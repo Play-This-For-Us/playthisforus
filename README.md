@@ -1,24 +1,13 @@
-# README
+## PlayThisFor.US
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+#### Overview
 
-Things you may want to cover:
+A simple crowd-sourced playlist to play at events.
 
-* Ruby version
+#### Running Locally
 
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+- Install `rails` and dependencies.
+- Clone this repo.
+- Install gems: `bundle install`
+- Create database: `rake db:create`
+- Run the server: `rails s` or `foreman s`
