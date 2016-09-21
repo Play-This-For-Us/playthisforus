@@ -13,3 +13,11 @@
  *= require_tree .
  *= require_self
  */
+
+$brand-color: #FF0404;
+
+@import "bootstrap";
+
+body {
+  padding-top: 70px;
+}
