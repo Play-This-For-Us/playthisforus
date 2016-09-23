@@ -8,10 +8,10 @@
     = javascript_include_tag 'application', 'data-turbolinks-track': 'reload'
 
   %body
-    %nav.navbar.navbar-fixed-top.navbar-dark.bg-inverse
+    %nav.navbar.navbar-fixed-top.bg-custom
       = link_to "PlayThisFor.Us", root_path, class: "navbar-brand"
       %ul.nav.navbar-nav
-        %li.nav-item.active
+        %li.nav-item
           = link_to "Home", root_path, class: "nav-link"
 
     = yield
