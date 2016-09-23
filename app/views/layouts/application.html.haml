@@ -1,7 +1,7 @@
 %html
   %head
     %title
-      Play This For Us
+      Play This
 
     = csrf_meta_tags
     = stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload'
@@ -9,7 +9,7 @@
 
   %body
     %nav.navbar.navbar-fixed-top.bg-custom
-      = link_to "PlayThisFor.Us", root_path, class: "navbar-brand"
+      = link_to "Play This", root_path, class: "navbar-brand"
       %ul.nav.navbar-nav
         %li.nav-item
           = link_to "Home", root_path, class: "nav-link"
