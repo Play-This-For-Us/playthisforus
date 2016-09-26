@@ -41,7 +41,7 @@ GEM
     arel (7.1.2)
     autoprefixer-rails (6.4.1.1)
       execjs
-    bcrypt (3.1.11-x86-mingw32)
+    bcrypt (3.1.11)
     bootstrap (4.0.0.alpha4)
       autoprefixer-rails (>= 6.0.3)
       sass (>= 3.4.19)
@@ -65,7 +65,6 @@ GEM
     erubis (2.7.0)
     execjs (2.7.0)
     ffi (1.9.14)
-    ffi (1.9.14-x86-mingw32)
     font-awesome-rails (4.6.3.1)
       railties (>= 3.2, < 5.1)
     globalid (0.3.7)
@@ -92,18 +91,14 @@ GEM
       mime-types-data (~> 3.2015)
     mime-types-data (3.2016.0521)
     mini_portile2 (2.1.0)
-    minitest (5.9.0)
+    minitest (5.9.1)
     multi_json (1.12.1)
     nio4r (1.2.1)
     nokogiri (1.6.8)
       mini_portile2 (~> 2.1.0)
       pkg-config (~> 1.1.7)
-    nokogiri (1.6.8-x86-mingw32)
-      mini_portile2 (~> 2.1.0)
-      pkg-config (~> 1.1.7)
     orm_adapter (0.5.0)
-    pg (0.18.4)
-    pg (0.18.4-x86-mingw32)
+    pg (0.19.0)
     pkg-config (1.1.7)
     puma (3.6.0)
     rack (2.0.1)
@@ -164,8 +159,6 @@ GEM
     turbolinks-source (5.0.0)
     tzinfo (1.2.2)
       thread_safe (~> 0.1)
-    tzinfo-data (1.2016.6)
-      tzinfo (>= 1.0.0)
     uglifier (3.0.2)
       execjs (>= 0.3.0, < 3)
     warden (1.2.6)
@@ -181,7 +174,6 @@ GEM
 
 PLATFORMS
   ruby
-  x86-mingw32
 
 DEPENDENCIES
   bootstrap (~> 4.0.0.alpha4)
