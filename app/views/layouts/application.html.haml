@@ -1,17 +1,33 @@
 %html
   %head
     %title
-      Play This For Us
+      Play This
 
     = csrf_meta_tags
     = stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload'
     = javascript_include_tag 'application', 'data-turbolinks-track': 'reload'
 
+    %meta{:content => "width=device-width, initial-scale=1", :name => "viewport"}
+
   %body
-    %nav.navbar.navbar-fixed-top.navbar-dark.bg-inverse
-      = link_to "PlayThisFor.Us", root_path, class: "navbar-brand"
+    %nav.navbar.navbar-fixed-top.bg-custom
+      = link_to root_path, class: "navbar-brand" do
+        %i.fa.fa-music
+        Play This
       %ul.nav.navbar-nav
-        %li.nav-item.active
-          = link_to "Home", root_path, class: "nav-link"
+        %li.nav-item
+          = link_to root_path, class: "nav-link" do
+            %i.fa.fa-home
+            Home
+
+      %ul.nav.navbar-nav.pull-xs-right
+        %li.nav-item
+          = link_to root_path, class: "nav-link" do
+            %i.fa.fa-users
+            Host an Event
+        %li.nav-item
+          = link_to root_path, class: "nav-link" do
+            %i.fa.fa-user-plus
+            Join an Event
 
     = yield
