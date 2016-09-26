@@ -44,7 +44,10 @@ group :development, :test do
   gem 'byebug', platform: :mri
 
   # Testing framework
-  gem 'rspec'
+  gem 'rspec-rails', '~> 3.5'
+
+  # headless browser
+  gem 'capybara'
 end
 
 group :development do
