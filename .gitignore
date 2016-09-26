@@ -23,3 +23,5 @@
 # Rubymine
 .idea/
 
+# System-specific environment variables
+/.env
