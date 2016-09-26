@@ -30,4 +30,11 @@
             %i.fa.fa-user-plus
             Join an Event
 
+    #flash-display
+      - flash.each do |name, msg|
+        - if msg.is_a?(String)
+          %div{:class => "alert alert-#{name == :notice ? "success" : "error"}"}
+            %a.close{"data-dismiss" => "alert"} ×
+            = content_tag :div, msg, :id => "flash_#{name}"
+
     = yield
