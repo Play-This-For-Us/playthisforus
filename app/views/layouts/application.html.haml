@@ -29,6 +29,22 @@
           = link_to root_path, class: "nav-link" do
             %i.fa.fa-user-plus
             Join an Event
+        - if user_signed_in?
+          %li.nav-item.dropdown
+            %button.btn.btn-primary.dropdown-toggle{:type => "button", "data-toggle" => "dropdown"}
+              = current_user.email
+              %span.caret
+            %ul.dropdown-menu
+              %li
+                = link_to destroy_user_session_path, :method => :delete, class: "dropdown-item" do
+                  Sign Out
+        - else
+          %li.nav-item
+            = link_to new_user_session_path, class: "nav-link" do
+              %i.fa.fa-user
+              Sign In
+        %li.nav-item
+
 
     #flash-display
       - flash.each do |name, msg|
