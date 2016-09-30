@@ -9,7 +9,7 @@
 
     %meta{:content => "width=device-width, initial-scale=1", :name => "viewport"}
 
-  %body
+  %body{ class: "#{yield (:body_class)}" }
     %nav.navbar.navbar-fixed-top.bg-custom
       = link_to root_path, class: "navbar-brand" do
         %i.fa.fa-music
@@ -43,14 +43,18 @@
             = link_to new_user_session_path, class: "nav-link" do
               %i.fa.fa-user
               Sign In
-        %li.nav-item
+          %li.nav-item
+            = link_to new_user_registration_path, class: "nav-link" do
+              %i.fa.fa-user-plus
+              Sign Up
 
 
     #flash-display
       - flash.each do |name, msg|
         - if msg.is_a?(String)
-          %div{:class => "alert alert-#{name == :notice ? "success" : "error"}"}
-            %a.close{"data-dismiss" => "alert"} ×
+          %div{:class => "alert alert-#{name == :notice.to_s ? "success" : "danger"}"}
+            %a.close{"data-dismiss" => "alert"}
+              %i.fa.fa-times
             = content_tag :div, msg, :id => "flash_#{name}"
 
     = yield

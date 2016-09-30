@@ -31,10 +31,26 @@ $navbar-inverse-color: $brand-primary;
 body {
   padding-top: 54px;
   color: $dark;
+
+  &.full-background {
+    background-image: linear-gradient(rgba($dark, 0.7), rgba($dark, 0.7)), image_url("hero-background.jpg");
+    background-position: center;
+    background-size: center;
+    color: $brand-primary;
+  }
 }
 
 .container-custom {
   padding-top: 30px;
+}
+
+.alert ul {
+  margin-bottom: 0;
+}
+
+// this is automatically appended and causes styling issues
+.field_with_errors {
+  display: inline-block;
 }
 
 // Helpers
