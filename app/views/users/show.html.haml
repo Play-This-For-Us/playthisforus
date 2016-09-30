@@ -1,0 +1,20 @@
+.container.container-custom
+  .row
+    .col-md-12
+      %h3
+        = greeting
+
+      %p.lead
+        It doesn't look like you've created any events. Wanna make one now?
+
+  .row
+    .col-md-3
+      .card
+        = image_tag("events/1.jpeg", class: "card-img-top")
+        .card-block
+          %h4.card-title
+            Your First Event
+          %p.card-text
+            Create an event then we can add guests and start on your song queue.
+          %a.btn.btn-primary{:href => "#"}
+            Let's Get Started!
