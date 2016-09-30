@@ -4,11 +4,13 @@
       %h3
         = greeting
 
+      -# TODO(skovy): condititonally show this text
       %p.lead
         It doesn't look like you've created any events. Wanna make one now?
 
   .row
-    .col-md-3
+    -# TODO(skovy): conditionally show this card
+    .col-md-4
       .card
         = image_tag("events/1.jpg", class: "card-img-top")
         .card-block
@@ -18,3 +20,26 @@
             Create an event then we can add guests and start on your song queue.
           %a.btn.btn-primary{:href => "#"}
             Let's Get Started!
+
+    -# TODO(skovy): placeholder events for now
+    .col-md-4
+      .card
+        = image_tag("events/2.jpg", class: "card-img-top")
+        .card-block
+          %h4.card-title
+            Your Second Event
+          %p.card-text
+            Nice! This is another event. Let's have fun.
+          %a.btn.btn-primary{:href => "#"}
+            View Event
+
+    .col-md-4
+      .card
+        = image_tag("events/3.jpg", class: "card-img-top")
+        .card-block
+          %h4.card-title
+            Your Third Event
+          %p.card-text
+            Nice! This is another event. Let's have fun.
+          %a.btn.btn-primary{:href => "#"}
+            View Event
