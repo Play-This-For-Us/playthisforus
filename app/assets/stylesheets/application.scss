@@ -33,9 +33,9 @@ body {
   color: $dark;
 
   &.full-background {
-    background-image: linear-gradient(rgba($dark, 0.7), rgba($dark, 0.7)), image_url("hero-background.jpg");
+    background-image: linear-gradient(rgba($dark, 0.7), rgba($dark, 0.7)), image_url("full-background.jpg");
     background-position: center;
-    background-size: center;
+    background-size: cover;
     color: $brand-primary;
   }
 }
@@ -71,5 +71,5 @@ img {
   color: $brand-primary;
   padding: 200px 0;
   background-position: center;
-  background-size: center;
+  background-size: cover;
 }
