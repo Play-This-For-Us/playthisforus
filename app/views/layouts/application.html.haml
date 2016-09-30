@@ -31,7 +31,7 @@
             Join an Event
         - if user_signed_in?
           %li.nav-item.dropdown
-            %button.btn.btn-primary.dropdown-toggle{:type => "button", "data-toggle" => "dropdown"}
+            %button.btn.btn-primary.dropdown-toggle{ type: "button", "data-toggle": "dropdown" }
               = current_user.email
               %span.caret
             %ul.dropdown-menu
@@ -62,8 +62,8 @@
             .col-md-12
               - flash.each do |name, msg|
                 - if msg.is_a?(String)
-                  %div{:class => "alert alert-#{name == :notice.to_s ? "success" : "danger"}"}
-                    %a.close{"data-dismiss" => "alert"}
+                  %div{ class: "alert alert-#{name == :notice.to_s ? "success" : "danger"}" }
+                    %a.close{ "data-dismiss": "alert" }
                       %i.fa.fa-times
                     = content_tag :div, msg, :id => "flash_#{name}"
 

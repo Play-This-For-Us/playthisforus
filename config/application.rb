@@ -8,7 +8,7 @@ Bundler.require(*Rails.groups)
 
 module Playthisforus
   class Application < Rails::Application
-    config.action_view.field_error_proc = Proc.new { |html_tag, instance|
+    config.action_view.field_error_proc = proc { |html_tag|
       "<span class=\"\">#{html_tag}</span>".html_safe
     }
   end
