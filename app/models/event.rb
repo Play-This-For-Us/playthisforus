@@ -11,6 +11,11 @@ class Event < ApplicationRecord
   # create a random code to join the event
   before_create :set_join_code
 
+  def avatar_image
+    # we currently have 5 default iamges
+    "events/#{(self.id % 5) + 1}.jpg"
+  end
+
 private
 
   def set_join_code
