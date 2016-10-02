@@ -31,6 +31,30 @@ $navbar-inverse-color: $brand-primary;
 body {
   padding-top: 54px;
   color: $dark;
+
+  &.full-background {
+    background-image: linear-gradient(rgba($dark, 0.7), rgba($dark, 0.7)), image_url("full-background.jpg");
+    background-position: center;
+    background-size: cover;
+    color: $brand-primary;
+  }
+}
+
+.container-custom {
+  padding-top: 16px;
+}
+
+.alert ul {
+  margin-bottom: 0;
+}
+
+img {
+  width: 100%;
+}
+
+// this is automatically appended and causes styling issues
+.field_with_errors {
+  display: inline-block;
 }
 
 // Helpers
@@ -47,5 +71,5 @@ body {
   color: $brand-primary;
   padding: 200px 0;
   background-position: center;
-  background-size: center;
+  background-size: cover;
 }

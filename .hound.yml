@@ -1,0 +1,7 @@
+fail_on_violations: false
+
+scss:
+  config_file: .scss.yml
+
+ruby:
+  config_file: .rubocop.yml
