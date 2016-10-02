@@ -6,9 +6,11 @@
           .event__banner-overlay
           %h2.event__name
             = @event.name
-            = link_to edit_event_path(@event), class: "event__edit" do
-              %i.fa.fa-pencil
-              Edit
+
+            %small
+              = link_to edit_event_path(@event), class: "event__edit" do
+                %i.fa.fa-pencil
+                Edit
 
         .card-block
           %p.card-text.lead
