@@ -15,3 +15,8 @@
         .card-block
           %p.card-text.lead
             = @event.description
+
+        .card-footer.text-muted
+          %i.fa.fa-key
+          Guest Join Code:
+          %strong #{@event.join_code}
