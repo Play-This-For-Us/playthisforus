@@ -13,7 +13,7 @@ class Event < ApplicationRecord
 
   def avatar_image
     # we currently have 5 default iamges
-    "events/#{(self.id % 5) + 1}.jpg"
+    "events/#{(self.id % 4) + 1}.jpg"
   end
 
 private
