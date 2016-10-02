@@ -1,0 +1,26 @@
+.event__banner {
+  background-image: linear-gradient(rgba($dark, 0.7), rgba($dark, 0.7)), image_url("events/1.jpg");
+  padding: 0;
+  background-position: center;
+  background-size: cover;
+}
+
+.event__banner-container {
+  position: relative;
+  padding: 0 15px;
+  margin: 0 auto;
+  height: 500px;
+  max-width: 1200px;
+}
+
+.event__name {
+  color: #FFF;
+  position: absolute;
+  left: 0;
+  bottom: 30px;
+  font-size: 56px;
+}
+
+.event__edit {
+  font-size: 0.5em;
+}
