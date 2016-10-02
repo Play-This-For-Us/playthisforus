@@ -18,6 +18,8 @@ ActiveRecord::Schema.define(version: 20161002210312) do
   create_table "events", force: :cascade do |t|
     t.string   "name",        null: false
     t.text     "description"
+    t.string   "join_code",   null: false
+    t.string   "guest_key",   null: false
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
     t.integer  "user_id"

@@ -3,6 +3,8 @@ class CreateEvents < ActiveRecord::Migration[5.0]
     create_table :events do |t|
       t.string :name, null: false
       t.text :description
+      t.string :join_code, null: false
+      t.string :guest_key, null: false
 
       t.timestamps
     end
