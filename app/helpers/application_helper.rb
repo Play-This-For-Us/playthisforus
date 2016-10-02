@@ -12,22 +12,22 @@ module ApplicationHelper
   end
 
   def five_pm
-    @five_pm ||= Time.now.change(:hour => 17 ).to_i
+    @five_pm ||= Time.now.change(hour: 17).to_i
   end
 
   def eight_pm
-    @eight_pm ||= Time.now.change(:hour => 20 ).to_i
+    @eight_pm ||= Time.now.change(hour: 20 ).to_i
   end
 
   def greeting
     if midnight.upto(noon).include?(current_time)
-      "Good Morning!"
+      'Good Morning!'
     elsif noon.upto(five_pm).include?(current_time)
-      "Good Afternoon!"
+      'Good Afternoon!'
     elsif five_pm.upto(eight_pm).include?(current_time)
-      "Good Evening!"
+      'Good Evening!'
     elsif eight_pm.upto(midnight + 1.day).include?(current_time)
-      "Good Night!"
+      'Good Night!'
     end
   end
 end
