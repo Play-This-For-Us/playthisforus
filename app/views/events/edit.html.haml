@@ -1,0 +1,11 @@
+%h1 Editing Event
+
+= render 'form', event: @event
+
+= link_to 'Show', @event |
+= link_to 'Back', events_path
+%h1 Editing Event
+= render 'form', event: @event
+= link_to 'Show', @event
+|
+\#{link_to 'Back', events_path}
