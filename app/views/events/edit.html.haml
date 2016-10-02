@@ -1,11 +1,9 @@
-%h1 Editing Event
+.container.container-custom
+  .row
+    .col-md-8.offset-md-2
+      %h2.header-brand
+        Edit Event
 
-= render 'form', event: @event
+      = render 'form', event: @event
 
-= link_to 'Show', @event |
-= link_to 'Back', events_path
-%h1 Editing Event
-= render 'form', event: @event
-= link_to 'Show', @event
-|
-\#{link_to 'Back', events_path}
+      = link_to 'Cancel', @event
