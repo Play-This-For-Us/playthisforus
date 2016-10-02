@@ -4,7 +4,6 @@ class CreateEvents < ActiveRecord::Migration[5.0]
       t.string :name, null: false
       t.text :description
       t.string :join_code, null: false
-      t.string :guest_key, null: false
 
       t.timestamps
     end
