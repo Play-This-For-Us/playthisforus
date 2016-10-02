@@ -23,13 +23,13 @@
       %ul.nav.navbar-nav.pull-xs-right
         %li.nav-item
           = link_to root_path, class: "nav-link" do
-            %i.fa.fa-users
-            Host an Event
-        %li.nav-item
-          = link_to root_path, class: "nav-link" do
             %i.fa.fa-share
             Join an Event
         - if user_signed_in?
+          %li.nav-item
+            = link_to new_event_path, class: "nav-link" do
+              %i.fa.fa-users
+              Host an Event
           %li.nav-item.dropdown
             %button.btn.btn-primary.dropdown-toggle{ type: "button", "data-toggle": "dropdown" }
               = current_user.email
