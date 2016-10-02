@@ -3,6 +3,10 @@
   background-position: center;
   background-size: cover;
   position: relative;
+  height: 300px;
+  border-top-left-radius: .25em;
+  border-top-right-radius: .25em;
+  overflow: hidden;
 }
 
 .event__banner-overlay {
@@ -14,22 +18,15 @@
   bottom: 0;
 }
 
-.event__banner-container {
-  position: relative;
-  padding: 0 15px;
-  margin: 0 auto;
-  height: 500px;
-  max-width: 1200px;
-}
-
 .event__name {
   color: #FFF;
   position: absolute;
   left: 30px;
-  bottom: 30px;
-  font-size: 56px;
+  bottom: 15px;
+  font-size: 36px;
 }
 
 .event__edit {
   font-size: 0.5em;
+  color: $blue;
 }

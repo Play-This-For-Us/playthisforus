@@ -1,14 +1,15 @@
-.event__banner{ style: "background-image: url('#{image_url(@event.avatar_image)}')"}
-  .event__banner-overlay
-  .event__banner-container
-    %h2.event__name
-      = @event.name
-      = link_to edit_event_path(@event), class: "event__edit" do
-        %i.fa.fa-pencil
-        Edit
-
 .container.container-custom
   .row
     .col-md-12
-      .lead
-        = @event.description
+      .card
+        .event__banner{ style: "background-image: url('#{image_url(@event.avatar_image)}')"}
+          .event__banner-overlay
+          %h2.event__name
+            = @event.name
+            = link_to edit_event_path(@event), class: "event__edit" do
+              %i.fa.fa-pencil
+              Edit
+
+        .card-block
+          %p.card-text.lead
+            = @event.description
