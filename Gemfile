@@ -51,6 +51,10 @@ group :development, :test do
 
   # headless browser
   gem 'capybara'
+
+  gem 'factory_girl_rails'
+
+  gem 'rails-controller-testing'
 end
 
 group :development do
