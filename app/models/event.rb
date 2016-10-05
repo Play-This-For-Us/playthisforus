@@ -1,3 +1,16 @@
+# == Schema Information
+#
+# Table name: events
+#
+#  id          :integer          not null, primary key
+#  name        :string           not null
+#  description :text             not null
+#  join_code   :string           not null
+#  created_at  :datetime         not null
+#  updated_at  :datetime         not null
+#  user_id     :integer
+#
+
 class Event < ApplicationRecord
   JOIN_CODE_LENGTH = 8
 
