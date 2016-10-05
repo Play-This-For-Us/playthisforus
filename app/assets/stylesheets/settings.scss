@@ -1,0 +1,11 @@
+// Our custom color palette
+$blue: #3C91E6;
+$green: #9FD356;
+$orange: #FA824C;
+$dark: #342E37;
+$light: #FAFFFD;
+$red: #FF1654;
+
+// Bootstrap overrides
+$brand-primary: $orange;
+$navbar-inverse-color: $brand-primary;

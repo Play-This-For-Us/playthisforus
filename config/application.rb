@@ -11,5 +11,9 @@ module Playthisforus
     config.action_view.field_error_proc = proc { |html_tag|
       "<span class=\"\">#{html_tag}</span>".html_safe
     }
+
+    config.generators do |g|
+      g.template_engine :haml
+    end
   end
 end

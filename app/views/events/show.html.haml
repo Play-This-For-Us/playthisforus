@@ -1,0 +1,22 @@
+.container.container-custom
+  .row
+    .col-md-12
+      .card
+        .event__banner{ style: "background-image: url('#{image_url(@event.avatar_image)}')"}
+          .event__banner-overlay
+          %h2.event__name
+            = @event.name
+
+            %small
+              = link_to edit_event_path(@event), class: "event__edit" do
+                %i.fa.fa-pencil
+                Edit
+
+        .card-block
+          %p.card-text.lead
+            = @event.description
+
+        .card-footer.text-muted
+          %i.fa.fa-key
+          Guest Join Code:
+          %strong #{@event.join_code}

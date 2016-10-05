@@ -1,0 +1,13 @@
+.container.container-custom
+  .row
+    .col-md-8.offset-md-2
+      %h2.header-brand
+        Edit Event
+
+      = render 'form', event: @event
+
+      = link_to 'Cancel', @event, class: "btn btn-secondary"
+
+      = link_to event_path(@event), method: :delete, class: "btn btn-danger pull-xs-right" do
+        %i.fa.fa-trash
+        Delete
