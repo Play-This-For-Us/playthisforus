@@ -1,0 +1,24 @@
+= form_for(event) do |f|
+
+  - if event.errors.any?
+    %div.alert.alert-danger
+      %a.close{ "data-dismiss": "alert" }
+        %i.fa.fa-times
+
+      %strong
+        = pluralize(event.errors.count, "error")
+        prohibited this event from being saved:
+
+      %ul
+        - event.errors.full_messages.each do |message|
+          %li= message
+
+  .form-group
+    = f.label :name
+    = f.text_field :name, autofocus: true, class: "form-control", required: true
+
+  .form-group
+    = f.label :description
+    = f.text_area :description, autofocus: true, class: "form-control", required: true
+
+  = f.submit class: "btn btn-primary"

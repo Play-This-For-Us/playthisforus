@@ -1,0 +1,13 @@
+.container.container-custom
+  .row
+    .col-md-8.offset-md-2
+      %h2.header-brand
+        Host an Event
+
+      %p
+        If you want to host an event (party, gathering, etc) you first need
+        to create an event. Afterwards, you'll be able to invite guests to collaborate.
+
+      = render 'form', event: @event
+
+      = link_to 'Cancel', current_user

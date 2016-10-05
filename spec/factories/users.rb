@@ -17,11 +17,10 @@
 #  updated_at             :datetime         not null
 #
 
-class User < ApplicationRecord
-  # Include default devise modules. Others available are:
-  # :confirmable, :lockable, :timeoutable and :omniauthable
-  devise :database_authenticatable, :registerable,
-         :recoverable, :rememberable, :trackable, :validatable
-
-  has_many :events
+FactoryGirl.define do
+  factory :user do
+    sequence(:email) { |n| "testuser#{n}@playthisfor.us"}
+    password "password"
+    password_confirmation "password"
+  end
 end

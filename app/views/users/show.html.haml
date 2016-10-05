@@ -4,42 +4,34 @@
       %h3
         = greeting
 
-      -# TODO(skovy): condititonally show this text
-      %p.lead
-        It doesn't look like you've created any events. Wanna make one now?
-
+      - if @events.empty?
+        %p.lead
+          It doesn't look like you've created any events. Wanna make one now?
+      - else
+        %p.lead
+          You can view all of your existing events below or
+          = link_to 'create a new one', new_event_path
   .row
-    -# TODO(skovy): conditionally show this card
-    .col-md-4
-      .card
-        = image_tag("events/1.jpg", class: "card-img-top")
-        .card-block
-          %h4.card-title
-            Your First Event
-          %p.card-text
-            Create an event then we can add guests and start on your song queue.
-          %a.btn.btn-primary{ href: "#" }
-            Let's Get Started!
-
-    -# TODO(skovy): placeholder events for now
-    .col-md-4
-      .card
-        = image_tag("events/2.jpg", class: "card-img-top")
-        .card-block
-          %h4.card-title
-            Your Second Event
-          %p.card-text
-            Nice! This is another event. Let's have fun.
-          %a.btn.btn-primary{ href: "#" }
-            View Event
-
-    .col-md-4
-      .card
-        = image_tag("events/3.jpg", class: "card-img-top")
-        .card-block
-          %h4.card-title
-            Your Third Event
-          %p.card-text
-            Nice! This is another event. Let's have fun.
-          %a.btn.btn-primary{ href: "#" }
-            View Event
+    - if @events.empty?
+      .col-md-4
+        .card
+          = image_tag("events/1.jpg", class: "card-img-top")
+          .card-block
+            %h4.card-title
+              Your First Event
+            %p.card-text
+              Create an event then we can add guests and start on your song queue.
+            = link_to new_event_path, class: "btn btn-primary" do
+              Let's Get Started!
+    - else
+      - @events.each do |event|
+        .col-md-4
+          .card
+            = image_tag(event.avatar_image, class: "card-img-top")
+            .card-block
+              %h4.card-title
+                = event.name
+              %p.card-text
+                = event.description
+              = link_to event_path(event), class: "btn btn-primary" do
+                View Event
