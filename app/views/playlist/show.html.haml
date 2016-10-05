@@ -1,3 +1,42 @@
-.container
-  .row
-    TODO
+.container.container-custom
+  .dropdown
+    %button.btn.btn-addsong.dropdown-toggle{id: 'newSongDropdownBtn', 'data-toggle': 'dropdown'}
+      Add song
+    .dropdown-menu.song-search-dropdown
+      %input{type: 'text', class: 'form-control', placeholder: 'Search for song name', id: 'songSearchEntry'}
+      .search-results{id: 'search-results'}
+
+  %table.table.table-hover.table-bordered.table-striped
+    %thead
+      %th #
+      %th Title
+      %th Artist
+      %th Duration
+      %th Points
+      %th
+    %tbody
+      %tr
+        %th{scope: 'row'} 1
+        %td Contact
+        %td Daft Punk
+        %td 6:24
+        %td 5
+        %td
+      %tr
+        %th{scope: 'row'} 2
+        %td Randy (Radio Edit)
+        %td Justice
+        %td 3:13
+        %td 3
+        %td
+          %i.fa.fa-arrow-circle-up{'aria-hidden': 'true'}
+          %i.fa.fa-arrow-circle-down{'aria-hidden': 'true'}
+      %tr
+        %th{scope: 'row'} 3
+        %td Never Gonna Give You Up
+        %td Rick Astley
+        %td 3:33
+        %td -2
+        %td
+          %i.fa.fa-arrow-circle-up{'aria-hidden': 'true'}
+          %i.fa.fa-arrow-circle-down{'aria-hidden': 'true'}
