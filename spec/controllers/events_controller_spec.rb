@@ -4,7 +4,25 @@ RSpec.describe EventsController, type: :controller do
 
   let(:event) { FactoryGirl.create(:event) }
 
-  let(:invalid_attributes) { {} }
+  let(:user) { FactoryGirl.create(:user) }
+
+  let(:valid_attributes) {
+    {
+      name: "Event 1",
+      description: "Event Description",
+      user: user
+    }
+  }
+
+  let(:invalid_attributes) {
+    {
+      name: ""
+    }
+  }
+
+  before(:each) do
+    sign_in user
+  end
 
   describe "GET #show" do
     it "assigns the requested event as @event" do
@@ -51,6 +69,7 @@ RSpec.describe EventsController, type: :controller do
     context "with invalid params" do
       it "assigns a newly created but unsaved event as @event" do
         post :create, params: {event: invalid_attributes}
+
         expect(assigns(:event)).to be_a_new(Event)
       end
 
@@ -63,13 +82,9 @@ RSpec.describe EventsController, type: :controller do
 
   describe "PUT #update" do
     context "with valid params" do
-      let(:new_attributes) {
-        skip("Add a hash of attributes valid for your model")
-      }
-
       it "updates the requested event" do
         event = Event.create! valid_attributes
-        put :update, params: {id: event.to_param, event: new_attributes}
+        put :update, params: {id: event.to_param, event: valid_attributes}
         event.reload
         skip("Add assertions for updated state")
       end
@@ -113,7 +128,7 @@ RSpec.describe EventsController, type: :controller do
     it "redirects to the events list" do
       event = Event.create! valid_attributes
       delete :destroy, params: {id: event.to_param}
-      expect(response).to redirect_to(events_url)
+      expect(response).to redirect_to(user_path(user))
     end
   end
 
