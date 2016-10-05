@@ -5,6 +5,8 @@
 MAX_SONG_LEN = 50
 MAX_ARTIST_LEN = 50
 
+playlistSongs = []
+
 waitingBetweenRequests = false
 
 $(document).ready(=>
@@ -22,7 +24,61 @@ $(document).ready(=>
       waitingBetweenRequests = true
       setTimeout((=> waitingBetweenRequests = false), 1000)
   )
+
+  addPlaceholderSongs()
+  updateSongListView()
 )
+
+addPlaceholderSongs = =>
+  contact =
+    id: 0
+    title: 'Contact'
+    artist: 'Daft Punk'
+    duration: '6:24'
+    points: '5'
+    active: true
+
+  randy =
+    id: 1
+    title: 'Randy'
+    artist: 'Justice'
+    duration: '3:13'
+    points: '3'
+    active: false
+
+  nggyu =
+    id: 2
+    title: 'Never Gonna Give You Up'
+    artist: 'Rick Astley'
+    duration: '3:33'
+    points: '-2'
+    active: false
+
+  addSong(contact)
+  addSong(randy)
+  addSong(nggyu)
+
+addSong = (song) ->
+  playlistSongs.push(song)
+
+appendSongView = (song) ->
+  $("#songsTableBody").append("<tr>" +
+      "<td>#{song.title}</td>" +
+      "<td>#{song.artist}</td>" +
+      "<td>#{song.duration}</td>" +
+      "<td>#{song.points}</td>" +
+      "</tr>")
+
+updateSongListView = =>
+  # Sort the songs by upvotes
+  playlistSongs.sort (a, b) ->
+    a.points - b.points
+
+  # Clear the table
+  $("#songsTableBody").empty()
+
+  # Add each song to the table
+  appendSongView(song) for song in playlistSongs
 
 updateSearch = (s) ->
   data =
