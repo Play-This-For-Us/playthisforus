@@ -72,7 +72,7 @@ appendSongView = (song) ->
 updateSongListView = =>
   # Sort the songs by upvotes
   playlistSongs.sort (a, b) ->
-    a.points - b.points
+    b.points - a.points
 
   # Clear the table
   $("#songsTableBody").empty()
