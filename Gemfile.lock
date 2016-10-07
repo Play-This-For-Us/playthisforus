@@ -147,6 +147,7 @@ GEM
     rb-fsevent (0.9.7)
     rb-inotify (0.9.7)
       ffi (>= 0.5.0)
+    redis (3.3.1)
     responders (2.3.0)
       railties (>= 4.2.0, < 5.1)
     rspec-core (3.5.3)
@@ -226,6 +227,7 @@ DEPENDENCIES
   puma (~> 3.0)
   rails (~> 5.0.0, >= 5.0.0.1)
   rails-controller-testing
+  redis (~> 3.0)
   rspec-rails (~> 3.5)
   sass-rails (~> 5.0)
   spring
@@ -236,4 +238,4 @@ DEPENDENCIES
   web-console
 
 BUNDLED WITH
-   1.13.1
+   1.13.2
