@@ -2,20 +2,35 @@
 # All this logic will automatically be available in application.js.
 # You can use CoffeeScript in this file: http://coffeescript.org/
 
+# Maximum length of the song and artist strings displayed on the search
 MAX_SONG_LEN = 50
 MAX_ARTIST_LEN = 50
 
+# Songs that are in the playlist
 playlistSongs = []
 
+# Whether we're waiting between searches
 waitingBetweenRequests = false
 
+# ID of the playlist we're listening to
+playlistID = window.location.href.substr(window.location.href.lastIndexOf('/') + 1)
+
+
+# Subscribe to the action cable channel
+App.playlistChannel = App.cable.subscriptions.create { channel: "EventChannel", id: playlistID },
+  received: (data) ->
+    addSong(data)
+    updateSongListView()
+
+
+# When the document is rendered, setup our DOM manipulations
 $(document).ready(=>
-  $("#songSearchEntry").keyup((e) ->
-    if e.currentTarget.value.length == 0
+  $("#songSearchEntry").keyup((e) -> # When the user changes what is in the search box
+    if e.currentTarget.value.length == 0 # If the search box is empty, clear the results
       $('#search-results').empty()
       return
 
-    if(waitingBetweenRequests)
+    if(waitingBetweenRequests) # Wait a bit between requests
       setTimeout((=> updateSearch(e.currentTarget.value)), 1010)
     else
       updateSearch(e.currentTarget.value)
@@ -24,51 +39,36 @@ $(document).ready(=>
       waitingBetweenRequests = true
       setTimeout((=> waitingBetweenRequests = false), 1000)
   )
-
-  addPlaceholderSongs()
-  updateSongListView()
 )
 
-addPlaceholderSongs = =>
-  contact =
-    id: 0
-    title: 'Contact'
-    artist: 'Daft Punk'
-    duration: '6:24'
-    points: '5'
-    active: true
 
-  randy =
-    id: 1
-    title: 'Randy'
-    artist: 'Justice'
-    duration: '3:13'
-    points: '3'
-    active: false
-
-  nggyu =
-    id: 2
-    title: 'Never Gonna Give You Up'
-    artist: 'Rick Astley'
-    duration: '3:33'
-    points: '-2'
-    active: false
-
-  addSong(contact)
-  addSong(randy)
-  addSong(nggyu)
-
+# Add a song to the playlist data structure
 addSong = (song) ->
-  playlistSongs.push(song)
+  # if the song already exist, replace
+  existed = false
+  for i in [0 ... playlistSongs.length]
+    if playlistSongs[i].uri == song.uri
+      playlistSongs[i] = song
+      existed = true
+      break
 
+  if(!existed)
+    playlistSongs.push(song)
+
+
+# Add a song view to the DOM
 appendSongView = (song) ->
+  showDuration = msToTime(song.duration)
+
   $("#songsTableBody").append("<tr>" +
-      "<td>#{song.title}</td>" +
+      "<td>#{song.name}</td>" +
       "<td>#{song.artist}</td>" +
-      "<td>#{song.duration}</td>" +
-      "<td>#{song.points}</td>" +
+      "<td>#{showDuration}</td>" +
+      "<td>#{song.score}</td>" +
       "</tr>")
 
+
+# Update the playlist view with the contents of our song list
 updateSongListView = =>
   # Sort the songs by upvotes
   playlistSongs.sort (a, b) ->
@@ -79,6 +79,7 @@ updateSongListView = =>
 
   # Add each song to the table
   appendSongView(song) for song in playlistSongs
+
 
 updateSearch = (s) ->
   data =
@@ -92,6 +93,13 @@ updateSearch = (s) ->
     addSearchResultEntry entry for entry in data.tracks.items
   ), 'json')
 
+
+onSearchResultClick = (event) ->
+  App.playlistChannel.send(jQuery.data(event.currentTarget, 'song'))
+  event.preventDefault()
+
+
+# Add a spotify song to the search results
 addSearchResultEntry = (entry) ->
   songTitle = entry.name
   artistName = entry.artists[0].name
@@ -104,6 +112,20 @@ addSearchResultEntry = (entry) ->
 
   imageURL = entry.album.images.pop().url
 
+  entryEl = $('<a>', {
+    href: '#',
+    click: onSearchResultClick
+  })
+
+  playthisSong =
+    name: entry.name
+    artist: entry.artists[0].name
+    duration: entry.duration_ms
+    uri: entry.uri
+    art: imageURL
+
+  entryEl.data('song', playthisSong)
+
   searchResultHTML =
     "<div class=\"row search-result clearfix\"><div class=\"col-md-12\">" +
       "<img class=\"search-result-art\" src=\"#{imageURL}\">" +
@@ -112,4 +134,19 @@ addSearchResultEntry = (entry) ->
       "<p class=\"search-result-artist\">#{artistName}</p>" +
       "</a></div></div>"
 
-  $("#search-results").append(searchResultHTML)
+  entryEl.append(searchResultHTML)
+
+  $("#search-results").append(entryEl)
+
+
+# Convert a count of milliseconds into a human-readable duration in M:SS form
+msToTime = (msCount) ->
+  ms = msCount % 1000
+  msCount = (msCount - ms) / 1000
+  secs = msCount % 60
+  msCount = (msCount - secs) / 60
+  mins = msCount % 60
+
+  secs = ("0" + secs).slice(-2)
+
+  return "#{mins}:#{secs}"

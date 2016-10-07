@@ -29,7 +29,7 @@ ActiveRecord::Schema.define(version: 20161007153926) do
     t.string   "name",                 null: false
     t.string   "artist",               null: false
     t.string   "art",                  null: false
-    t.integer  "duration",   limit: 2, null: false
+    t.integer  "duration",             null: false
     t.string   "uri",                  null: false
     t.integer  "score",      limit: 2, null: false
     t.integer  "event_id",             null: false
