@@ -1,7 +1,7 @@
 fail_on_violations: false
 
 scss:
-  config_file: .scss.yml
+  enabled: false
 
 ruby:
   config_file: .rubocop.yml
