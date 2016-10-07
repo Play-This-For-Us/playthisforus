@@ -24,20 +24,21 @@ App.playlistChannel = App.cable.subscriptions.create { channel: "EventChannel", 
 
 
 # When the document is rendered, setup our DOM manipulations
-$(document).ready(=>
+$(document).ready(->
   $("#songSearchEntry").keyup((e) -> # When the user changes what is in the search box
-    if e.currentTarget.value.length == 0 # If the search box is empty, clear the results
+    # If the search box is empty, clear the results
+    if e.currentTarget.value.length == 0
       $('#search-results').empty()
       return
 
     if(waitingBetweenRequests) # Wait a bit between requests
-      setTimeout((=> updateSearch(e.currentTarget.value)), 1010)
+      setTimeout((-> updateSearch(e.currentTarget.value)), 1010)
     else
       updateSearch(e.currentTarget.value)
 
       # wait 500 ms between requests
       waitingBetweenRequests = true
-      setTimeout((=> waitingBetweenRequests = false), 1000)
+      setTimeout((-> waitingBetweenRequests = false), 1000)
   )
 )
 
@@ -69,7 +70,7 @@ appendSongView = (song) ->
 
 
 # Update the playlist view with the contents of our song list
-updateSongListView = =>
+updateSongListView = ->
   # Sort the songs by upvotes
   playlistSongs.sort (a, b) ->
     b.points - a.points
