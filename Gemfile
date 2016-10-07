@@ -42,6 +42,9 @@ gem "font-awesome-rails"
 # Devise for user management
 gem 'devise'
 
+# for timed tasks/ repeated tasks
+gem 'clockwork'
+
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platform: :mri
