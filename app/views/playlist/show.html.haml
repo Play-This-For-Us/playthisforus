@@ -1,0 +1,15 @@
+.container.container-custom
+  .dropdown
+    %button.btn.btn-addsong.dropdown-toggle{ id: 'newSongDropdownBtn', 'data-toggle': 'dropdown' }
+      Add song
+    .dropdown-menu.song-search-dropdown
+      %input{ type: 'text', class: 'form-control', placeholder: 'Search for song name', id: 'songSearchEntry' }
+      .search-results{ id: 'search-results' }
+
+  %table.table.table-hover.table-bordered.table-striped
+    %thead
+      %th Title
+      %th Artist
+      %th Duration
+      %th Points
+    %tbody{ id: 'songsTableBody' }

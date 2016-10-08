@@ -5,3 +5,6 @@ scss:
 
 ruby:
   config_file: .rubocop.yml
+
+coffeescript:
+  config_file: coffeelint.json
