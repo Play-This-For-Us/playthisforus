@@ -2,7 +2,7 @@ class App.Playlist
   # playlistSelector: string to select the playlist element in the DOM
   constructor: (@playlistSelector) ->
     # convert the DOM selection string into a jQuery selector
-    @playlistSelector = $(@playlistSelector);
+    @playlistSelector = $(@playlistSelector)
 
     @playlistSongs = [] # songs that are in the playlist
 
@@ -10,7 +10,7 @@ class App.Playlist
     # TODO(skovy) use a pass to js helper with a meta tag
     @playlistID = window.location.href.substr(window.location.href.lastIndexOf('/') + 1)
 
-    @playlistChannel = new App.EventChannel(@addSong);
+    @playlistChannel = new App.EventChannel(@addSong)
 
   # add a song to the playlist data structure
   addSong: (data) =>
@@ -30,7 +30,7 @@ class App.Playlist
   # find a song position in the playlist, returns -1 if nonexistant
   findSong: (song) =>
     for i in [0 ... @playlistSongs.length]
-        return i if @playlistSongs[i].isEqual(song)
+      return i if @playlistSongs[i].isEqual(song)
     return -1
 
   # add a song view to the DOM

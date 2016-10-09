@@ -1,6 +1,6 @@
 class App.EventChannel
   constructor: (@received) ->
-    @eventId = window.eventId;
+    @eventId = window.eventId
 
     if @received
       @eventChannel = @subscribeWithReceive()

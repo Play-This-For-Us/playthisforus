@@ -3,8 +3,8 @@ class App.Search
   # resultSelector: string to select the result element in the DOM
   constructor: (@searchSelector, @resultSelector, @closeSelector) ->
     # convert the DOM selection string into a jQuery selector
-    @searchSelector = $(@searchSelector);
-    @resultSelector = $(@resultSelector);
+    @searchSelector = $(@searchSelector)
+    @resultSelector = $(@resultSelector)
 
     # when the user interacts with the search input
     @searchSelector.keyup @handleSearch
@@ -44,7 +44,7 @@ class App.Search
 
   # Add a spotify song to the search results
   addSearchResultEntry: (entry) =>
-    song = App.Song.spotifyResultToSong(entry);
+    song = App.Song.spotifyResultToSong(entry)
 
     entryEl = $('<span>', {
       click: =>
