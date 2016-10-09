@@ -1,8 +1,7 @@
 class App.Playlist
   # playlistSelector: string to select the playlist element in the DOM
   constructor: (@playlistSelector) ->
-    # songs that are in the playlist
-    @playlistSongs = []
+    @playlistSongs = [] # songs that are in the playlist
 
     # Maximum length of the song and artist strings displayed on the search
     @maxSongLength = 50
@@ -17,6 +16,7 @@ class App.Playlist
 
     @playlistChannel = @generatePlaylistChannel();
 
+    # convert the DOM selection string into a jQuery selector
     @playlistSelector = $(@playlistSelector);
 
   # setup the channel to subscribe to event changes
@@ -27,7 +27,7 @@ class App.Playlist
 
   # add a song to the playlist data structure
   addSong: (data) =>
-    song = new App.Song(data)
+    song = new App.Song(data, @updatePlaylistUI)
     songPosition = @findSong(song)
 
     if songPosition >= 0
@@ -43,54 +43,12 @@ class App.Playlist
   # find a song position in the playlist, returns -1 if nonexistant
   findSong: (song) =>
     for i in [0 ... @playlistSongs.length]
-      if @playlistSongs[i].id == song.id()
-        console.log i
-        return i
+        return i if @playlistSongs[i].isEqual(song)
     return -1
 
   # add a song view to the DOM
   appendSongUI: (song) =>
-
-    scoreClass = "songs-list__score"
-    scoreClass += " songs-list__score--positive" if song.score > 0
-    scoreClass += " songs-list__score--negative" if song.score < 0
-
-    @playlistSelector.append(
-      """
-      <div class='media songs-list__song'>
-        <span class='media-left'>
-          <img class='media-object songs-list__song-avatar' src='#{song.art()}' alt='Generic placeholder image'>
-        </span>
-        <div class='media-body'>
-          <h4 class='media-heading songs-list__song-title'>
-            #{song.name()}
-          </h4>
-          <span class='songs-list__song-details'>
-            <i class="fa fa-microphone"></i> #{song.artist()}
-          </span>
-          <span class='songs-list__song-details'>
-            <i class="fa fa-clock-o"></i> #{song.duration()}
-          </span>
-          <span class='songs-list__song-details'>
-            <a href='#{song.spotifyOpenURL()}' target='_blank'>
-              <i class="fa fa-spotify"></i> Open in Spotify
-            </a>
-          </span>
-        </div>
-        <span class='media-right songs-list__vote-container'>
-          <button class='songs-list__vote songs-list__vote--upvote' data-song-id='#{song.id()}'>
-            <i class='fa fa-chevron-up'></i>
-          </button>
-          <span class='songs-list__score' id='songs-list__score--#{song.id()}'>
-            #{song.score()}
-          </span>
-          <button class='songs-list__vote songs-list__vote--downvote' data-song-id='#{song.id()}'>
-            <i class='fa fa-chevron-down'></i>
-          </button>
-        </span>
-      </div>
-      """
-    )
+    @playlistSelector.append(song.toHtml())
 
   # clear the DOM and remove the playlist
   clearPlaylistUI: =>
@@ -99,7 +57,7 @@ class App.Playlist
   # sort the playlist based on votes and other metadata
   sortPlaylistSongs: ->
     @playlistSongs.sort (a, b) ->
-      b.points - a.points
+      b.score() - a.score()
 
   # update the playlist view with the contents of our song list
   updatePlaylistUI: =>
@@ -123,7 +81,6 @@ class App.Playlist
   onSearchResultClick: (event) =>
     @playlistChannel.send(jQuery.data(event.currentTarget, 'song'))
     event.preventDefault()
-
 
   # Add a spotify song to the search results
   addSearchResultEntry: (entry) =>
@@ -184,32 +141,4 @@ $(document).ready(->
       playlistView.waitingBetweenRequests = true
       setTimeout((-> playlistView.waitingBetweenRequests = false), 1000)
   )
-
-  # vote casting listener
-  $(document).on 'click', '.songs-list__song .songs-list__vote', (e) ->
-    songId = $(this).data('song-id')
-    scoreSelector = $('#songs-list__score--' + songId)
-    currentValue = parseInt(scoreSelector.text())
-    vote = 0
-
-    if $(this).hasClass('songs-list__vote--upvote')
-      # TODO(skovy) call upvote function to persist to database
-      vote = 1
-    else if $(this).hasClass('songs-list__vote--downvote')
-      # TODO(skovy) call downvote function to persist to database
-      vote = -1
-
-    # calculate and set new vote value
-    newValue = currentValue + vote
-    scoreSelector.html(newValue)
-
-    # remove class flags
-    scoreSelector.removeClass('songs-list__score--negative')
-    scoreSelector.removeClass('songs-list__score--positive')
-
-    # set the current class flag if not zero votes
-    if newValue > 0
-      scoreSelector.addClass('songs-list__score--positive')
-    else if newValue < 0
-      scoreSelector.addClass('songs-list__score--negative')
-  )
+)
