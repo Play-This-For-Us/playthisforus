@@ -1,10 +1,19 @@
-// Place all the styles related to the playlist controller here.
-// They will automatically be included in application.css.
-// You can use Sass (SCSS) here: http://sass-lang.com/
+.songs-list__song-avatar {
+  width: 70px;
+  height: 70px;
+}
 
-.btn-addsong {
-  background-color: #2ebd59;
-  color: white;
+.songs-list__song {
+  margin-bottom: 10px;
+}
+
+.songs-list__song-subtitle {
+  font-size: 0.6em;
+}
+
+.songs-list__song-details {
+  display: block;
+  color: $blue;
 }
 
 .search-result-title {

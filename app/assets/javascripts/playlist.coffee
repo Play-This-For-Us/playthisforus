@@ -59,15 +59,39 @@ addSong = (song) ->
 
 # Add a song view to the DOM
 appendSongView = (song) ->
-  showDuration = msToTime(song.duration)
-
-  $("#songsTableBody").append("<tr>" +
-      "<td>#{song.name}</td>" +
-      "<td>#{song.artist}</td>" +
-      "<td>#{showDuration}</td>" +
-      "<td>#{song.score}</td>" +
-      "</tr>")
-
+  songDuration = msToTime(song.duration)
+  console.log(song)
+  # $(".songs-list").append("<tr>" +
+  #     "<td>#{song.name}</td>" +
+  #     "<td>#{song.artist}</td>" +
+  #     "<td>#{songDuration}</td>" +
+  #     "<td>#{song.score}</td>" +
+  #     "</tr>")
+  $(".songs-list").append(
+    """
+    <div class='media songs-list__song'>
+      <span class='media-left'>
+        <img class='media-object songs-list__song-avatar' src='#{song.art}' alt='Generic placeholder image'>
+      </span>
+      <div class='media-body'>
+        <h4 class='media-heading songs-list__song-title'>
+          #{song.name}
+          <small class='pull-xs-right songs-list__song-subtitle'>
+            <a href='http://open.spotify.com/track/#{song.uri.replace('spotify:track:', '')}' target='_blank'>
+              <i class="fa fa-spotify"></i> Open in Spotify
+            </a>
+          </small>
+        </h4>
+        <span class='songs-list__song-details'>
+          <i class="fa fa-microphone"></i> #{song.artist}
+        </span>
+        <span class='songs-list__song-details'>
+          <i class="fa fa-clock-o"></i> #{songDuration}
+        </span>
+      </div>
+    </div>
+    """
+  )
 
 # Update the playlist view with the contents of our song list
 updateSongListView = ->
@@ -76,7 +100,7 @@ updateSongListView = ->
     b.points - a.points
 
   # Clear the table
-  $("#songsTableBody").empty()
+  $(".songs-list").empty()
 
   # Add each song to the table
   appendSongView(song) for song in playlistSongs
