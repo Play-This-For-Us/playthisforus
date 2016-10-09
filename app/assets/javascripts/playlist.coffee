@@ -10,17 +10,7 @@ class App.Playlist
     # TODO(skovy) use a pass to js helper with a meta tag
     @playlistID = window.location.href.substr(window.location.href.lastIndexOf('/') + 1)
 
-    @playlistChannel = @generatePlaylistChannel();
-
-  # setup the channel to subscribe to event changes
-  generatePlaylistChannel: =>
-    App.cable.subscriptions.create { channel: "EventChannel", id: @playlistID },
-      received: (data) =>
-        @addSong(data)
-
-  # send data over the channel
-  send: (data) =>
-    @playlistChannel.send(data)
+    @playlistChannel = new App.EventChannel(@addSong);
 
   # add a song to the playlist data structure
   addSong: (data) =>

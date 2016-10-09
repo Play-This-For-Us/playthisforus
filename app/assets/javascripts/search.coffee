@@ -10,18 +10,7 @@ class App.Search
     @searchSelector.keyup @handleSearch
 
     @waitingBetweenRequests = false
-    @playlistID = window.location.href.substr(window.location.href.lastIndexOf('/') + 1)
-    @eventChannel = @generateEventChannel()
-
-
-  # setup the channel to subscribe to event changes
-  generateEventChannel: =>
-    App.cable.subscriptions.create { channel: "EventChannel", id: @playlistID }
-
-  # send data over the channel
-  send: (data) =>
-    console.log data
-    @eventChannel.send(data)
+    @eventChannel = new App.EventChannel
 
   handleSearch: (e) =>
     # if the search box is empty, clear the results
@@ -58,7 +47,7 @@ class App.Search
     song = App.Song.spotifyResultToSong(entry);
 
     entryEl = $('<span>', {
-      click: => @send(song.data())
+      click: => @eventChannel.send(song.data())
     })
 
     entryEl.append(song.resultToHtml())
