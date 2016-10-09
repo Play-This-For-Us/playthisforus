@@ -60,13 +60,11 @@ addSong = (song) ->
 # Add a song view to the DOM
 appendSongView = (song) ->
   songDuration = msToTime(song.duration)
-  console.log(song)
-  # $(".songs-list").append("<tr>" +
-  #     "<td>#{song.name}</td>" +
-  #     "<td>#{song.artist}</td>" +
-  #     "<td>#{songDuration}</td>" +
-  #     "<td>#{song.score}</td>" +
-  #     "</tr>")
+
+  scoreClass = "songs-list__score"
+  scoreClass += " songs-list__score--positive" if song.score > 0
+  scoreClass += " songs-list__score--negative" if song.score < 0
+
   $(".songs-list").append(
     """
     <div class='media songs-list__song'>
@@ -76,11 +74,6 @@ appendSongView = (song) ->
       <div class='media-body'>
         <h4 class='media-heading songs-list__song-title'>
           #{song.name}
-          <small class='pull-xs-right songs-list__song-subtitle'>
-            <a href='http://open.spotify.com/track/#{song.uri.replace('spotify:track:', '')}' target='_blank'>
-              <i class="fa fa-spotify"></i> Open in Spotify
-            </a>
-          </small>
         </h4>
         <span class='songs-list__song-details'>
           <i class="fa fa-microphone"></i> #{song.artist}
@@ -88,7 +81,23 @@ appendSongView = (song) ->
         <span class='songs-list__song-details'>
           <i class="fa fa-clock-o"></i> #{songDuration}
         </span>
+        <span class='songs-list__song-details'>
+          <a href='http://open.spotify.com/track/#{song.uri.replace('spotify:track:', '')}' target='_blank'>
+            <i class="fa fa-spotify"></i> Open in Spotify
+          </a>
+        </span>
       </div>
+      <span class='media-right songs-list__vote-container'>
+        <button class='songs-list__vote'>
+          <i class='fa fa-chevron-up'></i>
+        </button>
+        <span class='songs-list__score'>
+          #{song.score}
+        </span>
+        <button class='songs-list__vote'>
+          <i class='fa fa-chevron-down'></i>
+        </button>
+      </span>
     </div>
     """
   )

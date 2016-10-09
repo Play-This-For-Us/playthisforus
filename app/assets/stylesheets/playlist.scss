@@ -4,17 +4,47 @@
 }
 
 .songs-list__song {
-  margin-bottom: 10px;
-}
-
-.songs-list__song-subtitle {
-  font-size: 0.6em;
+  margin-bottom: 20px;
 }
 
 .songs-list__song-details {
   display: block;
-  color: $blue;
 }
+
+.songs-list__vote-container {
+  text-align: center;
+}
+
+.songs-list__vote {
+  border: 0;
+  font-size: 32px;
+  color: $blue;
+  background: transparent;
+  outline: none;
+  transition: text-shadow 150ms ease;
+
+  &:focus {
+    outline: none;
+  }
+
+  &:hover {
+    text-shadow: 0 0 8px $orange;
+  }
+}
+
+.songs-list__score {
+  font-size: 28px;
+  color: $blue;
+
+  &--positive {
+    color: $green;
+  }
+
+  &--negative {
+    color: $red;
+  }
+}
+
 
 .search-result-title {
   font-weight: bold;
