@@ -1,7 +1,7 @@
 class App.Playlist
-  # DOMPlayistSelector: string to select the playlist element
-  constructor: (@DOMPlayistSelector) ->
-    # Songs that are in the playlist
+  # playlistSelector: string to select the playlist element in the DOM
+  constructor: (@playlistSelector) ->
+    # songs that are in the playlist
     @playlistSongs = []
 
     # Maximum length of the song and artist strings displayed on the search
@@ -12,72 +12,79 @@ class App.Playlist
     @waitingBetweenRequests = false
 
     # ID of the playlist we're listening to
-    # TODO(skovy) use a pass to js helper
+    # TODO(skovy) use a pass to js helper with a meta tag
     @playlistID = window.location.href.substr(window.location.href.lastIndexOf('/') + 1)
 
-    @playlistChannel = null
-    @setupPlaylistChannel()
+    @playlistChannel = @generatePlaylistChannel();
 
-  # setup the channel to listen to event changes
-  setupPlaylistChannel: =>
-    # Subscribe to the action cable channel
-    @playlistChannel = App.cable.subscriptions.create { channel: "EventChannel", id: @playlistID },
+    @playlistSelector = $(@playlistSelector);
+
+  # setup the channel to subscribe to event changes
+  generatePlaylistChannel: =>
+    App.cable.subscriptions.create { channel: "EventChannel", id: @playlistID },
       received: (data) =>
         @addSong(data)
-        @updateSongListView()
 
   # add a song to the playlist data structure
-  addSong: (song) =>
-    # if the song already exist, replace
-    existed = false
-    for i in [0 ... @playlistSongs.length]
-      if @playlistSongs[i].uri == song.uri
-        @playlistSongs[i] = song
-        existed = true
-        break
+  addSong: (data) =>
+    song = new App.Song(data)
+    songPosition = @findSong(song)
 
-    if(!existed)
+    if songPosition >= 0
+      # overwrite the existing song
+      @playlistSongs[songPosition] = song
+    else
+      # append to the end of the songs
       @playlistSongs.push(song)
 
-  # Add a song view to the DOM
-  appendSongView: (song) =>
-    songDuration = @msToTime(song.duration)
+    # update the playlsit UI
+    @updatePlaylistUI()
+
+  # find a song position in the playlist, returns -1 if nonexistant
+  findSong: (song) =>
+    for i in [0 ... @playlistSongs.length]
+      if @playlistSongs[i].id == song.id()
+        console.log i
+        return i
+    return -1
+
+  # add a song view to the DOM
+  appendSongUI: (song) =>
 
     scoreClass = "songs-list__score"
     scoreClass += " songs-list__score--positive" if song.score > 0
     scoreClass += " songs-list__score--negative" if song.score < 0
 
-
-    $(".songs-list").append(
+    @playlistSelector.append(
       """
       <div class='media songs-list__song'>
         <span class='media-left'>
-          <img class='media-object songs-list__song-avatar' src='#{song.art}' alt='Generic placeholder image'>
+          <img class='media-object songs-list__song-avatar' src='#{song.art()}' alt='Generic placeholder image'>
         </span>
         <div class='media-body'>
           <h4 class='media-heading songs-list__song-title'>
-            #{song.name}
+            #{song.name()}
           </h4>
           <span class='songs-list__song-details'>
-            <i class="fa fa-microphone"></i> #{song.artist}
+            <i class="fa fa-microphone"></i> #{song.artist()}
           </span>
           <span class='songs-list__song-details'>
-            <i class="fa fa-clock-o"></i> #{songDuration}
+            <i class="fa fa-clock-o"></i> #{song.duration()}
           </span>
           <span class='songs-list__song-details'>
-            <a href='http://open.spotify.com/track/#{song.uri.replace('spotify:track:', '')}' target='_blank'>
+            <a href='#{song.spotifyOpenURL()}' target='_blank'>
               <i class="fa fa-spotify"></i> Open in Spotify
             </a>
           </span>
         </div>
         <span class='media-right songs-list__vote-container'>
-          <button class='songs-list__vote songs-list__vote--upvote' data-song-id='#{song.id}'>
+          <button class='songs-list__vote songs-list__vote--upvote' data-song-id='#{song.id()}'>
             <i class='fa fa-chevron-up'></i>
           </button>
-          <span class='songs-list__score' id='songs-list__score--#{song.id}'>
-            #{song.score}
+          <span class='songs-list__score' id='songs-list__score--#{song.id()}'>
+            #{song.score()}
           </span>
-          <button class='songs-list__vote songs-list__vote--downvote' data-song-id='#{song.id}'>
+          <button class='songs-list__vote songs-list__vote--downvote' data-song-id='#{song.id()}'>
             <i class='fa fa-chevron-down'></i>
           </button>
         </span>
@@ -85,18 +92,20 @@ class App.Playlist
       """
     )
 
-  # Update the playlist view with the contents of our song list
-  updateSongListView: =>
-    # Sort the songs by upvotes
+  # clear the DOM and remove the playlist
+  clearPlaylistUI: =>
+    @playlistSelector.empty()
+
+  # sort the playlist based on votes and other metadata
+  sortPlaylistSongs: ->
     @playlistSongs.sort (a, b) ->
       b.points - a.points
 
-    # Clear the table
-    $(".songs-list").empty()
-
-    # Add each song to the table
-    @appendSongView(song) for song in @playlistSongs
-
+  # update the playlist view with the contents of our song list
+  updatePlaylistUI: =>
+    @sortPlaylistSongs()
+    @clearPlaylistUI()
+    @appendSongUI(song) for song in @playlistSongs
 
   updateSearch: (s) =>
     data =
@@ -156,22 +165,9 @@ class App.Playlist
     $("#search-results").append(entryEl)
 
 
-  # convert a count of milliseconds into a human-readable duration in M:SS form
-  msToTime: (msCount) =>
-    ms = msCount % 1000
-    msCount = (msCount - ms) / 1000
-    secs = msCount % 60
-    msCount = (msCount - secs) / 60
-    mins = msCount % 60
-
-    secs = ("0" + secs).slice(-2)
-
-    return "#{mins}:#{secs}"
-
-
 # When the document is rendered, setup our DOM manipulations
 $(document).ready(->
-  playlistView = new App.Playlist
+  playlistView = new App.Playlist(".songs-list")
 
   $("#songSearchEntry").keyup((e) -> # When the user changes what is in the search box
     # If the search box is empty, clear the results
