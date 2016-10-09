@@ -73,13 +73,18 @@ class App.Song
 
   resultToHtml: =>
     """
-    <div class='row search-result clearfix'>
-      <div class='col-md-12'>
-        <img class='search-result-art' src='#{@art()}'>
-        <a class='search-result-text'>
-          <p class='search-result-title'>#{@name()}</p>
-          <p class='search-result-artist'>#{@artist()}</p>
-        </a>
+    <div class='search-results__song'>
+      <img class='search-results__song-art' src='#{@art()}'>
+      <div class='search-results__song-description'>
+        <h4 class='search-results__song-name'>
+          #{@name()}
+        </h4>
+        <span class='search-results__song-details'>
+          <i class="fa fa-microphone"></i> #{@artist()}
+        </span>
+        <span class='search-results__song-details'>
+          <i class="fa fa-clock-o"></i> #{@duration()}
+        </span>
       </div>
     </div>
     """

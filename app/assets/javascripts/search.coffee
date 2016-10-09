@@ -1,15 +1,15 @@
 class App.Search
   # searchSelector: string to select the search element in the DOM
   # resultSelector: string to select the result element in the DOM
-  constructor: (@searchSelector, @resultSelector) ->
+  constructor: (@searchSelector, @resultSelector, @closeSelector) ->
     # convert the DOM selection string into a jQuery selector
     @searchSelector = $(@searchSelector);
     @resultSelector = $(@resultSelector);
 
     # when the user interacts with the search input
     @searchSelector.keyup @handleSearch
+    $(document).on 'click', @closeSelector, @reset
 
-    @waitingBetweenRequests = false
     @eventChannel = new App.EventChannel
 
   handleSearch: (e) =>
@@ -18,14 +18,14 @@ class App.Search
       @clearSearchResults()
       return
 
-    if @waitingBetweenRequests # wait a bit between requests
-      setTimeout((=> @updateSearch(e.currentTarget.value)), 1010)
-    else
-      @updateSearch(e.currentTarget.value)
+    @updateSearch(e.currentTarget.value)
 
-      # wait 500 ms between requests
-      @waitingBetweenRequests = true
-      setTimeout((=> @waitingBetweenRequests = false), 1000)
+  reset: =>
+    @clearSearchInput()
+    @clearSearchResults()
+
+  clearSearchInput: =>
+    @searchSelector.val("")
 
   clearSearchResults: =>
     @resultSelector.empty()
@@ -47,7 +47,9 @@ class App.Search
     song = App.Song.spotifyResultToSong(entry);
 
     entryEl = $('<span>', {
-      click: => @eventChannel.send(song.data())
+      click: =>
+        @eventChannel.send(song.data())
+        @reset()
     })
 
     entryEl.append(song.resultToHtml())

@@ -55,4 +55,4 @@ class App.Playlist
 # When the document is rendered, setup our DOM manipulations
 $(document).ready ->
   playlistView = new App.Playlist(".songs-list")
-  searchView = new App.Search(".search-entry", ".search-results")
+  searchView = new App.Search(".search-entry", ".search-results", ".search-results__close")

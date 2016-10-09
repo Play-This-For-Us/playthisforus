@@ -26,12 +26,14 @@
 
   .row
     .col-md-6.offset-md-3
-      %form
+      %form.search-form
         .form-group
           .input-group
             .input-group-addon
               %i.fa.fa-search
             %input.form-control.search-entry{ type: 'text', placeholder: 'Search for Songs on Spotify' }
-          .search-results{ id: 'search-results' }
+            .input-group-addon.search-results__close
+              %i.fa.fa-times
+          .search-results
 
       .songs-list

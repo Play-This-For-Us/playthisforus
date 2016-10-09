@@ -45,23 +45,55 @@
   }
 }
 
+.search-results {
+  position: absolute;
+  background-color: darken(#fff, 5%);
+  width: calc(100% - 30px);
+  left: 15px;
+  right: 15px;
+  border-radius: 3px;
+}
 
-.search-result-title {
-  font-weight: bold;
+.search-results__song {
+  cursor: pointer;
+  font-size: 12px;
+  padding: 6px 0;
+
+  &:hover {
+    background-color: darken(#fff, 15%);
+  }
+}
+
+.search-results__song-art {
+  vertical-align: top;
+  display: inline-block;
+  width: 40px;
+}
+
+.search-results__song-description {
+  display: inline-block;
+  width: calc(100% - 50px);
+  padding-left: 4px;
+}
+
+.search-results__song-name {
+  font-size: 14px;
+  color: $blue;
   margin-bottom: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-.search-result-artist {
-  color: #757575;
+.search-results__song-details {
+  display: inline-block;
+  margin-right: 4px;
 }
 
-.search-result-art {
-  width: 60px;
-  height: 60px;
-  float: left;
-  margin-right: 10px;
-}
+.search-results__close {
+  cursor: pointer;
 
-.song-search-dropdown {
-  min-width: 500px !important;
+  &:hover {
+    color: $orange;
+  }
 }
