@@ -83,4 +83,11 @@ Rails.application.configure do
 
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false
+
+  config.web_socket_server_url = "wss://playthisfor.us/cable"
+
+  # Action Cable can only accept WebSocket requests from specified origins. We need
+  # to pass those origins to the Action Cable server's configuration as an array.
+
+  config.action_cable.allowed_request_origins = ['https://playthisfor.us', 'http://playthisfor.us']
 end
