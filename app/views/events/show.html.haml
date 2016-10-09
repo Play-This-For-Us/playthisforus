@@ -20,3 +20,25 @@
           %i.fa.fa-key
           Guest Join Code:
           %strong #{@event.join_code}
+
+  .row
+    .col-md-6.offset-md-3
+      %form
+        .form-group
+          .input-group
+            .input-group-addon
+              %i.fa.fa-search
+            %input.form-control{ type: 'text', class: 'form-control', placeholder: 'Search for song name', id: 'songSearchEntry' }
+          .search-results{ id: 'search-results' }
+
+
+
+
+
+      %table.table.table-hover.table-bordered.table-striped
+        %thead
+          %th Title
+          %th Artist
+          %th Duration
+          %th Points
+        %tbody{ id: 'songsTableBody' }
