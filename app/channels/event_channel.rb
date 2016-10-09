@@ -16,10 +16,9 @@ class EventChannel < ApplicationCable::Channel
   def receive(data)
     event = Event.find(params[:id])
 
-    Song.create!(name: data['name'], artist: data['artist'], art: data['art'], duration: data['duration'],
+    song = Song.create!(name: data['name'], artist: data['artist'], art: data['art'], duration: data['duration'],
                     uri: data['uri'], score: 0, event: event)
 
-    data['score'] = 0 # so that the client gets a score to show
-    EventChannel.broadcast_to(event, data)
+    EventChannel.broadcast_to(event, song)
   end
 end

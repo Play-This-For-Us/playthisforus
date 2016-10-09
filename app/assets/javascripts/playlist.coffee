@@ -6,13 +6,6 @@ class App.Playlist
 
     @playlistSongs = [] # songs that are in the playlist
 
-    # Maximum length of the song and artist strings displayed on the search
-    @maxSongLength = 50
-    @maxArtistLength = 50
-
-    # Whether we're waiting between searches
-    @waitingBetweenRequests = false
-
     # ID of the playlist we're listening to
     # TODO(skovy) use a pass to js helper with a meta tag
     @playlistID = window.location.href.substr(window.location.href.lastIndexOf('/') + 1)
@@ -72,4 +65,4 @@ class App.Playlist
 # When the document is rendered, setup our DOM manipulations
 $(document).ready ->
   playlistView = new App.Playlist(".songs-list")
-  searchView = new App.Search(".search-results", playlistView)
+  searchView = new App.Search(".search-entry", ".search-results")

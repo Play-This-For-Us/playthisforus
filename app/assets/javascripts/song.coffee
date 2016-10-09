@@ -5,6 +5,9 @@ class App.Song
     $(document).on 'click', "#songs-list__song--#{@id()} .songs-list__vote--upvote", @upvote
     $(document).on 'click', "#songs-list__song--#{@id()} .songs-list__vote--downvote", @downvote
 
+  data: =>
+    @song
+
   id: =>
     @song.id
 
@@ -57,6 +60,29 @@ class App.Song
     scoreClass += " songs-list__score--positive" if @score() > 0
     scoreClass += " songs-list__score--negative" if @score() < 0
     return scoreClass
+
+  @spotifyResultToSong: (data) ->
+    song =
+      name: data.name
+      artist: data.artists[0].name
+      duration: data.duration_ms
+      uri: data.uri
+      art: data.album.images.pop().url
+
+    return new @ song
+
+  resultToHtml: =>
+    """
+    <div class='row search-result clearfix'>
+      <div class='col-md-12'>
+        <img class='search-result-art' src='#{@art()}'>
+        <a class='search-result-text'>
+          <p class='search-result-title'>#{@name()}</p>
+          <p class='search-result-artist'>#{@artist()}</p>
+        </a>
+      </div>
+    </div>
+    """
 
   toHtml: =>
     """
