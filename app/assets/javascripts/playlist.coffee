@@ -6,10 +6,6 @@ class App.Playlist
 
     @playlistSongs = [] # songs that are in the playlist
 
-    # ID of the playlist we're listening to
-    # TODO(skovy) use a pass to js helper with a meta tag
-    @playlistID = window.location.href.substr(window.location.href.lastIndexOf('/') + 1)
-
     @playlistChannel = new App.EventChannel(@addSong)
 
   # add a song to the playlist data structure
@@ -51,8 +47,3 @@ class App.Playlist
     @sortPlaylistSongs()
     @clearPlaylistUI()
     @appendSongUI(song) for song in @playlistSongs
-
-# When the document is rendered, setup our DOM manipulations
-$(document).ready ->
-  playlistView = new App.Playlist(".songs-list")
-  searchView = new App.Search(".search-entry", ".search-results", ".search-results__close")
