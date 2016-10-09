@@ -36,6 +36,11 @@ gem 'haml', '~> 4.0', '>= 4.0.7'
 # the newest and shiniest bootstrap (Bootstrap v4)
 gem 'bootstrap', '~> 4.0.0.alpha4'
 
+# needed for some bootstrap functionality (and avoid an exception)
+source 'https://rails-assets.org' do
+  gem 'rails-assets-tether', '>= 1.1.0'
+end
+
 # nice fancy fonts
 gem "font-awesome-rails"
 
