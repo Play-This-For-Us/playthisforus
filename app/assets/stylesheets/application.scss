@@ -1,11 +1,11 @@
 /*
- *= require_tree .
  *= require_self
  */
 
 @import 'settings';
 @import 'events';
 @import 'users';
+@import 'playlist';
 @import 'bootstrap';
 @import 'font-awesome';
 

@@ -1,153 +1,49 @@
-# Place all the behaviors and hooks related to the matching controller here.
-# All this logic will automatically be available in application.js.
-# You can use CoffeeScript in this file: http://coffeescript.org/
+class App.Playlist
+  # playlistSelector: string to select the playlist element in the DOM
+  constructor: (@playlistSelector) ->
+    # convert the DOM selection string into a jQuery selector
+    @playlistSelector = $(@playlistSelector)
 
-# Maximum length of the song and artist strings displayed on the search
-MAX_SONG_LEN = 50
-MAX_ARTIST_LEN = 50
+    @playlistSongs = [] # songs that are in the playlist
 
-# Songs that are in the playlist
-playlistSongs = []
+    @playlistChannel = new App.EventChannel(@addSong)
 
-# Whether we're waiting between searches
-waitingBetweenRequests = false
+  # add a song to the playlist data structure
+  addSong: (data) =>
+    song = new App.Song(data, @updatePlaylistUI)
+    songPosition = @findSong(song)
 
-# ID of the playlist we're listening to
-playlistID = window.location.href.substr(window.location.href.lastIndexOf('/') + 1)
-
-
-# Subscribe to the action cable channel
-App.playlistChannel = App.cable.subscriptions.create { channel: "EventChannel", id: playlistID },
-  received: (data) ->
-    addSong(data)
-    updateSongListView()
-
-
-# When the document is rendered, setup our DOM manipulations
-$(document).ready(->
-  $("#songSearchEntry").keyup((e) -> # When the user changes what is in the search box
-    # If the search box is empty, clear the results
-    if e.currentTarget.value.length == 0
-      $('#search-results').empty()
-      return
-
-    if(waitingBetweenRequests) # Wait a bit between requests
-      setTimeout((-> updateSearch(e.currentTarget.value)), 1010)
+    if songPosition >= 0
+      # overwrite the existing song
+      @playlistSongs[songPosition] = song
     else
-      updateSearch(e.currentTarget.value)
+      # append to the end of the songs
+      @playlistSongs.push(song)
 
-      # wait 500 ms between requests
-      waitingBetweenRequests = true
-      setTimeout((-> waitingBetweenRequests = false), 1000)
-  )
-)
+    # update the playlsit UI
+    @updatePlaylistUI()
 
+  # find a song position in the playlist, returns -1 if nonexistant
+  findSong: (song) =>
+    for i in [0 ... @playlistSongs.length]
+      return i if @playlistSongs[i].isEqual(song)
+    return -1
 
-# Add a song to the playlist data structure
-addSong = (song) ->
-  # if the song already exist, replace
-  existed = false
-  for i in [0 ... playlistSongs.length]
-    if playlistSongs[i].uri == song.uri
-      playlistSongs[i] = song
-      existed = true
-      break
+  # add a song view to the DOM
+  appendSongUI: (song) =>
+    @playlistSelector.append(song.toHtml())
 
-  if(!existed)
-    playlistSongs.push(song)
+  # clear the DOM and remove the playlist
+  clearPlaylistUI: =>
+    @playlistSelector.empty()
 
+  # sort the playlist based on votes and other metadata
+  sortPlaylistSongs: ->
+    @playlistSongs.sort (a, b) ->
+      b.score() - a.score()
 
-# Add a song view to the DOM
-appendSongView = (song) ->
-  showDuration = msToTime(song.duration)
-
-  $("#songsTableBody").append("<tr>" +
-      "<td>#{song.name}</td>" +
-      "<td>#{song.artist}</td>" +
-      "<td>#{showDuration}</td>" +
-      "<td>#{song.score}</td>" +
-      "</tr>")
-
-
-# Update the playlist view with the contents of our song list
-updateSongListView = ->
-  # Sort the songs by upvotes
-  playlistSongs.sort (a, b) ->
-    b.points - a.points
-
-  # Clear the table
-  $("#songsTableBody").empty()
-
-  # Add each song to the table
-  appendSongView(song) for song in playlistSongs
-
-
-updateSearch = (s) ->
-  data =
-    q: s
-    type: 'track'
-    market: 'US'
-    limit: 5
-
-  $.get('https://api.spotify.com/v1/search', data, ((data, status, jqXHR) ->
-    $("#search-results").empty()
-    addSearchResultEntry entry for entry in data.tracks.items
-  ), 'json')
-
-
-onSearchResultClick = (event) ->
-  App.playlistChannel.send(jQuery.data(event.currentTarget, 'song'))
-  event.preventDefault()
-
-
-# Add a spotify song to the search results
-addSearchResultEntry = (entry) ->
-  songTitle = entry.name
-  artistName = entry.artists[0].name
-
-  if songTitle.length > MAX_SONG_LEN
-    songTitle = songTitle.substring(0, MAX_SONG_LEN - 3) + '...'
-
-  if artistName.length > MAX_ARTIST_LEN
-    artistName = artistName.substring(0, MAX_ARTIST_LEN - 3) + '...'
-
-  imageURL = entry.album.images.pop().url
-
-  entryEl = $('<a>', {
-    href: '#',
-    click: onSearchResultClick
-  })
-
-  playthisSong =
-    name: entry.name
-    artist: entry.artists[0].name
-    duration: entry.duration_ms
-    uri: entry.uri
-    art: imageURL
-
-  entryEl.data('song', playthisSong)
-
-  searchResultHTML =
-    "<div class=\"row search-result clearfix\"><div class=\"col-md-12\">" +
-      "<img class=\"search-result-art\" src=\"#{imageURL}\">" +
-      "<a class=\"search-result-text\"> " +
-      "<p class=\"search-result-title\">#{songTitle}</p>" +
-      "<p class=\"search-result-artist\">#{artistName}</p>" +
-      "</a></div></div>"
-
-  entryEl.append(searchResultHTML)
-
-  $("#search-results").append(entryEl)
-
-
-# Convert a count of milliseconds into a human-readable duration in M:SS form
-msToTime = (msCount) ->
-  ms = msCount % 1000
-  msCount = (msCount - ms) / 1000
-  secs = msCount % 60
-  msCount = (msCount - secs) / 60
-  mins = msCount % 60
-
-  secs = ("0" + secs).slice(-2)
-
-  return "#{mins}:#{secs}"
+  # update the playlist view with the contents of our song list
+  updatePlaylistUI: =>
+    @sortPlaylistSongs()
+    @clearPlaylistUI()
+    @appendSongUI(song) for song in @playlistSongs

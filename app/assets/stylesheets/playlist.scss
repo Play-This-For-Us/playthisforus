@@ -1,28 +1,99 @@
-// Place all the styles related to the playlist controller here.
-// They will automatically be included in application.css.
-// You can use Sass (SCSS) here: http://sass-lang.com/
-
-.btn-addsong {
-  background-color: #2ebd59;
-  color: white;
+.songs-list__song-avatar {
+  width: 70px;
+  height: 70px;
 }
 
-.search-result-title {
-  font-weight: bold;
+.songs-list__song {
+  margin-bottom: 20px;
+}
+
+.songs-list__song-details {
+  display: block;
+}
+
+.songs-list__vote-container {
+  text-align: center;
+}
+
+.songs-list__vote {
+  border: 0;
+  font-size: 32px;
+  color: $blue;
+  background: transparent;
+  outline: none;
+  transition: text-shadow 150ms ease;
+
+  &:focus {
+    outline: none;
+  }
+
+  &:hover {
+    text-shadow: 0 0 8px $orange;
+  }
+}
+
+.songs-list__score {
+  font-size: 28px;
+  color: $blue;
+
+  &--positive {
+    color: $green;
+  }
+
+  &--negative {
+    color: $red;
+  }
+}
+
+.search-results {
+  position: absolute;
+  background-color: darken(#fff, 5%);
+  width: calc(100% - 30px);
+  left: 15px;
+  right: 15px;
+  border-radius: 3px;
+}
+
+.search-results__song {
+  cursor: pointer;
+  font-size: 12px;
+  padding: 6px 0;
+
+  &:hover {
+    background-color: darken(#fff, 15%);
+  }
+}
+
+.search-results__song-art {
+  vertical-align: top;
+  display: inline-block;
+  width: 40px;
+}
+
+.search-results__song-description {
+  display: inline-block;
+  width: calc(100% - 50px);
+  padding-left: 4px;
+}
+
+.search-results__song-name {
+  font-size: 14px;
+  color: $blue;
   margin-bottom: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-.search-result-artist {
-  color: #757575;
+.search-results__song-details {
+  display: inline-block;
+  margin-right: 4px;
 }
 
-.search-result-art {
-  width: 60px;
-  height: 60px;
-  float: left;
-  margin-right: 10px;
-}
+.search-results__close {
+  cursor: pointer;
 
-.song-search-dropdown {
-  min-width: 500px !important;
+  &:hover {
+    color: $orange;
+  }
 }

@@ -1,3 +1,6 @@
+:javascript
+  window.eventId = #{@event.id};
+
 .container.container-custom
   .row
     .col-md-12
@@ -20,3 +23,17 @@
           %i.fa.fa-key
           Guest Join Code:
           %strong #{@event.join_code}
+
+  .row
+    .col-md-6.offset-md-3
+      %form.search-form
+        .form-group
+          .input-group
+            .input-group-addon
+              %i.fa.fa-search
+            %input.form-control.search-entry{ type: 'text', placeholder: 'Search for Songs on Spotify' }
+            .input-group-addon.search-results__close
+              %i.fa.fa-times
+          .search-results
+
+      .songs-list
