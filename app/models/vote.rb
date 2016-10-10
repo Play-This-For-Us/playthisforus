@@ -15,4 +15,12 @@ class Vote < ApplicationRecord
 
   validates :user_identifier, presence: true
   validates :vote, presence: true, inclusion: [-1, 0, 1]
+
+  def upvote
+    self.update!(vote: 1)
+  end
+
+  def downvote
+    self.update!(vote: -1)
+  end
 end

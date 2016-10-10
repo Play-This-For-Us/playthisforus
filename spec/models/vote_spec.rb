@@ -53,4 +53,18 @@ RSpec.describe Vote, type: :model do
     subject.vote = -2
     expect(subject).to_not be_valid
   end
+
+  context "voting" do
+    it "is able to upvote" do
+      subject.update(vote: -1)
+      subject.upvote
+      expect(subject.vote).to be 1
+    end
+
+    it "is able to downvote" do
+      subject.update(vote: 1)
+      subject.downvote
+      expect(subject.vote).to be -1
+    end
+  end
 end
