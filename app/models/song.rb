@@ -8,7 +8,6 @@
 #  art        :string           not null
 #  duration   :integer          not null
 #  uri        :string           not null
-#  score      :integer          not null
 #  event_id   :integer          not null
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
@@ -20,7 +19,7 @@ class Song < ApplicationRecord
   has_many :votes
 
   def score
-    # TODO(skovy) sum all votes
+    self.votes.sum(:vote)
   end
 
   def upvote(user_identifier)

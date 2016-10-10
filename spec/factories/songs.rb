@@ -8,7 +8,6 @@
 #  art        :string           not null
 #  duration   :integer          not null
 #  uri        :string           not null
-#  score      :integer          not null
 #  event_id   :integer          not null
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
@@ -21,7 +20,6 @@ FactoryGirl.define do
     art "MyString"
     duration 1
     uri "MyString"
-    score 1
     association :event, factory: :event
   end
 end

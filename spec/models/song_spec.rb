@@ -8,7 +8,6 @@
 #  art        :string           not null
 #  duration   :integer          not null
 #  uri        :string           not null
-#  score      :integer          not null
 #  event_id   :integer          not null
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
@@ -60,6 +59,23 @@ RSpec.describe Song, type: :model do
       subject.upvote("1234")
       expect(subject.votes.upvotes).to be 1
       expect(subject.votes.downvotes).to be 0
+    end
+
+    it "calculates vote value" do
+      subject.upvote("1234")
+      expect(subject.score).to be 1
+      subject.upvote("12345")
+      expect(subject.score).to be 2
+      subject.upvote("123456")
+      expect(subject.score).to be 3
+      subject.downvote("4321")
+      expect(subject.score).to be 2
+      subject.downvote("54321")
+      expect(subject.score).to be 1
+      subject.downvote("654321")
+      expect(subject.score).to be 0
+      subject.downvote("7654321")
+      expect(subject.score).to be -1
     end
   end
 end
