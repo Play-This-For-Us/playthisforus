@@ -1,7 +1,5 @@
 .container.container-custom
-  = form_tag '/events', method: 'join' do
-  = field_set_tag do
-  = label_tag :code, 'Event Code:'
-  = text_field_tag :code
-  = submit_tag 'Go'
-  
+  = form_for :events, :url => {:controller => 'events', :action => 'join'} do
+    = label_tag :join_tag, "Event Code:"
+    = text_field_tag :j
+    = button_tag 'Go' , class: 'join-button' , type: :submit

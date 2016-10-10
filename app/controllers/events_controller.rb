@@ -50,9 +50,17 @@ class EventsController < ApplicationController
     end
   end
 
+  def join
+    @event = Event.where(params[:join_code])
+  end
+
   private
     def set_event
-      @event = Event.find(params[:id])
+      if :id == 'join'
+        redirect_to /join/
+      else
+        @event = Event.find(params[:id])
+      end
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.
