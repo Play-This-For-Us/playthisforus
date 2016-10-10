@@ -41,4 +41,10 @@ class Song < ApplicationRecord
       self.votes.create!(user_identifier: user_identifier, vote: -1)
     end
   end
+
+  def as_json(options = { })
+    h = super(options)
+    h[:score] = score
+    h
+  end
 end
