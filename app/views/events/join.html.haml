@@ -1,0 +1,7 @@
+.container.container-custom
+  = form_tag '/events', method: 'join' do
+  = field_set_tag do
+  = label_tag :code, 'Event Code:'
+  = text_field_tag :code
+  = submit_tag 'Go'
+  

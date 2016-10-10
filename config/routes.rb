@@ -5,4 +5,5 @@ Rails.application.routes.draw do
   resources :users, only: [:show]
   root "home#index"
   get '/playlists/:id', to: 'playlist#show'
+  get '/join/', to: 'events#join'
 end
