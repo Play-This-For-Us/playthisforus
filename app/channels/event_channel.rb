@@ -16,7 +16,7 @@ class EventChannel < ApplicationCable::Channel
   def receive(data)
     event = Event.find(params[:id])
 
-    unless Song.exists?(uri: data['uri'])
+    unless Song.exists?(uri: data['uri'], event: event)
       song = Song.create!(name: data['name'], artist: data['artist'], art: data['art'], duration: data['duration'],
                           uri: data['uri'], score: 0, event: event)
 
