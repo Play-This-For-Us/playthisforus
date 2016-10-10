@@ -12,7 +12,8 @@
 
 FactoryGirl.define do
   factory :vote do
-    
+    sequence(:user_identifier) { |n| "unique-indentifier-#{n}" }
+    vote -1
+    association :song, factory: :song
   end
-
 end

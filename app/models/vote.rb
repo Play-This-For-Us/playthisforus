@@ -14,5 +14,5 @@ class Vote < ApplicationRecord
   belongs_to :song
 
   validates :user_identifier, presence: true
-  validates :number, presence: true, inclusion: [-1, 0, 1]
+  validates :vote, presence: true, inclusion: [-1, 0, 1]
 end

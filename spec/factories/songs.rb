@@ -17,12 +17,11 @@
 FactoryGirl.define do
   factory :song do
     name "MyString"
-artist "MyString"
-art "MyString"
-duration 1
-uri "MyString"
-score 1
-event nil
+    artist "MyString"
+    art "MyString"
+    duration 1
+    uri "MyString"
+    score 1
+    association :event, factory: :event
   end
-
 end
