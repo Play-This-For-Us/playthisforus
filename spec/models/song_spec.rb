@@ -17,5 +17,31 @@
 require 'rails_helper'
 
 RSpec.describe Song, type: :model do
-  pending "add some examples to (or delete) #{__FILE__}"
+  subject { FactoryGirl.create(:song) }
+
+  it "is valid with valid attributes" do
+    expect(subject).to be_valid
+  end
+
+  context "scopes" do
+    it "upvotes" do
+      expect(subject.votes.upvotes).to be 0
+    end
+
+    it "downvotes" do
+      expect(subject.votes.downvotes).to be 0
+    end
+  end
+
+  context "voting" do
+    it "is able to upvote" do
+      subject.upvote("1234")
+      expect(subject.votes.upvotes).to be 1
+    end
+
+    it "is able to downvote" do
+      subject.downvote("1234")
+      expect(subject.votes.downvotes).to be 1
+    end
+  end
 end
