@@ -26,7 +26,7 @@ class App.Playlist
   # find a song position in the playlist, returns -1 if nonexistant
   findSong: (song) =>
     for i in [0 ... @playlistSongs.length]
-      return i if @playlistSongs[i].isEqual(song)
+      return i if @playlistSongs[i].uri == song.uri
     return -1
 
   # add a song view to the DOM
