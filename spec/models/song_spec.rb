@@ -43,5 +43,23 @@ RSpec.describe Song, type: :model do
       subject.downvote("1234")
       expect(subject.votes.downvotes).to be 1
     end
+
+    it "is able to change upvote to downvote" do
+      subject.upvote("1234")
+      expect(subject.votes.upvotes).to be 1
+      expect(subject.votes.downvotes).to be 0
+      subject.downvote("1234")
+      expect(subject.votes.upvotes).to be 0
+      expect(subject.votes.downvotes).to be 1
+    end
+
+    it "is able to change downvote to upvote" do
+      subject.downvote("1234")
+      expect(subject.votes.upvotes).to be 0
+      expect(subject.votes.downvotes).to be 1
+      subject.upvote("1234")
+      expect(subject.votes.upvotes).to be 1
+      expect(subject.votes.downvotes).to be 0
+    end
   end
 end
