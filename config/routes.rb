@@ -1,6 +1,6 @@
 Rails.application.routes.draw do
   mount ActionCable.server => '/cable'
-  resources :events, except: [:index] do 
+  resources :events, except: [:index] do
     get 'join', on: :collection
     post 'create_join', on: :collection
   end

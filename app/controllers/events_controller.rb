@@ -64,28 +64,23 @@ class EventsController < ApplicationController
     end
   end
 
-  private
-    def set_event
-      if :id == 'join'
-        redirect_to /join/
-      else
-        @event = Event.find(params[:id])
-      end
-    end
+private
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def event_params
-      params.require(:event).permit(:name, :description)
-    end
+  def set_event
+    @event = Event.find(params[:id])
+  end
 
-    def authenticate
-      unless can_view?
-        redirect_to root_path
-      end
-    end
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def event_params
+    params.require(:event).permit(:name, :description)
+  end
 
-    def can_view?
-      (current_user.present? and @event.user == current_user) || 
-      (Event.find_by_join_code(cookies.permanent.encrypted[:join_cookie]).present?)
-    end
+  def authenticate
+    redirect_to root_path unless can_view?
+  end
+
+  def can_view?
+    (current_user.present? and @event.user == current_user) || 
+      (Event.find_by_join_code(cookies.permanent.encrypted[:join_cookie]) == @event)
+  end
 end
