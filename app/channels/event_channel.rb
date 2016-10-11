@@ -18,7 +18,7 @@ class EventChannel < ApplicationCable::Channel
 
     unless Song.exists?(uri: data['uri'], event: event)
       song = Song.create!(name: data['name'], artist: data['artist'], art: data['art'], duration: data['duration'],
-                          uri: data['uri'], score: 0, event: event)
+                          uri: data['uri'], event: event)
 
       EventChannel.broadcast_to(event, song)
     end

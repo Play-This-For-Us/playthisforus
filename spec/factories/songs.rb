@@ -8,7 +8,6 @@
 #  art        :string           not null
 #  duration   :integer          not null
 #  uri        :string           not null
-#  score      :integer          not null
 #  event_id   :integer          not null
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
@@ -17,12 +16,10 @@
 FactoryGirl.define do
   factory :song do
     name "MyString"
-artist "MyString"
-art "MyString"
-duration 1
-uri "MyString"
-score 1
-event nil
+    artist "MyString"
+    art "MyString"
+    duration 1
+    uri "MyString"
+    association :event, factory: :event
   end
-
 end
