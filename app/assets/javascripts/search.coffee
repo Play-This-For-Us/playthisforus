@@ -48,7 +48,7 @@ class App.Search
 
     entryEl = $('<span>', {
       click: =>
-        @eventChannel.send(song.data())
+        @eventChannel.submitSong(song.data())
         @reset()
     })
 

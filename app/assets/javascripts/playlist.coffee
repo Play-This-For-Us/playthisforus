@@ -10,7 +10,7 @@ class App.Playlist
 
   # add a song to the playlist data structure
   addSong: (data) =>
-    song = new App.Song(data, @updatePlaylistUI)
+    song = new App.Song(data, @updatePlaylistUI, @sendUpvote, @sendDownvote)
     songPosition = @findSong(song)
 
     if songPosition >= 0
@@ -47,3 +47,12 @@ class App.Playlist
     @sortPlaylistSongs()
     @clearPlaylistUI()
     @appendSongUI(song) for song in @playlistSongs
+
+  # send an upvote to the server
+  sendUpvote: (songID) =>
+    @playlistChannel.vote(songID, true)
+    console.log('upvote')
+
+  # send a downvote to the server
+  sendDownvote: (songID) =>
+    @playlistChannel.vote(songID, false)
