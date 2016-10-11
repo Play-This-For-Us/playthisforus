@@ -25,7 +25,7 @@ class Event < ApplicationRecord
   before_create :set_join_code
 
   def avatar_image
-    # we currently have 5 default iamges
+    # we currently have 5 default images
     "events/#{(self.id % 4) + 1}.jpg"
   end
 
