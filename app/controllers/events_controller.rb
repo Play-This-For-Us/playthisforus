@@ -6,7 +6,7 @@ class EventsController < ApplicationController
     @events = Event.all
   end
 
-  def show  
+  def show
   end
 
   def new
@@ -64,7 +64,7 @@ class EventsController < ApplicationController
     end
   end
 
-private
+  private
 
   def set_event
     @event = Event.find(params[:id])
@@ -80,7 +80,7 @@ private
   end
 
   def can_view?
-    (current_user.present? and @event.user == current_user) || 
+    (current_user.present? && @event.user == current_user) || 
       (Event.find_by_join_code(cookies.permanent.encrypted[:join_cookie]) == @event)
   end
 end
