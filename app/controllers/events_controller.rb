@@ -1,5 +1,6 @@
 class EventsController < ApplicationController
   before_action :set_event, only: [:show, :edit, :update, :destroy]
+  before_action :authenticate, only: [:show, :edit]
 
   def index
     @events = Event.all
@@ -50,13 +51,36 @@ class EventsController < ApplicationController
     end
   end
 
-  private
-    def set_event
-      @event = Event.find(params[:id])
-    end
+  def join
+  end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def event_params
-      params.require(:event).permit(:name, :description)
+  def create_join
+    @event = Event.find_by_join_code(params[:join_code])
+    if @event.present?
+      cookies.permanent.encrypted[:join_cookie] = @event.join_code
+      redirect_to @event
+    else
+      render :join
     end
+  end
+
+  private
+
+  def set_event
+    @event = Event.find(params[:id])
+  end
+
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def event_params
+    params.require(:event).permit(:name, :description)
+  end
+
+  def authenticate
+    redirect_to root_path unless can_view?
+  end
+
+  def can_view?
+    (current_user.present? && @event.user == current_user) ||
+      (Event.find_by_join_code(cookies.permanent.encrypted[:join_cookie]) == @event)
+  end
 end
