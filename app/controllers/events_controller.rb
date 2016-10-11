@@ -80,7 +80,7 @@ class EventsController < ApplicationController
   end
 
   def can_view?
-    (current_user.present? && @event.user == current_user) || 
+    (current_user.present? && @event.user == current_user) ||
       (Event.find_by_join_code(cookies.permanent.encrypted[:join_cookie]) == @event)
   end
 end
