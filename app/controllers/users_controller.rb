@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 class UsersController < ApplicationController
-  before_filter :auth_user
+  before_action :auth_user
 
   def show
     @user = User.find(params[:id])

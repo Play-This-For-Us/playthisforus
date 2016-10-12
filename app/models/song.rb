@@ -14,6 +14,7 @@
 #  updated_at :datetime         not null
 #
 
+# An entry in an event's playlist
 class Song < ApplicationRecord
   belongs_to :event
 
@@ -26,7 +27,7 @@ class Song < ApplicationRecord
   def upvote(user_identifier)
     if self.votes.exists?(user_identifier: user_identifier)
       # the user already voted, change the vote to an upvote
-      self.votes.where(user_identifier: user_identifier).first.upvote
+      self.votes.find_by(user_identifier: user_identifier).upvote
     else
       # create a new upvote for the user
       self.votes.create!(user_identifier: user_identifier, vote: 1)
@@ -36,7 +37,7 @@ class Song < ApplicationRecord
   def downvote(user_identifier)
     if self.votes.exists?(user_identifier: user_identifier)
       # the user already voted, change the vote to a downvote
-      self.votes.where(user_identifier: user_identifier).first.downvote
+      self.votes.find_by(user_identifier: user_identifier).downvote
     else
       # create a new downvote for the user
       self.votes.create!(user_identifier: user_identifier, vote: -1)

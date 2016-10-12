@@ -14,3 +14,12 @@ Metrics/AbcSize:
 Metrics/MethodLength:
   CountComments: false  # count full line comments?
   Max: 20
+
+Style/EmptyLinesAroundBlockBody:
+  Enabled: false
+
+Style/RedundantSelf:
+  Enabled: false
+
+Rails:
+  Enabled: true

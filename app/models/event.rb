@@ -12,6 +12,7 @@
 #  user_id     :integer
 #
 
+# An event or party that multiple users can join
 class Event < ApplicationRecord
   JOIN_CODE_LENGTH = 8
 
