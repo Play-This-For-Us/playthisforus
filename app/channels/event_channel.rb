@@ -25,8 +25,6 @@ class EventChannel < ApplicationCable::Channel
   end
 
   def vote(data)
-    # TODO: way to set vote to 0
-
     user_identifier = @user_identifier
     song_id = data['song']
 
