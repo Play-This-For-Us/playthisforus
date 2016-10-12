@@ -97,10 +97,10 @@ class App.Song
       </span>
       <div class='media-body'>
         <a href='#{@spotifyOpenURL()}' style='text-decoration: none' target='_blank'>
-        <h4 class='media-heading songs-list__song-title'>
-          #{@name()}
+          <h4 class='media-heading songs-list__song-title'>
+            #{@name()}
+          </h4>
         </a>
-        </h4>
         <span class='songs-list__song-details'>
           <i class="fa fa-microphone"></i> #{@artist()}
         </span>
