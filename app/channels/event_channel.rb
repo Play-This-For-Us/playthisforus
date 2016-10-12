@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class EventChannel < ApplicationCable::Channel
   def subscribed
     @event = Event.find(params[:id])

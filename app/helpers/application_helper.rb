@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module ApplicationHelper
   def current_time
     @current_time ||= Time.now.to_i

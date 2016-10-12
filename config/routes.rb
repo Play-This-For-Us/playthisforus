@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 Rails.application.routes.draw do
   mount ActionCable.server => '/cable'
   resources :events, except: [:index] do
