@@ -22,7 +22,9 @@
         .card-footer.text-muted
           %i.fa.fa-key
           Guest Join Code:
-          %strong #{@event.join_code}
+          %strong{ id: 'eventJoinCode' } #{@event.join_code}
+          %a{ href: '#', id: 'eventQRPopover' }
+            %i.fa.fa-qrcode
 
   .row
     .col-md-6.offset-md-3
