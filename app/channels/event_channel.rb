@@ -33,16 +33,10 @@ class EventChannel < ApplicationCable::Channel
     song = Song.find_by(id: song_id, event: @event)
 
     unless song.nil?
-      vote = Vote.find_by(user_identifier: user_identifier, song: song)
-
-      if vote.nil?
-        Vote.create!(user_identifier: user_identifier, vote: data['upvote'] ? 1 : -1, song: song)
-      else # if the vote already exists, update the score
-        if data['upvote']
-          vote.upvote
-        else
-          vote.downvote
-        end
+      if data['upvote']
+        song.upvote(user_identifier)
+      else
+        song.downvote(user_identifier)
       end
 
       EventChannel.broadcast_to(@event, song)
