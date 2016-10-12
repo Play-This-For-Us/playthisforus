@@ -37,5 +37,7 @@ class EventChannel < ApplicationCable::Channel
     else
       song.downvote(user_identifier)
     end
+
+    EventChannel.broadcast_to(@event, song)
   end
 end
