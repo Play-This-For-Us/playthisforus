@@ -51,7 +51,6 @@ class App.Playlist
   # send an upvote to the server
   sendUpvote: (songID) =>
     @playlistChannel.vote(songID, true)
-    console.log('upvote')
 
   # send a downvote to the server
   sendDownvote: (songID) =>
