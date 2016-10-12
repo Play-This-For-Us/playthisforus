@@ -50,6 +50,9 @@ gem 'devise'
 # for timed tasks/ repeated tasks
 gem 'clockwork'
 
+# For QR code generation for events
+gem 'jquery-qrcode-rails'
+
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platform: :mri
