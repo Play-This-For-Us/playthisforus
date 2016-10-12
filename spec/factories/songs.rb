@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # == Schema Information
 #
 # Table name: songs
@@ -15,11 +16,11 @@
 
 FactoryGirl.define do
   factory :song do
-    name "MyString"
-    artist "MyString"
-    art "MyString"
+    name 'MyString'
+    artist 'MyString'
+    art 'MyString'
     duration 1
-    uri "MyString"
+    uri 'MyString'
     association :event, factory: :event
   end
 end

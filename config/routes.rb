@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 Rails.application.routes.draw do
   mount ActionCable.server => '/cable'
   resources :events, except: [:index] do
@@ -6,6 +7,6 @@ Rails.application.routes.draw do
   end
   devise_for :users
   resources :users, only: [:show]
-  root "home#index"
+  root 'home#index'
   get '/join/:join_code', to: 'events#create_join'
 end

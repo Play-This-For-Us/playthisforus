@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # == Schema Information
 #
 # Table name: events
@@ -11,6 +12,7 @@
 #  user_id     :integer
 #
 
+# An event or party that multiple users can join
 class Event < ApplicationRecord
   JOIN_CODE_LENGTH = 8
 
@@ -26,10 +28,10 @@ class Event < ApplicationRecord
 
   def avatar_image
     # we currently have 5 default images
-    "events/#{(self.id % 4) + 1}.jpg"
+    "events/#{(id % 4) + 1}.jpg"
   end
 
-private
+  private
 
   def set_join_code
     self.join_code = generate_join_code

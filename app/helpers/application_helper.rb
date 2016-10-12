@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module ApplicationHelper
   def current_time
     @current_time ||= Time.now.to_i
@@ -16,7 +17,7 @@ module ApplicationHelper
   end
 
   def eight_pm
-    @eight_pm ||= Time.now.change(hour: 20 ).to_i
+    @eight_pm ||= Time.now.change(hour: 20).to_i
   end
 
   def greeting

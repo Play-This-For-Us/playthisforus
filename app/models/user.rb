@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # == Schema Information
 #
 # Table name: users
@@ -17,6 +18,7 @@
 #  updated_at             :datetime         not null
 #
 
+# A registered user of the application
 class User < ApplicationRecord
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable

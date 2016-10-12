@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class EventChannel < ApplicationCable::Channel
   def subscribed
     @event = Event.find(params[:id])
@@ -16,12 +17,12 @@ class EventChannel < ApplicationCable::Channel
   end
 
   def submit_song(data)
-    unless Song.exists?(uri: data['uri'], event: @event)
-      song = Song.create!(name: data['name'], artist: data['artist'], art: data['art'], duration: data['duration'],
-                          uri: data['uri'], event: @event)
+    return if Song.exists?(uri: data['uri'], event: @event)
 
-      EventChannel.broadcast_to(@event, song)
-    end
+    song = Song.create!(name: data['name'], artist: data['artist'], art: data['art'], duration: data['duration'],
+                        uri: data['uri'], event: @event)
+
+    EventChannel.broadcast_to(@event, song)
   end
 
   def vote(data)
@@ -29,15 +30,12 @@ class EventChannel < ApplicationCable::Channel
     song_id = data['song']
 
     song = Song.find_by(id: song_id, event: @event)
+    return if song.nil?
 
-    unless song.nil?
-      if data['upvote']
-        song.upvote(user_identifier)
-      else
-        song.downvote(user_identifier)
-      end
-
-      EventChannel.broadcast_to(@event, song)
+    if data['upvote']
+      song.upvote(user_identifier)
+    else
+      song.downvote(user_identifier)
     end
   end
 end

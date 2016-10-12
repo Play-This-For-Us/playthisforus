@@ -1,8 +1,9 @@
+# frozen_string_literal: true
 require 'rails_helper'
 
-RSpec.describe "Home" do
-  it "contains our application name" do
+RSpec.describe 'Home' do
+  it 'contains our application name' do
     visit root_path
-    expect(page).to have_content "Play This"
+    expect(page).to have_content 'Play This'
   end
 end

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # == Schema Information
 #
 # Table name: votes
@@ -13,7 +14,7 @@
 FactoryGirl.define do
   factory :vote do
     sequence(:user_identifier) { |n| "unique-indentifier-#{n}" }
-    vote -1
+    vote(-1)
     association :song, factory: :song
   end
 end
