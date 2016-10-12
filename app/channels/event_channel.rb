@@ -28,6 +28,7 @@ class EventChannel < ApplicationCable::Channel
   def vote(data)
     user_identifier = @user_identifier
     song_id = data['song']
+    puts data['user_identifier']
 
     song = Song.find_by(id: song_id, event: @event)
     return if song.nil?

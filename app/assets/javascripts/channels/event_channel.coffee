@@ -20,11 +20,25 @@ class App.EventChannel
 
   # send data over the channel
   send: (data) =>
-    @eventChannel.send(data)
+    @eventChannel.send data
 
   vote: (songID, upvote) =>
     @eventChannel.perform 'vote',
       {
         upvote: upvote,
-        song: songID
+        song: songID,
+        user_identifier: @getCookie "user_identifier"
       }
+
+  getCookie: (cname) ->
+    name = cname + '='
+    ca = document.cookie.split(';')
+    i = 0
+    while i < ca.length
+      c = ca[i]
+      while c.charAt(0) == ' '
+        c = c.substring(1)
+      if c.indexOf(name) == 0
+        return c.substring(name.length, c.length)
+      i++
+    ''
