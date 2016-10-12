@@ -26,9 +26,12 @@ class EventChannel < ApplicationCable::Channel
   end
 
   def vote(data)
-    user_identifier = @user_identifier
     song_id = data['song']
-    puts data['user_identifier']
+    user_identifier = data['user_identifier']
+
+    # TODO(skovy): allow owners to vote - only allowing guests as of now
+    # some basic cookie verification
+    return if user_identifier.blank? || user_identifier.length != 40
 
     song = Song.find_by(id: song_id, event: @event)
     return if song.nil?
