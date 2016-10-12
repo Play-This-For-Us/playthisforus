@@ -6,7 +6,7 @@ class UsersController < ApplicationController
     @events = @user.events
   end
 
-private
+  private
 
   def auth_user
     redirect_to new_user_session_path unless user_signed_in?

@@ -6,6 +6,6 @@ Rails.application.routes.draw do
   end
   devise_for :users
   resources :users, only: [:show]
-  root "home#index"
+  root 'home#index'
   get '/join/:join_code', to: 'events#create_join'
 end

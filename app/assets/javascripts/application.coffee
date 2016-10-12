@@ -19,6 +19,6 @@
 
 # When the document is rendered, setup our DOM manipulations
 $(document).ready ->
-  eventView = new App.Event("#eventQRPopover", "#eventJoinCode")
-  playlistView = new App.Playlist(".songs-list")
-  searchView = new App.Search(".search-entry", ".search-results", ".search-results__close")
+  eventView = new App.Event('#eventQRPopover', '#eventJoinCode')
+  playlistView = new App.Playlist('.songs-list')
+  searchView = new App.Search('.search-entry', '.search-results', '.search-results__close')

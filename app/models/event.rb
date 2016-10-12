@@ -26,10 +26,10 @@ class Event < ApplicationRecord
 
   def avatar_image
     # we currently have 5 default images
-    "events/#{(self.id % 4) + 1}.jpg"
+    "events/#{(id % 4) + 1}.jpg"
   end
 
-private
+  private
 
   def set_join_code
     self.join_code = generate_join_code

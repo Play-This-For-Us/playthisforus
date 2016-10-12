@@ -15,23 +15,23 @@
     - if @events.empty?
       .col-md-4
         .card
-          = image_tag("events/1.jpg", class: "card-img-top")
+          = image_tag('events/1.jpg', class: 'card-img-top')
           .card-block
             %h4.card-title
               Your First Event
             %p.card-text
               Create an event then we can add guests and start on your song queue.
-            = link_to new_event_path, class: "btn btn-primary" do
+            = link_to new_event_path, class: 'btn btn-primary' do
               Let's Get Started!
     - else
       - @events.each do |event|
         .col-md-4
           .card
-            = image_tag(event.avatar_image, class: "card-img-top")
+            = image_tag(event.avatar_image, class: 'card-img-top')
             .card-block
               %h4.card-title
                 = event.name
               %p.card-text
                 = event.description
-              = link_to event_path(event), class: "btn btn-primary" do
+              = link_to event_path(event), class: 'btn btn-primary' do
                 View Event

@@ -54,9 +54,9 @@ class App.Song
     @score() > song.score()
 
   scoreClass: =>
-    scoreClass = "songs-list__score"
-    scoreClass += " songs-list__score--positive" if @score() > 0
-    scoreClass += " songs-list__score--negative" if @score() < 0
+    scoreClass = 'songs-list__score'
+    scoreClass += ' songs-list__score--positive' if @score() > 0
+    scoreClass += ' songs-list__score--negative' if @score() < 0
     return scoreClass
 
   @spotifyResultToSong: (data) ->
