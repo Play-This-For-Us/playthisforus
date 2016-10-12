@@ -1,9 +1,17 @@
 class App.Song
   # song - an object representing a song object (matches song.rb)
   # songChanged - a callback function to update UI when a song is changed
-  constructor: (@song, @songChanged) ->
-    $(document).on 'click', "#songs-list__song--#{@id()} .songs-list__vote--upvote", @upvote
-    $(document).on 'click', "#songs-list__song--#{@id()} .songs-list__vote--downvote", @downvote
+  # upvote - a callback function called when the song is upvoted
+  # downvote - a callback function called when the song is downvoted
+  constructor: (@song, @songChanged, @upvote, @downvote) ->
+    $(document).on 'click', "#songs-list__song--#{@id()} .songs-list__vote--upvote",
+      (e) =>
+        @upvote(@id())
+        e.stopImmediatePropagation()
+    $(document).on 'click', "#songs-list__song--#{@id()} .songs-list__vote--downvote",
+      (e) =>
+        @downvote(@id())
+        e.stopImmediatePropagation()
 
   data: =>
     @song
@@ -44,16 +52,6 @@ class App.Song
 
   isHigherRanked: (song) =>
     @score() > song.score()
-
-  upvote: =>
-    # TODO(skovy): persist to the database
-    @song.score += 1
-    @songChanged()
-
-  downvote: =>
-    # TODO(skovy): persist to the database
-    @song.score -= 1
-    @songChanged()
 
   scoreClass: =>
     scoreClass = "songs-list__score"
