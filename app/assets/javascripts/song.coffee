@@ -91,22 +91,21 @@ class App.Song
     """
     <div class='media songs-list__song' id='songs-list__song--#{@id()}'>
       <span class='media-left'>
-        <img class='media-object songs-list__song-avatar' src='#{@art()}' alt='Generic placeholder image'>
+        <a href='#{@spotifyOpenURL()}' style='text-decoration: none' target='_blank'>
+          <img class='media-object songs-list__song-avatar' src='#{@art()}' alt='Generic placeholder image'>
+        </a>
       </span>
       <div class='media-body'>
+        <a href='#{@spotifyOpenURL()}' style='text-decoration: none' target='_blank'>
         <h4 class='media-heading songs-list__song-title'>
           #{@name()}
+        </a>
         </h4>
         <span class='songs-list__song-details'>
           <i class="fa fa-microphone"></i> #{@artist()}
         </span>
         <span class='songs-list__song-details'>
           <i class="fa fa-clock-o"></i> #{@duration()}
-        </span>
-        <span class='songs-list__song-details'>
-          <a href='#{@spotifyOpenURL()}' target='_blank'>
-            <i class="fa fa-spotify"></i> Open in Spotify
-          </a>
         </span>
       </div>
       <span class='media-right songs-list__vote-container'>
