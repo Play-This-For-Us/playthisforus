@@ -21,6 +21,8 @@ class Event < ApplicationRecord
   validates :name, presence: true
   validates :description, presence: true
 
+  has_many :songs
+
   has_secure_token :join_code
 
   # create a random code to join the event

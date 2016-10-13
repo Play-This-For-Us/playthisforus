@@ -57,8 +57,10 @@ class EventsController < ApplicationController
 
   def create_join
     @event = Event.find_by_join_code(params[:join_code])
+
     if @event.present?
-      cookies.permanent.encrypted[:join_cookie] = @event.join_code
+      set_join_cookie
+      set_user_identifier_cookie
       redirect_to @event
     else
       render :join
@@ -66,6 +68,14 @@ class EventsController < ApplicationController
   end
 
   private
+
+  def set_join_cookie
+    cookies.permanent.encrypted[:join_cookie] = @event.join_code
+  end
+
+  def set_user_identifier_cookie
+    cookies.permanent[:user_identifier] = Digest::SHA1.hexdigest([Time.now.utc, rand].join)
+  end
 
   def set_event
     @event = Event.find(params[:id])

@@ -3,15 +3,8 @@ class EventChannel < ApplicationCable::Channel
   def subscribed
     @event = Event.find(params[:id])
 
-    # TODO: use user identifier from cookie
-    @user_identifier = ('a'..'z').to_a.sample(16).join
-
-    temp_stream_name = String(@event) + '|' + @user_identifier
-    stream_from temp_stream_name
-
-    Song.where(event: @event).each do |song|
-      ActionCable.server.broadcast(temp_stream_name, song)
-    end
+    stream_from unique_channel
+    broadcast_current_queue
 
     stream_for @event
   end
@@ -26,18 +19,30 @@ class EventChannel < ApplicationCable::Channel
   end
 
   def vote(data)
-    user_identifier = @user_identifier
-    song_id = data['song']
+    return unless current_user.present?
 
+    song_id = data['song']
     song = Song.find_by(id: song_id, event: @event)
     return if song.nil?
 
     if data['upvote']
-      song.upvote(user_identifier)
+      song.upvote(current_user)
     else
-      song.downvote(user_identifier)
+      song.downvote(current_user)
     end
 
     EventChannel.broadcast_to(@event, song)
+  end
+
+  private
+
+  def broadcast_current_queue
+    @event.songs.each do |song|
+      ActionCable.server.broadcast(unique_channel, song)
+    end
+  end
+
+  def unique_channel
+    @unique_channel ||= "#{@event}|#{current_user}"
   end
 end

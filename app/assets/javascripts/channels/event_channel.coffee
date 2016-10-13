@@ -20,7 +20,7 @@ class App.EventChannel
 
   # send data over the channel
   send: (data) =>
-    @eventChannel.send(data)
+    @eventChannel.send data
 
   vote: (songID, upvote) =>
     @eventChannel.perform 'vote',
