@@ -26,19 +26,5 @@ class App.EventChannel
     @eventChannel.perform 'vote',
       {
         upvote: upvote,
-        song: songID,
-        user_identifier: @getCookie "user_identifier"
+        song: songID
       }
-
-  getCookie: (cname) ->
-    name = cname + '='
-    ca = document.cookie.split(';')
-    i = 0
-    while i < ca.length
-      c = ca[i]
-      while c.charAt(0) == ' '
-        c = c.substring(1)
-      if c.indexOf(name) == 0
-        return c.substring(name.length, c.length)
-      i++
-    ''
