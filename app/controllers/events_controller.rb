@@ -60,7 +60,7 @@ class EventsController < ApplicationController
 
     if @event.present?
       set_join_cookie
-      set_user_identifier
+      set_user_identifier_cookie
       redirect_to @event
     else
       render :join
