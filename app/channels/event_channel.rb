@@ -3,12 +3,8 @@ class EventChannel < ApplicationCable::Channel
   def subscribed
     @event = Event.find(params[:id])
 
-    temp_stream_name = String(@event) + '|' + String(current_user)
-    stream_from temp_stream_name
-
-    @event.songs.each do |song|
-      ActionCable.server.broadcast(temp_stream_name, song)
-    end
+    stream_from unique_channel
+    broadcast_current_queue
 
     stream_for @event
   end
@@ -36,5 +32,17 @@ class EventChannel < ApplicationCable::Channel
     end
 
     EventChannel.broadcast_to(@event, song)
+  end
+
+  private
+
+  def broadcast_current_queue
+    @event.songs.each do |song|
+      ActionCable.server.broadcast(unique_channel, song)
+    end
+  end
+
+  def unique_channel
+    @unique_channel ||= "#{@event}|#{current_user}"
   end
 end
