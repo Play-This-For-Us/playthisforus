@@ -7,7 +7,7 @@ class EventChannel < ApplicationCable::Channel
     stream_from temp_stream_name
 
     @event.songs.each do |song|
-      ActionCable.server.broadcast(temp_stream_named, song)
+      ActionCable.server.broadcast(temp_stream_name, song)
     end
 
     stream_for @event
