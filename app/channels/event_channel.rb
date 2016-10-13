@@ -3,11 +3,14 @@ class EventChannel < ApplicationCable::Channel
   def subscribed
     @event = Event.find(params[:id])
 
-    temp_stream_name = String(@event) + '|' + current_user
+    puts String(current_user)
+    temp_stream_name = String(@event) + '|' + String(current_user)
     stream_from temp_stream_name
 
-    Song.where(event: @event).each do |song|
-      ActionCable.server.broadcast(temp_stream_name, song)
+    puts "COUNT #{@event.songs.count}"
+    @event.songs.each do |song|
+      puts song
+      ActionCable.server.broadcast(@event, song)
     end
 
     stream_for @event
@@ -16,6 +19,7 @@ class EventChannel < ApplicationCable::Channel
   end
 
   def submit_song(data)
+    puts data
     return if Song.exists?(uri: data['uri'], event: @event)
 
     song = Song.create!(name: data['name'], artist: data['artist'], art: data['art'], duration: data['duration'],
@@ -25,7 +29,7 @@ class EventChannel < ApplicationCable::Channel
   end
 
   def vote(data)
-    if current_user.present?
+    return unless current_user.present?
 
     song_id = data['song']
     song = Song.find_by(id: song_id, event: @event)
