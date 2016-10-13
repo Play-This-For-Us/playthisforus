@@ -14,10 +14,8 @@ module ApplicationCable
         verified_user.id
       else
         user_identifier = cookies.permanent[:user_identifier]
-        if (user_identifier.present? && user_identifier.length == 40)
+        if user_identifier.present? && user_identifier.length == 40
           user_identifier
-        else
-          nil
         end
       end
     end
