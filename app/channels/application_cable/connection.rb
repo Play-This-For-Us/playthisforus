@@ -22,8 +22,8 @@ module ApplicationCable
     def find_verified_user
       if authenticated_user.present?
         authenticated_user.id # use the authenticated user's id
-      else
-        unauthenticated_user if unauthenticated_user.present? && unauthenticated_user.length == 40
+      elsif unauthenticated_user.present? && unauthenticated_user.length == 40
+        unauthenticated_user
       end
     end
   end
