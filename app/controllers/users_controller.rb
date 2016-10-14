@@ -7,6 +7,16 @@ class UsersController < ApplicationController
     @events = @user.events
   end
 
+  def spotify
+    spotify_user = RSpotify::User.new(request.env['omniauth.auth'])
+
+    if current_user.update!(spotify_attributes: spotify_user.to_hash)
+      redirect_to current_user, notice: 'Nice! You have successfully authenticated with Spotify.'
+    else
+      redirect_to current_user, error: 'Oh snap! Something didn\'t go correctly'
+    end
+  end
+
   private
 
   def auth_user

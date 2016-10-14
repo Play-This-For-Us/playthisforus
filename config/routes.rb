@@ -9,4 +9,5 @@ Rails.application.routes.draw do
   resources :users, only: [:show]
   root 'home#index'
   get '/join/:join_code', to: 'events#create_join'
+  get '/auth/spotify/callback', to: 'users#spotify'
 end

@@ -18,6 +18,8 @@
         .card-block
           %p.card-text.lead
             = @event.description
+            = link_to 'Sign in with Spotify', '/auth/spotify'
+
 
         .card-footer.text-muted
           %i.fa.fa-key
