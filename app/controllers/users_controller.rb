@@ -12,8 +12,8 @@ class UsersController < ApplicationController
     # Now you can access user's private data, create playlists and much more
 
     # Access private data
-    spotify_user.country #=> "US"
-    spotify_user.email   #=> "example@email.com"
+    puts spotify_user.to_hash
+    redirect_to current_user, notice: 'Nice! You have successfully authenticated with Spotify.'
   end
 
   private
