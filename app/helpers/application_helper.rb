@@ -21,9 +21,9 @@ module ApplicationHelper
   end
 
   def custom_user
-    if current_user.spotify_attributes.key?("display_name") &&
-       current_user.spotify_attributes["display_name"].length > 0
-      ", #{current_user.spotify_attributes["display_name"]}"
+    if current_user.spotify_attributes.key?('display_name') &&
+       current_user.spotify_attributes['display_name'].length > 0
+      ", #{current_user.spotify_attributes['display_name']}"
     end
   end
 
