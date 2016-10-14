@@ -26,4 +26,6 @@ class User < ApplicationRecord
          :recoverable, :rememberable, :trackable, :validatable
 
   has_many :events
+
+  serialize :spotify_attributes
 end

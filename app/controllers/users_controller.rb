@@ -9,11 +9,12 @@ class UsersController < ApplicationController
 
   def spotify
     spotify_user = RSpotify::User.new(request.env['omniauth.auth'])
-    # Now you can access user's private data, create playlists and much more
 
-    # Access private data
-    puts spotify_user.to_hash
-    redirect_to current_user, notice: 'Nice! You have successfully authenticated with Spotify.'
+    if current_user.update!(spotify_attributes: spotify_user.to_hash)
+      redirect_to current_user, notice: 'Nice! You have successfully authenticated with Spotify.'
+    else
+      redirect_to current_user, error: 'Oh snap! Something didn\'t go correctly'
+    end
   end
 
   private
