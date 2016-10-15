@@ -29,4 +29,13 @@ class User < ApplicationRecord
   has_many :events
 
   serialize :spotify_attributes
+
+  # A basic check to verify that there are attributes stored in spotify
+  # attributes. We may want to consider a more "reliable" verification
+  def user_spotify_authenticated?
+    self.spotify_attributes.present? &&
+    self.spotify_attributes.key?('credentials') &&
+    self.spotify_attributes['credentials'].key?('refresh_token') &&
+    self.spotify_attributes['credentials'].key?('token')
+  end
 end
