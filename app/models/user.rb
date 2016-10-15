@@ -38,4 +38,8 @@ class User < ApplicationRecord
     self.spotify_attributes['credentials'].key?('refresh_token') &&
     self.spotify_attributes['credentials'].key?('token')
   end
+
+  def spotify
+    @spotify ||= RSpotify::User.new(self.spotify_attributes)
+  end
 end
