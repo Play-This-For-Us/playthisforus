@@ -78,8 +78,10 @@ class EventsController < ApplicationController
   private
 
   def create_playlist
+    return true if @event.spotify_playlist_id.present?
+
     playlist = current_user.spotify.create_playlist!(@event.name)
-    puts playlist.id
+    @event.update(spotify_playlist_id: playlist.id)
   end
 
   def set_join_cookie
