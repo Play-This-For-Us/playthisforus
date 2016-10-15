@@ -68,7 +68,7 @@ class EventsController < ApplicationController
   end
 
   def start_playing
-    if create_playlist
+    if create_playlist && queue_first_song
       redirect_to @event, notice: 'Sweet! The playlist has started.'
     else
       redirect_to @event, error: 'An error occurred creating the playlist.'
@@ -77,10 +77,14 @@ class EventsController < ApplicationController
 
   private
 
+  def queue_first_song
+    @event.queue_next_song
+  end
+
   def create_playlist
     return true if @event.spotify_playlist_id.present?
 
-    playlist = current_user.spotify.create_playlist!(@event.name)
+    playlist = @event.user.spotify.create_playlist!(@event.name)
     @event.update(spotify_playlist_id: playlist.id)
   end
 

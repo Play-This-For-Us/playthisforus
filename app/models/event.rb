@@ -34,7 +34,27 @@ class Event < ApplicationRecord
     "events/#{(id % 4) + 1}.jpg"
   end
 
+  def current_queue
+    self.songs
+  end
+
+  def next_song
+    current_queue.first
+  end
+
+  def next_song_to_spotify
+    RSpotify::Track.new(next_song)
+  end
+
+  def queue_next_song
+    spotify_playlist.add_tracks!([next_song_to_spotify])
+  end
+
   private
+
+  def spotify_playlist
+    @spotify_playlist ||= RSpotify::Playlist.find(self.user.spotify_attributes['id'], self.spotify_playlist_id)
+  end
 
   def set_join_code
     self.join_code = generate_join_code
