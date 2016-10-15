@@ -67,6 +67,10 @@ class EventsController < ApplicationController
     end
   end
 
+  def start_playing
+    puts "NIce"
+  end
+
   private
 
   def set_join_cookie

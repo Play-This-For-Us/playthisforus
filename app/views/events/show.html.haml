@@ -18,13 +18,13 @@
         .card-block
           %p.card-text.lead
             = @event.description
-            - if is_owner?(@event)
-              - if current_user.user_spotify_authenticated?
-                = link_to '#' do
-                  %i.fa.fa-play
-                  Play on Spotify
-              - else
-                = link_to 'Sign in with Spotify', '/auth/spotify'
+          - if is_owner?(@event)
+            - if current_user.user_spotify_authenticated?
+              = link_to start_playing_event_path, method: :post, class: "btn btn-primary" do
+                %i.fa.fa-play
+                Play on Spotify
+            - else
+              = link_to 'Sign in with Spotify', '/auth/spotify'
 
 
         .card-footer.text-muted
