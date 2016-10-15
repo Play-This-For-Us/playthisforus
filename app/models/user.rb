@@ -34,9 +34,9 @@ class User < ApplicationRecord
   # attributes. We may want to consider a more "reliable" verification
   def user_spotify_authenticated?
     self.spotify_attributes.present? &&
-    self.spotify_attributes.key?('credentials') &&
-    self.spotify_attributes['credentials'].key?('refresh_token') &&
-    self.spotify_attributes['credentials'].key?('token')
+      self.spotify_attributes.key?('credentials') &&
+      self.spotify_attributes['credentials'].key?('refresh_token') &&
+      self.spotify_attributes['credentials'].key?('token')
   end
 
   def spotify

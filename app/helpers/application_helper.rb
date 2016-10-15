@@ -40,7 +40,7 @@ module ApplicationHelper
     end
   end
 
-  def is_owner?(event)
+  def owner?(event)
     current_user && event.user == current_user
   end
 end
