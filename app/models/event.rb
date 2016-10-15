@@ -3,13 +3,14 @@
 #
 # Table name: events
 #
-#  id          :integer          not null, primary key
-#  name        :string           not null
-#  description :text             not null
-#  join_code   :string           not null
-#  created_at  :datetime         not null
-#  updated_at  :datetime         not null
-#  user_id     :integer
+#  id                  :integer          not null, primary key
+#  name                :string           not null
+#  description         :text             not null
+#  join_code           :string           not null
+#  created_at          :datetime         not null
+#  updated_at          :datetime         not null
+#  user_id             :integer
+#  spotify_playlist_id :string
 #
 
 # An event or party that multiple users can join
