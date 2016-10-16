@@ -39,4 +39,8 @@ module ApplicationHelper
       "Good Night#{custom_user}!"
     end
   end
+
+  def owner?(event)
+    current_user && event.user == current_user
+  end
 end
