@@ -43,10 +43,12 @@ class Event < ApplicationRecord
   end
 
   def next_song_to_spotify
+    return unless next_song
     RSpotify::Track.new(next_song)
   end
 
   def queue_next_song
+    return unless next_song
     spotify_playlist.add_tracks!([next_song_to_spotify])
   end
 
