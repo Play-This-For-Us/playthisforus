@@ -11,6 +11,7 @@
 #  updated_at          :datetime         not null
 #  user_id             :integer
 #  spotify_playlist_id :string
+#  currently_playing   :boolean          default(FALSE), not null
 #
 
 FactoryGirl.define do
