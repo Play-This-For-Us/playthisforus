@@ -57,8 +57,9 @@ class Event < ApplicationRecord
   def queue_next_song
     return unless next_song
 
+    auth_user
     spotify_playlist.add_tracks!([next_song_to_spotify])
-    next_song.update(queued_at: Time.now)
+    next_song.update(queued_at: Time.now.utc)
   end
 
   def check_queue
@@ -72,13 +73,18 @@ class Event < ApplicationRecord
 
   private
 
+  def auth_user
+    # TODO(skovy) make this cleaner
+    self.user.spotify
+  end
+
   def currently_playing_song
     self.songs.where.not(queued_at: nil).order(queued_at: :desc).first
   end
 
   def should_queue_next_song?
     song = currently_playing_song
-    (song.queued_at + (song.duration / 1000).seconds) > (Time.now - 15.seconds)
+    (song.queued_at + (song.duration / 1000).seconds) <= (Time.now.utc + 15.seconds)
   end
 
   def spotify_playlist
