@@ -7,6 +7,8 @@ require 'rails/all'
 # you've limited to :test, :development, or :production.
 Bundler.require(*Rails.groups)
 
+RSpotify.authenticate(ENV["SPOTIFY_CLIENT_ID"], ENV["SPOTIFY_CLIENT_SECRET"])
+
 module Playthisforus
   class Application < Rails::Application
     config.action_view.field_error_proc = proc { |html_tag|

@@ -30,6 +30,8 @@ class Event < ApplicationRecord
   # create a random code to join the event
   before_create :set_join_code
 
+  scope :currently_playing, -> { where(currently_playing: true) }
+
   def avatar_image
     # we currently have 5 default images
     "events/#{(id % 4) + 1}.jpg"
@@ -37,6 +39,10 @@ class Event < ApplicationRecord
 
   def current_queue
     self.songs.active_queue.ranked
+  end
+
+  def can_queue_song?
+    current_queue.length > 0
   end
 
   def next_song

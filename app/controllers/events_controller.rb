@@ -68,7 +68,7 @@ class EventsController < ApplicationController
   end
 
   def start_playing
-    if create_playlist && queue_first_song
+    if create_playlist && queue_first_song && set_playing
       redirect_to @event, notice: 'Sweet! The playlist has started.'
     else
       redirect_to @event, error: 'An error occurred creating the playlist.'
@@ -76,6 +76,10 @@ class EventsController < ApplicationController
   end
 
   private
+
+  def set_playing
+    @event.update!(current_playing: true)
+  end
 
   def queue_first_song
     @event.queue_next_song
