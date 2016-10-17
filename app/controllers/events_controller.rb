@@ -78,7 +78,7 @@ class EventsController < ApplicationController
   private
 
   def set_playing
-    @event.update!(current_playing: true)
+    @event.update!(currently_playing: true)
   end
 
   def queue_first_song
