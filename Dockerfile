@@ -14,6 +14,7 @@ WORKDIR /playthis
 # Install our gems
 COPY Gemfile Gemfile.lock ./
 RUN gem install bundler && bundler install --jobs 4 --retry 5
+RUN gem install foreman
 
 # Copy over the project
 COPY . ./
