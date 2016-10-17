@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 class EventsController < ApplicationController
-  before_action :set_event, only: [:show, :edit, :update, :destroy]
+  before_action :set_event, only: [:show, :edit, :update, :destroy, :start_playing]
   before_action :authenticate, only: [:show, :edit]
 
   def index
@@ -67,7 +67,26 @@ class EventsController < ApplicationController
     end
   end
 
+  def start_playing
+    if create_playlist && queue_first_song
+      redirect_to @event, notice: 'Sweet! The playlist has started.'
+    else
+      redirect_to @event, error: 'An error occurred creating the playlist.'
+    end
+  end
+
   private
+
+  def queue_first_song
+    @event.queue_next_song
+  end
+
+  def create_playlist
+    return true if @event.spotify_playlist_id.present?
+
+    playlist = @event.user.spotify.create_playlist!(@event.name)
+    @event.update(spotify_playlist_id: playlist.id)
+  end
 
   def set_join_cookie
     cookies.permanent.encrypted[:join_cookie] = @event.join_code
