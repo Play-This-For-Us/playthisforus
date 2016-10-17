@@ -35,7 +35,7 @@ class Event < ApplicationRecord
   end
 
   def current_queue
-    self.songs
+    self.songs.active_queue.ranked
   end
 
   def next_song
@@ -49,13 +49,17 @@ class Event < ApplicationRecord
 
   def queue_next_song
     return unless next_song
+
     spotify_playlist.add_tracks!([next_song_to_spotify])
+    next_song.update(queued_at: Time.now)
   end
 
   private
 
   def spotify_playlist
-    @spotify_playlist ||= RSpotify::Playlist.find(self.user.spotify_attributes['id'], self.spotify_playlist_id)
+    user_id = self.user.spotify_attributes['id']
+    playlist_id = self.spotify_playlist_id
+    @spotify_playlist ||= RSpotify::Playlist.find(user_id, playlist_id)
   end
 
   def set_join_code
