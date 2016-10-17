@@ -42,7 +42,7 @@ class Event < ApplicationRecord
   end
 
   def can_queue_song?
-    current_queue.length > 0
+    current_queue.positive?
   end
 
   def next_song
@@ -63,12 +63,8 @@ class Event < ApplicationRecord
   end
 
   def check_queue
-    if should_queue_next_song?
-      puts "Queueing song"
-      queue_next_song
-    else
-      puts "Skipping queue"
-    end
+    return unless should_queue_next_song?
+    queue_next_song
   end
 
   private
