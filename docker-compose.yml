@@ -1,0 +1,14 @@
+version: '2'
+services:
+  db:
+    image: postgres
+    ports:
+      - "5432:5432"
+  web:
+    build: .
+    env_file: docker.env
+    command: foreman s
+    ports:
+      - "3000:3000"
+    links:
+      - db
