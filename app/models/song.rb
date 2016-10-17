@@ -23,7 +23,7 @@ class Song < ApplicationRecord
 
   scope :active_queue, -> { where(queued_at: nil) }
 
-  scope :ranked, -> { joins(:votes).group('votes.song_id, songs.id').order('sum(votes.vote) DESC') }
+  scope :ranked, -> { joins('LEFT JOIN votes ON songs.id = votes.song_id').group('votes.song_id, songs.id').order('sum(votes.vote) DESC') }
 
   def score
     self.votes.sum(:vote)
