@@ -62,19 +62,23 @@ class Event < ApplicationRecord
   end
 
   def check_queue
-    return unless should_queue_next_song?
-    queue_next_song
+    if should_queue_next_song?
+      puts "Queueing song"
+      queue_next_song
+    else
+      puts "Skipping queue"
+    end
   end
 
   private
 
   def currently_playing_song
-    self.song.where.not(queued_at: nil).order(queued_at: :desc).first
+    self.songs.where.not(queued_at: nil).order(queued_at: :desc).first
   end
 
   def should_queue_next_song?
     song = currently_playing_song
-    ((song.duration / 1000) + song.queued_at) > (Time.now - 15)
+    (song.queued_at + (song.duration / 1000).seconds) > (Time.now - 15.seconds)
   end
 
   def spotify_playlist
