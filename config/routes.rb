@@ -15,7 +15,6 @@ Rails.application.routes.draw do
 
   # events management and joining
   resources :events, except: [:index] do
-    post 'create_join', on: :collection
     post 'start_playing', on: :member
   end
 
