@@ -3,7 +3,7 @@
 
 .container.container-custom
   .row
-    .col-md-12
+    .col-md-8.offset-md-2
       .card
         .event__banner{ style: "background-image: url('#{image_url(@event.avatar_image)}')"}
           .event__banner-overlay
@@ -18,7 +18,17 @@
         .card-block
           %p.card-text.lead
             = @event.description
+
           - if owner?(@event)
+            %i.fa.fa-key
+            Guest Join Code:
+            %strong{ id: 'eventJoinCode' } #{@event.join_code}
+            %a{ href: '#', id: 'eventQRPopover' }
+              %i.fa.fa-qrcode
+              QR Code
+
+        - if owner?(@event)
+          .card-footer.text-muted
             - if current_user.user_spotify_authenticated?
               = link_to start_playing_event_path, method: :post, class: "btn btn-primary" do
                 %i.fa.fa-play
@@ -26,16 +36,8 @@
             - else
               = link_to 'Sign in with Spotify', '/auth/spotify'
 
-
-        .card-footer.text-muted
-          %i.fa.fa-key
-          Guest Join Code:
-          %strong{ id: 'eventJoinCode' } #{@event.join_code}
-          %a{ href: '#', id: 'eventQRPopover' }
-            %i.fa.fa-qrcode
-
   .row
-    .col-md-6.offset-md-3
+    .col-md-8.offset-md-2
       %form.search-form
         .form-group
           .input-group
