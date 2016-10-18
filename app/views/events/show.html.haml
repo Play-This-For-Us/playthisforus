@@ -24,7 +24,9 @@
                 %i.fa.fa-play
                 Play on Spotify
             - else
-              = link_to 'Sign in with Spotify', '/auth/spotify'
+              = link_to '/auth/spotify', class: "btn btn-primary" do
+                %i.fa.fa-spotify
+                Sign in with Spotify
 
 
         .card-footer.text-muted
