@@ -33,6 +33,12 @@ img {
   width: 100%;
 }
 
+.btn-secondary {
+  color: $dark;
+  background-color: $light;
+  border-color: $dark;
+}
+
 // this is automatically appended and causes styling issues
 .field_with_errors {
   display: inline-block;
@@ -53,6 +59,7 @@ img {
   padding: 200px 0;
   background-position: center;
   background-size: cover;
+  margin-bottom: 0;
 }
 
 .navbar-toggler {
@@ -61,4 +68,10 @@ img {
 
 .header-brand {
   color: $blue;
+}
+
+.container__landing-page {
+  padding: 60px 0;
+  background-color: $orange;
+  color: $light;
 }

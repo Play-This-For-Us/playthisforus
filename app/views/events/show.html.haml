@@ -5,6 +5,27 @@
   .row
     .col-md-8.offset-md-2
       .card
+        .card-block
+          %p.card-text.lead
+            Invite some guests to join! You can use any of the following methods.
+
+          %ul
+            %li
+              Provide them with the event code (
+              %strong
+                #{@event.join_code}
+              ) and direct them to
+              = link_to join_events_path, class: "nav-link" do
+                %i.fa.fa-share
+                Join an Event
+
+            %li
+              page, share this QR Code with them or direct them to this URL:
+
+            %li
+              Or direct them to this link:
+
+      .card
         .event__banner{ style: "background-image: url('#{image_url(@event.avatar_image)}')"}
           .event__banner-overlay
           %h2.event__name
@@ -20,12 +41,15 @@
             = @event.description
 
           - if owner?(@event)
-            %i.fa.fa-key
-            Guest Join Code:
-            %strong{ id: 'eventJoinCode' } #{@event.join_code}
-            %a{ href: '#', id: 'eventQRPopover' }
-              %i.fa.fa-qrcode
-              QR Code
+            %p.card-text
+              %i.fa.fa-key
+              Guest Join Code:
+              %strong{ id: 'eventJoinCode' } #{@event.join_code}
+
+            %p.card-text
+              %a{ href: '#', id: 'eventQRPopover' }
+                %i.fa.fa-qrcode
+                QR Code
 
         - if owner?(@event)
           .card-footer.text-muted
@@ -43,7 +67,7 @@
           .input-group
             .input-group-addon
               %i.fa.fa-search
-            %input.form-control.search-entry{ type: 'text', placeholder: 'Search for Songs on Spotify' }
+            %input.form-control.form-control-lg.search-entry{ type: 'text', placeholder: 'Search for Songs on Spotify' }
             .input-group-addon.search-results__close
               %i.fa.fa-times
           .search-results
