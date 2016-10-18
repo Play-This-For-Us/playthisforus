@@ -60,11 +60,11 @@
                 Sign Up
 
 
-    .container.container-custom
-      - unless flash.empty?
+    - unless flash.empty?
+      .container.flash-container
         - flash.each do |name, msg|
           - if msg.is_a?(String)
-            %div{ class: "alert alert-#{name == :notice.to_s ? "success" : "danger"} flash-display" }
+            %div{ class: "alert alert-#{name == :notice.to_s ? "success" : "danger"} flash-display #{yield (:alert_class)}" }
               %a.close{ "data-dismiss": "alert" }
                 %i.fa.fa-times
               = content_tag :div, msg, :id => "flash_#{name}"

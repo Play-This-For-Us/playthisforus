@@ -39,6 +39,22 @@ img {
   border-color: $dark;
 }
 
+.flash-container {
+  position: relative;
+  z-index: 9;
+}
+
+.flash-display {
+  margin-top: 16px;
+}
+
+.alert--cover {
+  position: absolute;
+  left: 15px;
+  right: 15px;
+  z-index: 9;
+}
+
 // this is automatically appended and causes styling issues
 .field_with_errors {
   display: inline-block;
