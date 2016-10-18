@@ -53,7 +53,6 @@ class EventsController < ApplicationController
   end
 
   def join
-    puts params.inspect
     if join_event_params.present?
       @event = Event.find_by_join_code(join_event_params)
 
