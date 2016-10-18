@@ -3,27 +3,32 @@
 
 .container.container-custom
   .row
-    .col-lg-8.offset-lg-2
-      .card
-        .card-block
-          %p.card-text.lead
-            Invite some guests to join! You can use any of the following methods.
+    .col-md-12.col-lg-8.offset-lg-2
 
-          %ul
-            %li
-              Provide them with the event code (
-              %strong
-                #{@event.join_code}
-              ) and direct them to
-              = link_to join_events_path, class: "nav-link" do
-                %i.fa.fa-share
-                Join an Event
+      - if owner?(@event)
+        .card
+          .card-block
+            %p.card-text.lead
+              Invite some guests to join! You can use any of the following methods.
 
-            %li
-              page, share this QR Code with them or direct them to this URL:
+            %ul
+              %li
+                Provide them with the event code
+                %strong{ id: 'eventJoinCode' }
+                  #{@event.join_code}
+                and direct them to the
+                = link_to 'landing page.', root_path
 
-            %li
-              Or direct them to this link:
+              %li
+                Share this
+                %a{ href: '#', id: 'eventQRPopover' }
+                  %i.fa.fa-qrcode
+                  QR Code
+                with them.
+
+              %li
+                Or direct them to this link:
+                = link_to "http://www.playthisfor.us#{join_events_path(join_code: @event.join_code)}", join_events_path(join_code: @event.join_code)
 
       .card
         .event__banner{ style: "background-image: url('#{image_url(@event.avatar_image)}')"}
@@ -40,17 +45,6 @@
           %p.card-text.lead
             = @event.description
 
-          - if owner?(@event)
-            %p.card-text
-              %i.fa.fa-key
-              Guest Join Code:
-              %strong{ id: 'eventJoinCode' } #{@event.join_code}
-
-            %p.card-text
-              %a{ href: '#', id: 'eventQRPopover' }
-                %i.fa.fa-qrcode
-                QR Code
-
         - if owner?(@event)
           .card-footer.text-muted
             - if current_user.user_spotify_authenticated?
@@ -61,7 +55,7 @@
               = link_to 'Sign in with Spotify', '/auth/spotify'
 
   .row
-    .col-lg-8.offset-lg-2
+    .col-md-12.col-lg-8.offset-lg-2
       %form.search-form
         .form-group
           .input-group

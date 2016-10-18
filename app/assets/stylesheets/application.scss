@@ -55,6 +55,17 @@ img {
   z-index: 9;
 }
 
+@media only screen and (max-width: 767px) {
+  .navbar-header {
+    height: 40px;
+  }
+
+  .navbar-nav {
+    text-align: right;
+    padding-right: .75em;
+  }
+}
+
 // this is automatically appended and causes styling issues
 .field_with_errors {
   display: inline-block;
