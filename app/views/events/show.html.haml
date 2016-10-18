@@ -52,7 +52,9 @@
                 %i.fa.fa-play
                 Play on Spotify
             - else
-              = link_to 'Sign in with Spotify', '/auth/spotify'
+              = link_to '/auth/spotify', class: "btn btn-primary" do
+                %i.fa.fa-spotify
+                Sign in with Spotify
 
   .row
     .col-md-12.col-lg-8.offset-lg-2

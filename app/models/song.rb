@@ -12,6 +12,7 @@
 #  event_id   :integer          not null
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
+#  queued_at  :datetime
 #
 
 # An entry in an event's playlist
@@ -19,6 +20,10 @@ class Song < ApplicationRecord
   belongs_to :event
 
   has_many :votes
+
+  scope :active_queue, -> { where(queued_at: nil) }
+
+  scope :ranked, -> { joins('LEFT JOIN votes ON songs.id = votes.song_id').group('votes.song_id, songs.id').order('sum(votes.vote) DESC') }
 
   def score
     self.votes.sum(:vote)
