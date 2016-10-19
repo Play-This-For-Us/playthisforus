@@ -83,8 +83,6 @@ class EventsController < ApplicationController
       params[:join_code]
     elsif params.key?(:events) && params[:events].key?(:join_code)
       params[:events][:join_code]
-    else
-      nil
     end
   end
 

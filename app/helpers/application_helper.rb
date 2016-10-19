@@ -9,8 +9,8 @@ module ApplicationHelper
   end
 
   def greetings
-    ["Hey", "Hello", "Hi", "Howdy", "Bonjour", "Good day", "Aloha", "Yo",
-    "Namaste", "Howdy-do", "Cheerio", "G'day", "Good day", "Sup", "Salute"]
+    ['Hey', 'Hello', 'Hi', 'Howdy', 'Bonjour', 'Good day', 'Aloha', 'Yo',
+     'Namaste', 'Howdy-do', 'Cheerio', 'G\'day', 'Good day', 'Sup', 'Salute']
   end
 
   def greeting
