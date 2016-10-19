@@ -63,6 +63,10 @@ class Event < ApplicationRecord
     queue_next_song
   end
 
+  def channel_name
+    "event-#{self.id}"
+  end
+
   private
 
   def auth_user
@@ -76,7 +80,7 @@ class Event < ApplicationRecord
 
   def should_queue_next_song?
     song = currently_playing_song
-    (song.queued_at + (song.duration / 1000).seconds) <= (Time.now.utc + 15.seconds)
+    (song.queued_at + (song.duration / 1000).seconds) <= (Time.now.utc + 20.seconds)
   end
 
   def spotify_playlist

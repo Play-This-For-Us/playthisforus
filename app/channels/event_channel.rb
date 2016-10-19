@@ -6,7 +6,7 @@ class EventChannel < ApplicationCable::Channel
     stream_from unique_channel
     broadcast_current_queue
 
-    stream_for @event
+    stream_from @event.channel_name
   end
 
   def submit_song(data)
@@ -15,7 +15,7 @@ class EventChannel < ApplicationCable::Channel
     song = Song.create!(name: data['name'], artist: data['artist'], art: data['art'], duration: data['duration'],
                         uri: data['uri'], event: @event)
 
-    EventChannel.broadcast_to(@event, song)
+    ActionCable.server.broadcast @event.channel_name, song
   end
 
   def vote(data)
@@ -31,7 +31,7 @@ class EventChannel < ApplicationCable::Channel
       song.downvote(current_user)
     end
 
-    EventChannel.broadcast_to(@event, song)
+    ActionCable.server.broadcast @event.channel_name, song
   end
 
   private
