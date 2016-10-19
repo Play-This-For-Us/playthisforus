@@ -23,10 +23,10 @@ class Song < ApplicationRecord
 
   scope :active_queue, -> { where(queued_at: nil) }
 
-  scope :ranked, -> {
-    joins('LEFT JOIN votes ON songs.id = votes.song_id').
-    group('songs.id').
-    order('coalesce(sum(votes.vote), 0) DESC NULLS LAST')
+  scope :ranked, lambda {
+    joins('LEFT JOIN votes ON songs.id = votes.song_id')
+      .group('songs.id')
+      .order('coalesce(sum(votes.vote), 0) DESC NULLS LAST')
   }
 
   def score
@@ -59,7 +59,7 @@ class Song < ApplicationRecord
 
   def remove_from_queue
     self.update(queued_at: Time.now.utc)
-    EventChannel.broadcast_to(@event, { action: "remove", song: self })
+    EventChannel.broadcast_to(@event, action: "remove", song: self)
   end
 
   def as_json(options = {})
