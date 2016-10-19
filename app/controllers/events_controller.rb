@@ -21,19 +21,26 @@ class EventsController < ApplicationController
     @event = Event.new(event_params)
     @event.user = current_user # the owner
 
+    pnator_on = params[:pnator_on] == 'on'
+    if pnator_on
+      target_energy = params[:pnator_energy].to_i / 100.to_f
+      target_danceability = params[:pnator_danceability].to_i / 100.to_f
+      target_popularity = params[:pnator_popularity].to_i / 100.to_f
+      target_speechiness = params[:pnator_speechiness].to_i / 100.to_f
+      target_happiness = params[:pnator_happiness].to_i / 100.to_f
+
+      @event.pnator_enabled = pnator_on
+      @event.pnator_danceability = target_danceability
+      @event.pnator_energy = target_energy
+      @event.pnator_popularity = target_popularity
+      @event.pnator_speechiness = target_speechiness
+      @event.pnator_happiness = target_happiness
+    end
+
     respond_to do |format|
       if @event.save
         format.html { redirect_to @event, notice: 'Event was successfully created.' }
         format.json { render :show, status: :created, location: @event }
-
-        if params[:pnator_on] == 'on'
-          target_energy = params[:pnator_energy].to_i / 100.to_f
-          puts(target_energy)
-          recs = RSpotify::Recommendations.generate(limit: 20, seed_tracks: ['0c6xIDDpzE81m2q797ordA'], target_energy: target_energy)
-          puts(String(recs.tracks))
-
-          for
-        end
       else
         format.html { render :new }
         format.json { render json: @event.errors, status: :unprocessable_entity }

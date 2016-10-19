@@ -24,10 +24,12 @@ ActiveRecord::Schema.define(version: 20161019132223) do
     t.integer  "user_id"
     t.string   "spotify_playlist_id"
     t.boolean  "currently_playing",   default: false, null: false
-    t.string   "pnator_seed_artists"
-    t.string   "pnator_seed_genres"
-    t.string   "pnator_seed_tracks"
-    t.string   "pnator_target_attrs"
+    t.boolean  "pnator_enabled"
+    t.float    "pnator_danceability"
+    t.float    "pnator_energy"
+    t.float    "pnator_popularity"
+    t.float    "pnator_speechiness"
+    t.float    "pnator_happiness"
     t.index ["user_id"], name: "index_events_on_user_id", using: :btree
   end
 
