@@ -25,6 +25,15 @@ class EventsController < ApplicationController
       if @event.save
         format.html { redirect_to @event, notice: 'Event was successfully created.' }
         format.json { render :show, status: :created, location: @event }
+
+        if params[:pnator_on] == 'on'
+          target_energy = params[:pnator_energy].to_i / 100.to_f
+          puts(target_energy)
+          recs = RSpotify::Recommendations.generate(limit: 20, seed_tracks: ['0c6xIDDpzE81m2q797ordA'], target_energy: target_energy)
+          puts(String(recs.tracks))
+
+          for
+        end
       else
         format.html { render :new }
         format.json { render json: @event.errors, status: :unprocessable_entity }

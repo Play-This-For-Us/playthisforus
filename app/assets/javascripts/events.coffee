@@ -1,3 +1,13 @@
+class App.EventCreateForm
+  constructor: (togglePnatorSelector, pnatorFieldsSelector) ->
+    $(pnatorFieldsSelector).hide()
+    $(togglePnatorSelector).change(->
+      if this.checked
+        $(pnatorFieldsSelector).show()
+      else
+        $(pnatorFieldsSelector).hide()
+    )
+
 class App.Event
   # qrButtonSelect: string to select the QR code show button in the DOM
   # joinCodeSelector: string to select the event join code element in the DOM
