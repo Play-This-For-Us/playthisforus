@@ -53,17 +53,18 @@ class EventsController < ApplicationController
   end
 
   def join
-  end
+    if join_event_params.present?
+      @event = Event.find_by_join_code(join_event_params)
 
-  def create_join
-    @event = Event.find_by_join_code(params[:join_code])
-
-    if @event.present?
-      set_join_cookie
-      set_user_identifier_cookie
-      redirect_to @event
+      if @event.present?
+        set_join_cookie
+        set_user_identifier_cookie
+        redirect_to @event, notice: "You've sucessfully joined #{@event.name}"
+      else
+        redirect_to root_path, flash: { error: "Invalid code: #{join_event_params}" }
+      end
     else
-      render :join
+      redirect_to root_path, flash: { error: 'No join code found' }
     end
   end
 
@@ -76,6 +77,14 @@ class EventsController < ApplicationController
   end
 
   private
+
+  def join_event_params
+    if params.key?(:join_code)
+      params[:join_code]
+    elsif params.key?(:events) && params[:events].key?(:join_code)
+      params[:events][:join_code]
+    end
+  end
 
   def set_playing
     @event.update!(currently_playing: true)

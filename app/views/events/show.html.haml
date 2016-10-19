@@ -3,7 +3,33 @@
 
 .container.container-custom
   .row
-    .col-md-12
+    .col-md-12.col-lg-8.offset-lg-2
+
+      - if owner?(@event)
+        .card
+          .card-block
+            %p.card-text.lead
+              Invite some guests to join! You can use any of the following methods.
+
+            %ul
+              %li
+                Provide them with the event code
+                %strong{ id: 'eventJoinCode' }
+                  #{@event.join_code}
+                and direct them to the
+                = link_to 'landing page.', root_path
+
+              %li
+                Share this
+                %a{ href: '#', id: 'eventQRPopover' }
+                  %i.fa.fa-qrcode
+                  QR Code
+                with them.
+
+              %li
+                Or direct them to this link:
+                = link_to "http://www.playthisfor.us#{join_events_path(join_code: @event.join_code)}", join_events_path(join_code: @event.join_code)
+
       .card
         .event__banner{ style: "background-image: url('#{image_url(@event.avatar_image)}')"}
           .event__banner-overlay
@@ -18,7 +44,9 @@
         .card-block
           %p.card-text.lead
             = @event.description
-          - if owner?(@event)
+
+        - if owner?(@event)
+          .card-footer.text-muted
             - if current_user.user_spotify_authenticated?
               = link_to start_playing_event_path, method: :post, class: "btn btn-primary" do
                 %i.fa.fa-play
@@ -28,22 +56,14 @@
                 %i.fa.fa-spotify
                 Sign in with Spotify
 
-
-        .card-footer.text-muted
-          %i.fa.fa-key
-          Guest Join Code:
-          %strong{ id: 'eventJoinCode' } #{@event.join_code}
-          %a{ href: '#', id: 'eventQRPopover' }
-            %i.fa.fa-qrcode
-
   .row
-    .col-md-6.offset-md-3
+    .col-md-12.col-lg-8.offset-lg-2
       %form.search-form
         .form-group
           .input-group
             .input-group-addon
               %i.fa.fa-search
-            %input.form-control.search-entry{ type: 'text', placeholder: 'Search for Songs on Spotify' }
+            %input.form-control.form-control-lg.search-entry{ type: 'text', placeholder: 'Search for Songs on Spotify' }
             .input-group-addon.search-results__close
               %i.fa.fa-times
           .search-results

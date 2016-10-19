@@ -1,11 +1,27 @@
+= content_for :alert_class, "alert--cover"
+
 .jumbotron.jumbotron-fluid.jumbotron-custom
   .container
-    %h1.display-3
+    %h1
       %i.fa.fa-music
       Play This
-    %p.lead
-      Create a custom playlist for guests at your event.
 
-.container
-  .row
-    .col-md-12
+    %p.lead
+      Create a custom playlist for guests at an event to collaborate, suggest
+      and vote on the songs to be played.
+
+.container__landing-page
+  .container
+    .row
+      .col-md-12
+        %h3
+          Were you invited to join an event?
+
+        %p.lead
+          Enter the event code here to join:
+
+        = form_for :events, :url => join_events_path, method: :get, html: { class: 'form-inline' } do |f|
+          .form-group
+            = f.text_field :join_code, autofocus: true, class: 'form-control', placeholder: "Event Code"
+
+          = f.submit 'Go', class: "btn btn-secondary"

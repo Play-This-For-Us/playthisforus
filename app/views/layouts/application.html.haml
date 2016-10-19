@@ -13,24 +13,15 @@
   %body{ class: "#{yield (:body_class)}" }
     %nav.navbar.navbar-fixed-top.bg-custom
       .navbar-header
-        %button.navbar-toggler.pull-xs-right.hidden-lg-up{type: 'button', 'data-toggle': 'collapse', 'data-target': '#navContent'}
-          &#9776;
+        %button.navbar-toggler.pull-xs-right.hidden-md-up{ type: 'button', 'data-toggle': 'collapse', 'data-target': '#navContent' }
+          %i.fa.fa-bars
 
-        = link_to root_path, class: "navbar-brand hidden-xs-down" do
+        = link_to root_path, class: "navbar-brand" do
           %i.fa.fa-music
           Play This
 
-      .collapse.navbar-toggleable-md{id: 'navContent'}
-        = link_to root_path, class: "navbar-brand hidden-sm-up" do
-          %i.fa.fa-music
-          Play This
-
+      .collapse.navbar-toggleable-sm{id: 'navContent'}
         %ul.nav.navbar-nav.pull-xs-right
-          %li.nav-item
-            = link_to join_events_path, class: "nav-link" do
-              %i.fa.fa-share
-              Join an Event
-
           - if user_signed_in?
             %li.nav-item
               = link_to new_event_path, class: "nav-link" do
@@ -39,16 +30,11 @@
             %li.nav-item
               = link_to user_path(current_user), class: "nav-link" do
                 %i.fa.fa-user
-                Your Profile
-            %li.nav-item.dropdown
-              %button.btn.btn-primary.dropdown-toggle{ type: "button", "data-toggle": "dropdown" }
-                = current_user.email
-                %span.caret
-              %ul.dropdown-menu
-                %li
-                  = link_to destroy_user_session_path, :method => :delete, class: "dropdown-item" do
-                    %i.fa.fa-sign-out
-                    Sign Out
+                Profile
+            %li.nav-item
+              = link_to destroy_user_session_path, :method => :delete, class: "nav-link" do
+                %i.fa.fa-sign-out
+                Sign Out
           - else
             %li.nav-item
               = link_to new_user_session_path, class: "nav-link" do
@@ -60,16 +46,13 @@
                 Sign Up
 
 
-    #flash-display
-      - unless flash.empty?
-        .container.container-custom
-          .row
-            .col-md-12
-              - flash.each do |name, msg|
-                - if msg.is_a?(String)
-                  %div{ class: "alert alert-#{name == :notice.to_s ? "success" : "danger"}" }
-                    %a.close{ "data-dismiss": "alert" }
-                      %i.fa.fa-times
-                    = content_tag :div, msg, :id => "flash_#{name}"
+    - unless flash.empty?
+      .container.flash-container
+        - flash.each do |name, msg|
+          - if msg.is_a?(String)
+            %div{ class: "alert alert-#{name == :notice.to_s ? "success" : "danger"} flash-display #{yield (:alert_class)}" }
+              %a.close{ "data-dismiss": "alert" }
+                %i.fa.fa-times
+              = content_tag :div, msg, :id => "flash_#{name}"
 
     = yield

@@ -33,6 +33,39 @@ img {
   width: 100%;
 }
 
+.btn-secondary {
+  color: $dark;
+  background-color: $light;
+  border-color: $dark;
+}
+
+.flash-container {
+  position: relative;
+  z-index: 9;
+}
+
+.flash-display {
+  margin-top: 16px;
+}
+
+.alert--cover {
+  position: absolute;
+  left: 15px;
+  right: 15px;
+  z-index: 9;
+}
+
+@media only screen and (max-width: 767px) {
+  .navbar-header {
+    height: 40px;
+  }
+
+  .navbar-nav {
+    text-align: right;
+    padding-right: .75em;
+  }
+}
+
 // this is automatically appended and causes styling issues
 .field_with_errors {
   display: inline-block;
@@ -53,6 +86,7 @@ img {
   padding: 200px 0;
   background-position: center;
   background-size: cover;
+  margin-bottom: 0;
 }
 
 .navbar-toggler {
@@ -61,4 +95,10 @@ img {
 
 .header-brand {
   color: $blue;
+}
+
+.container__landing-page {
+  padding: 60px 0;
+  background-color: $orange;
+  color: $light;
 }
