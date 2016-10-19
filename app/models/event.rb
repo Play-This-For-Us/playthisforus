@@ -49,17 +49,13 @@ class Event < ApplicationRecord
     current_queue.first
   end
 
-  def next_song_to_spotify
-    return unless next_song
-    RSpotify::Track.new(next_song)
-  end
-
   def queue_next_song
     return unless next_song
+    song = next_song
 
     auth_user
-    spotify_playlist.add_tracks!([next_song_to_spotify])
-    next_song.update(queued_at: Time.now.utc)
+    spotify_playlist.add_tracks!([song.to_spotify_track])
+    song.remove_from_queue
   end
 
   def check_queue
