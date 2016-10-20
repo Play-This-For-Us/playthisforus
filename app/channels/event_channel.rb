@@ -34,6 +34,23 @@ class EventChannel < ApplicationCable::Channel
     EventChannel.broadcast_to(@event, song)
   end
 
+  def pnator(data)
+    authed_user = current_authed_user
+    # You must be the owner and there must be some songs to seed from
+    return unless authed_user and @event.user == authed_user and @event.songs.all.count > 0
+
+    seed_tracks = @event.songs.pluck(:uri).map{ |uri| uri.split(':')[-1] }
+    recs = RSpotify::Recommendations.generate(limit: 10, seed_tracks: seed_tracks)
+
+    recs.tracks.each { |t|
+      # Don't know how to get URI from RSpotify track
+      song = Song.create!(name: t.name, artist: t.artists[0].name, art: t.album.images[0]['url'], duration: t.duration_ms,
+                          uri: t.uri, event: @event)
+
+      EventChannel.broadcast_to(@event, song)
+    }
+  end
+
   private
 
   def broadcast_current_queue
@@ -44,5 +61,9 @@ class EventChannel < ApplicationCable::Channel
 
   def unique_channel
     @unique_channel ||= "#{@event}|#{current_user}"
+  end
+
+  def current_authed_user
+    return User.find_by(id: current_user)
   end
 end

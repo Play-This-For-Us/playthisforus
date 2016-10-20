@@ -8,7 +8,12 @@ class App.Playlist
 
     @playlistChannel = new App.EventChannel(@addSong)
 
-  # add a song to the playlist data structure
+    window.onhashchange = =>
+      if location.hash == '#pnator'
+        @pnator()
+        location.hash = '#' # reset back so that onhashchange will be called again
+
+# add a song to the playlist data structure
   addSong: (data) =>
     song = new App.Song(data, @updatePlaylistUI, @sendUpvote, @sendDownvote)
     songPosition = @findSong(song)
@@ -55,3 +60,6 @@ class App.Playlist
   # send a downvote to the server
   sendDownvote: (songID) =>
     @playlistChannel.vote(songID, false)
+
+  pnator: =>
+    @playlistChannel.pnator()
