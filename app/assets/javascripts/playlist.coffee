@@ -6,29 +6,28 @@ class App.Playlist
 
     @playlistSongs = [] # songs that are in the playlist
 
-    @playlistChannel = new App.EventChannel(@pushSong)
+    @playlistChannel = new App.EventChannel(@pushSong, @removeSong)
 
   getEventChannel: =>
     @playlistChannel
 
   # add a song to the playlist data structure
   pushSong: (data) =>
-    song = new App.Song(data, @updatePlaylistUI, @sendUpvote, @sendDownvote)
-    songPosition = @findSong(song)
+    songPosition = @findSong(data)
 
     if songPosition >= 0
       # overwrite the existing song
-      @playlistSongs[songPosition] = song
+      @playlistSongs[songPosition] = new App.Song(data, @updatePlaylistUI, @sendUpvote, @sendDownvote)
     else
       # append to the end of the songs
-      @playlistSongs.push(song)
+      @playlistSongs.push(new App.Song(data, @updatePlaylistUI, @sendUpvote, @sendDownvote))
 
     # update the playlsit UI
     @updatePlaylistUI()
 
   # remove a song from the playlsit data structure
   removeSong: (data) =>
-    songPosition = @findSong(song)
+    songPosition = @findSong(data)
 
     if songPosition >= 0
       @playlistSongs.splice(songPosition, 1)
@@ -39,7 +38,7 @@ class App.Playlist
   # find a song position in the playlist, returns -1 if nonexistant
   findSong: (song) =>
     for i in [0 ... @playlistSongs.length]
-      return i if @playlistSongs[i].id() == song.id()
+      return i if @playlistSongs[i].id() == song.id
     return -1
 
   # add a song view to the DOM
