@@ -26,10 +26,20 @@ class App.Playlist
     # update the playlsit UI
     @updatePlaylistUI()
 
+  # remove a song from the playlsit data structure
+  removeSong: (data) =>
+    songPosition = @findSong(song)
+
+    if songPosition >= 0
+      @playlistSongs.splice(songPosition, 1)
+
+      # update the playlsit UI
+      @updatePlaylistUI()
+
   # find a song position in the playlist, returns -1 if nonexistant
   findSong: (song) =>
     for i in [0 ... @playlistSongs.length]
-      return i if @playlistSongs[i].isEqual(song)
+      return i if @playlistSongs[i].id() == song.id()
     return -1
 
   # add a song view to the DOM

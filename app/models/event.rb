@@ -80,6 +80,10 @@ class Event < ApplicationRecord
 
   def should_queue_next_song?
     song = currently_playing_song
+
+    # if there are not songs currently playing or played, queue up!
+    return true unless currently_playing_song.present?
+
     (song.queued_at + (song.duration / 1000).seconds) <= (Time.now.utc + 20.seconds)
   end
 
