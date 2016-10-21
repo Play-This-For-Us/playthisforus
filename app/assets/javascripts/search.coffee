@@ -1,7 +1,9 @@
 class App.Search
+  # eventChannel: EventChannel object to communicate with the backend
   # searchSelector: string to select the search element in the DOM
   # resultSelector: string to select the result element in the DOM
-  constructor: (@searchSelector, @resultSelector, @closeSelector) ->
+  # closeSelector: string to select the close element in the DOM
+  constructor: (@eventChannel, @searchSelector, @resultSelector, @closeSelector) ->
     # convert the DOM selection string into a jQuery selector
     @searchSelector = $(@searchSelector)
     @resultSelector = $(@resultSelector)
@@ -9,8 +11,6 @@ class App.Search
     # when the user interacts with the search input
     @searchSelector.keyup @handleSearch
     $(document).on 'click', @closeSelector, @reset
-
-    @eventChannel = new App.EventChannel
 
   handleSearch: (e) =>
     # if the search box is empty, clear the results

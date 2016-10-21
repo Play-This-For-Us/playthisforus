@@ -32,6 +32,41 @@ RSpec.describe Song, type: :model do
     it 'downvotes' do
       expect(subject.votes.downvotes).to be 0
     end
+
+    context 'ranked' do
+      let(:event) { FactoryGirl.create(:event) }
+
+      it 'handles no songs' do
+        expect(event.songs.count).to be 0
+        expect(event.songs.ranked).to be_empty
+      end
+
+      it 'handles song with no votes' do
+        song = FactoryGirl.create(:song, event: event)
+        expect(song.score).to be 0
+        expect(event.songs.ranked).to match [song]
+      end
+
+      it 'properly ranks three songs' do
+        song_a = FactoryGirl.create(:song, event: event)
+        FactoryGirl.create(:vote, vote: 1, song: song_a)
+        FactoryGirl.create(:vote, vote: 1, song: song_a)
+        expect(song_a.score).to be 2
+
+        song_d = FactoryGirl.create(:song, event: event)
+        FactoryGirl.create(:vote, vote: -1, song: song_d)
+        expect(song_d.score).to be(-1)
+
+        song_c = FactoryGirl.create(:song, event: event)
+        expect(song_c.score).to be 0
+
+        song_b = FactoryGirl.create(:song, event: event)
+        FactoryGirl.create(:vote, vote: 1, song: song_b)
+        expect(song_b.score).to be 1
+
+        expect(event.songs.ranked).to match [song_a, song_b, song_c, song_d]
+      end
+    end
   end
 
   context 'voting' do

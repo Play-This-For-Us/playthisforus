@@ -3,19 +3,24 @@ class EventChannel < ApplicationCable::Channel
   def subscribed
     @event = Event.find(params[:id])
 
-    stream_from unique_channel
-    broadcast_current_queue
+    stream_from @event.channel_name
 
-    stream_for @event
+    broadcast_current_queue
   end
 
   def submit_song(data)
     return if Song.exists?(uri: data['uri'], event: @event)
 
-    song = Song.create!(name: data['name'], artist: data['artist'], art: data['art'], duration: data['duration'],
-                        uri: data['uri'], event: @event)
+    song = Song.create!(
+      name: data['name'],
+      artist: data['artist'],
+      art: data['art'],
+      duration: data['duration'],
+      uri: data['uri'],
+      event: @event
+    )
 
-    EventChannel.broadcast_to(@event, song)
+    ActionCable.server.broadcast @event.channel_name, action: 'add-song', data: song
   end
 
   def vote(data)
@@ -31,14 +36,14 @@ class EventChannel < ApplicationCable::Channel
       song.downvote(current_user)
     end
 
-    EventChannel.broadcast_to(@event, song)
+    ActionCable.server.broadcast @event.channel_name, action: 'update-song', data: song
   end
 
   private
 
   def broadcast_current_queue
-    @event.songs.each do |song|
-      ActionCable.server.broadcast(unique_channel, song)
+    @event.songs.active_queue.each do |song|
+      ActionCable.server.broadcast @event.channel_name, action: 'add-song', data: song
     end
   end
 
