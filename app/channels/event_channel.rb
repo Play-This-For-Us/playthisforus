@@ -38,7 +38,7 @@ class EventChannel < ApplicationCable::Channel
 
   def broadcast_current_queue
     @event.songs.active_queue.each do |song|
-      ActionCable.server.broadcast(unique_channel, song)
+      ActionCable.server.broadcast @event.channel_name, song
     end
   end
 
