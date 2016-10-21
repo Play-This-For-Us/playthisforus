@@ -21,4 +21,4 @@
 $(document).ready ->
   eventView = new App.Event('#eventQRPopover', '#eventJoinCode')
   playlistView = new App.Playlist('.songs-list')
-  searchView = new App.Search('.search-entry', '.search-results', '.search-results__close')
+  searchView = new App.Search(playlistView.getEventChannel(), '.search-entry', '.search-results', '.search-results__close')

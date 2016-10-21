@@ -6,10 +6,13 @@ class App.Playlist
 
     @playlistSongs = [] # songs that are in the playlist
 
-    @playlistChannel = new App.EventChannel(@addSong)
+    @playlistChannel = new App.EventChannel(@pushSong)
+
+  getEventChannel: =>
+    @playlistChannel
 
   # add a song to the playlist data structure
-  addSong: (data) =>
+  pushSong: (data) =>
     song = new App.Song(data, @updatePlaylistUI, @sendUpvote, @sendDownvote)
     songPosition = @findSong(song)
 

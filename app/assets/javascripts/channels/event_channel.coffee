@@ -1,11 +1,7 @@
 class App.EventChannel
-  constructor: (@received) ->
+  constructor: (@pushSong) ->
     @eventId = window.eventId
-
-    if @received
-      @eventChannel = @subscribeWithReceive()
-    else
-      @eventChannel = @subscribe()
+    @eventChannel = @subscribeWithReceive()
 
   subscribe: ->
     App.cable.subscriptions.create { channel: "EventChannel", id: @eventId }
@@ -13,7 +9,12 @@ class App.EventChannel
   subscribeWithReceive: ->
     App.cable.subscriptions.create { channel: "EventChannel", id: @eventId },
       received: (data) =>
-        @received(data)
+        if data.action && (data.action == 'add-song' || data.action == 'update-song')
+          @pushSong(data.data)
+        else if data.action && data.action == 'remove-song'
+  
+        else
+          console.log('Unexpected chanel action.')
 
   submitSong: (data) =>
     @eventChannel.perform 'submit_song', data

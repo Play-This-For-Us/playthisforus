@@ -59,7 +59,7 @@ class Song < ApplicationRecord
 
   def remove_from_queue
     self.update(queued_at: Time.now.utc)
-    ActionCable.server.broadcast self.event.channel_name, { action: 'remove', song: self }
+    ActionCable.server.broadcast self.event.channel_name, action: 'remove-song', data: self
   end
 
   def as_json(options = {})
