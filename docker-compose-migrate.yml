@@ -7,7 +7,7 @@ services:
   web:
     build: .
     env_file: docker.env
-    command: "rails db:migrate"
+    command: "foreman run rails db:migrate"
     ports:
       - "3000:3000"
     links:

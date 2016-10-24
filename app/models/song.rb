@@ -23,7 +23,11 @@ class Song < ApplicationRecord
 
   scope :active_queue, -> { where(queued_at: nil) }
 
-  scope :ranked, -> { joins('LEFT JOIN votes ON songs.id = votes.song_id').group('votes.song_id, songs.id').order('sum(votes.vote) DESC') }
+  scope :ranked, lambda {
+    joins('LEFT JOIN votes ON songs.id = votes.song_id')
+      .group('songs.id')
+      .order('coalesce(sum(votes.vote), 0) DESC NULLS LAST')
+  }
 
   def score
     self.votes.sum(:vote)
@@ -47,6 +51,15 @@ class Song < ApplicationRecord
       # create a new downvote for the user
       self.votes.create!(user_identifier: user_identifier, vote: -1)
     end
+  end
+
+  def to_spotify_track
+    RSpotify::Track.new(self)
+  end
+
+  def remove_from_queue
+    self.update(queued_at: Time.now.utc)
+    ActionCable.server.broadcast self.event.channel_name, action: 'remove-song', data: self
   end
 
   def as_json(options = {})

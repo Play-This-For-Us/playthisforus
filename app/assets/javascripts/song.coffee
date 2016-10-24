@@ -47,9 +47,6 @@ class App.Song
 
     return "#{mins}:#{secs}"
 
-  isEqual: (song) =>
-    @id() == song.id()
-
   isHigherRanked: (song) =>
     @score() > song.score()
 

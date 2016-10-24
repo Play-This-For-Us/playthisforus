@@ -49,22 +49,22 @@ class Event < ApplicationRecord
     current_queue.first
   end
 
-  def next_song_to_spotify
-    return unless next_song
-    RSpotify::Track.new(next_song)
-  end
-
   def queue_next_song
     return unless next_song
+    song = next_song
 
     auth_user
-    spotify_playlist.add_tracks!([next_song_to_spotify])
-    next_song.update(queued_at: Time.now.utc)
+    spotify_playlist.add_tracks!([song.to_spotify_track])
+    song.remove_from_queue
   end
 
   def check_queue
     return unless should_queue_next_song?
     queue_next_song
+  end
+
+  def channel_name
+    "event-#{self.id}"
   end
 
   private
@@ -80,7 +80,11 @@ class Event < ApplicationRecord
 
   def should_queue_next_song?
     song = currently_playing_song
-    (song.queued_at + (song.duration / 1000).seconds) <= (Time.now.utc + 15.seconds)
+
+    # if there are not songs currently playing or played, queue up!
+    return true unless currently_playing_song.present?
+
+    (song.queued_at + (song.duration / 1000).seconds) <= (Time.now.utc + 20.seconds)
   end
 
   def spotify_playlist
