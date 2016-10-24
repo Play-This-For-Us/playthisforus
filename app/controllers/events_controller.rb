@@ -2,6 +2,7 @@
 class EventsController < ApplicationController
   before_action :set_event, only: [:show, :edit, :update, :destroy, :start_playing]
   before_action :authenticate, only: [:show, :edit]
+  before_action :authenticate_owner, only: [:edit, :update]
 
   def index
     @events = Event.all
@@ -122,8 +123,16 @@ class EventsController < ApplicationController
     redirect_to root_path unless can_view?
   end
 
+  def authenticate_owner
+    redirect_to @event unless owns_event?
+  end
+
   def can_view?
     (current_user.present? && @event.user == current_user) ||
       (Event.find_by_join_code(cookies.permanent.encrypted[:join_cookie]) == @event)
+  end
+
+  def owns_event?
+    current_user.present? && @event.user == current_user
   end
 end
