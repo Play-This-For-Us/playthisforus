@@ -45,7 +45,6 @@ class EventChannel < ApplicationCable::Channel
     return unless authed_user && @event.user == authed_user && @event.songs.all.count.positive?
 
     seed_tracks = @event.songs.last(5).pluck(:uri).map { |uri| uri.split(':')[-1] }
-    puts(seed_tracks)
     pnator_popularity = (@event.pnator_popularity * 100).round
     recs = RSpotify::Recommendations.generate(limit: 10, seed_tracks: seed_tracks,
                                               target_energy: @event.pnator_energy,
