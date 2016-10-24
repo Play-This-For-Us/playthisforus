@@ -39,10 +39,10 @@ class EventChannel < ApplicationCable::Channel
     ActionCable.server.broadcast @event.channel_name, action: 'update-song', data: song
   end
 
-  def pnator(data)
+  def pnator(_data)
     authed_user = current_authed_user
     # You must be the owner and there must be some songs to seed from
-    return unless authed_user and @event.user == authed_user and @event.songs.all.count > 0
+    return unless authed_user && @event.user == authed_user && @event.songs.all.count.positive?
 
     seed_tracks = @event.songs.pluck(:uri).map{ |uri| uri.split(':')[-1] }
     # TODO Marcus target_popularity
