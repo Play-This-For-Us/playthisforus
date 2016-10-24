@@ -1,0 +1,10 @@
+- if owner?(@event)
+  .card-footer.text-muted
+    - if current_user.user_spotify_authenticated?
+      = link_to start_playing_event_path, method: :post, class: "btn btn-primary" do
+        %i.fa.fa-play
+        Play on Spotify
+    - else
+      = link_to '/auth/spotify', class: "btn btn-primary" do
+        %i.fa.fa-spotify
+        Sign in with Spotify
