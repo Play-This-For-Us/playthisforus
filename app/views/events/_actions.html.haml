@@ -1,10 +1,24 @@
 - if owner?(@event)
   .card-footer.text-muted
-    - if current_user.user_spotify_authenticated?
-      = link_to start_playing_event_path, method: :post, class: "btn btn-primary" do
-        %i.fa.fa-play
-        Play on Spotify
-    - else
+    - if !current_user.user_spotify_authenticated?
       = link_to '/auth/spotify', class: "btn btn-primary" do
         %i.fa.fa-spotify
         Sign in with Spotify
+    - else
+      - if @event.currently_playing
+        = link_to start_playing_event_path, method: :post, class: "btn btn-primary" do
+          %i.fa.fa-stop
+          Stop Playing on Spotify
+      - elsif !@event.currently_playing
+        = link_to start_playing_event_path, method: :post, class: "btn btn-primary" do
+          %i.fa.fa-play
+          Play on Spotify
+
+      - if @event.spotify_playlist_id.present?
+        = link_to start_playing_event_path, method: :post, class: "btn btn-primary" do
+          %i.fa.fa-th-list
+          Create new Playlist
+      - else
+        = link_to start_playing_event_path, method: :post, class: "btn btn-primary" do
+          %i.fa.fa-th-list
+          Create Playlist
