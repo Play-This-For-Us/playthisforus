@@ -45,12 +45,13 @@ class EventChannel < ApplicationCable::Channel
     return unless authed_user && @event.user == authed_user && @event.songs.all.count.positive?
 
     seed_tracks = @event.songs.pluck(:uri).map{ |uri| uri.split(':')[-1] }
-    # TODO Marcus target_popularity
+    pnator_popularity = (@event.pnator_popularity * 100).round
     recs = RSpotify::Recommendations.generate(limit: 10, seed_tracks: seed_tracks,
                                               target_energy: @event.pnator_energy,
                                               target_speechiness: @event.pnator_speechiness,
                                               target_danceability: @event.pnator_danceability,
-                                              target_valence: @event.pnator_happiness)
+                                              target_valence: @event.pnator_happiness,
+                                              target_popularity: pnator_popularity)
 
     recs.tracks.each { |t|
       # Don't know how to get URI from RSpotify track
