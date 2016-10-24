@@ -58,7 +58,7 @@ class EventChannel < ApplicationCable::Channel
       song = Song.create!(name: t.name, artist: t.artists[0].name, art: t.album.images[0]['url'], duration: t.duration_ms,
                           uri: t.uri, event: @event)
 
-      EventChannel.broadcast_to(@event, song)
+      ActionCable.server.broadcast @event.channel_name, action: 'add-song', data: song
     }
   end
 
