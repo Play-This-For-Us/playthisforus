@@ -55,8 +55,8 @@ class EventChannel < ApplicationCable::Channel
                                               target_popularity: pnator_popularity)
 
     recs.tracks.each { |t|
-      # Don't know how to get URI from RSpotify track
-      puts(t.name)
+      next if Song.exists?(uri: t.uri, event: @event)
+
       song = Song.create!(name: t.name, artist: t.artists[0].name, art: t.album.images[0]['url'], duration: t.duration_ms,
                           uri: t.uri, event: @event)
 
