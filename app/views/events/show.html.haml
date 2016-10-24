@@ -36,10 +36,11 @@
           %h2.event__name
             = @event.name
 
-            %small
-              = link_to edit_event_path(@event), class: "event__edit" do
-                %i.fa.fa-pencil
-                Edit
+            - if owner?(@event)
+              %small
+                = link_to edit_event_path(@event), class: "event__edit" do
+                  %i.fa.fa-pencil
+                  Edit
 
         .card-block
           %p.card-text.lead
