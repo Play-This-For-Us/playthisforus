@@ -44,7 +44,8 @@ class EventChannel < ApplicationCable::Channel
     # You must be the owner and there must be some songs to seed from
     return unless authed_user && @event.user == authed_user && @event.songs.all.count.positive?
 
-    seed_tracks = @event.songs.pluck(:uri).map{ |uri| uri.split(':')[-1] }
+    seed_tracks = @event.songs.last(5).pluck(:uri).map { |uri| uri.split(':')[-1] }
+    puts(seed_tracks)
     pnator_popularity = (@event.pnator_popularity * 100).round
     recs = RSpotify::Recommendations.generate(limit: 10, seed_tracks: seed_tracks,
                                               target_energy: @event.pnator_energy,
@@ -55,6 +56,7 @@ class EventChannel < ApplicationCable::Channel
 
     recs.tracks.each { |t|
       # Don't know how to get URI from RSpotify track
+      puts(t.name)
       song = Song.create!(name: t.name, artist: t.artists[0].name, art: t.album.images[0]['url'], duration: t.duration_ms,
                           uri: t.uri, event: @event)
 
