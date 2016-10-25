@@ -2,11 +2,11 @@
 
   - if event.errors.any?
     %div.alert.alert-danger
-      %a.close{ "data-dismiss": "alert" }
+      %a.close{ 'data-dismiss': 'alert' }
         %i.fa.fa-times
 
       %strong
-        = pluralize(event.errors.count, "error")
+        = pluralize(event.errors.count, 'error')
         prohibited this event from being saved:
 
       %ul
@@ -15,10 +15,40 @@
 
   .form-group
     = f.label :name
-    = f.text_field :name, autofocus: true, class: "form-control", required: true
+    = f.text_field :name, autofocus: true, class: 'form-control', required: true
 
   .form-group
     = f.label :description
-    = f.text_area :description, autofocus: true, class: "form-control", required: true
+    = f.text_area :description, autofocus: true, class: 'form-control', required: true
 
-  = f.submit class: "btn btn-primary"
+  .form-group
+    %label{ for: 'pnator_on' } Enable Playlistinator
+    %input{ name: 'pnator_on', id: 'pnatorToggle', type: 'checkbox' }
+
+  %div{ id: 'pnatorFields' }
+    .form-group
+      %label{ for: 'pnator_danceability' } Danceability
+      %input{ name: 'pnator_danceability', type: 'text', 'data-provide': 'slider',
+              'data-slider-min': 0, 'data-slider-max': 100, 'data-slider-value': 50 }
+
+    .form-group
+      %label{ for: 'pnator_energy' } Energy
+      %input{ name: 'pnator_energy', type: 'text', 'data-provide': 'slider',
+              'data-slider-min': 0, 'data-slider-max': 100, 'data-slider-value': 50 }
+
+    .form-group
+      %label{ for: 'pnator_popularity' } Popularity
+      %input{ name: 'pnator_popularity', type: 'text', 'data-provide': 'slider',
+              'data-slider-min': 0, 'data-slider-max': 100, 'data-slider-value': 50 }
+
+    .form-group
+      %label{ for: 'pnator_speechiness' } Speechiness
+      %input{ name: 'pnator_speechiness', type: 'text', 'data-provide': 'slider',
+              'data-slider-min': 0, 'data-slider-max': 100, 'data-slider-value': 50 }
+
+    .form-group
+      %label{ for: 'pnator_happiness' } Happiness
+      %input{ name: 'pnator_happiness', type: 'text', 'data-provide': 'slider',
+              'data-slider-min': 0, 'data-slider-max': 100, 'data-slider-value': 50 }
+
+  = f.submit class: 'btn btn-primary'

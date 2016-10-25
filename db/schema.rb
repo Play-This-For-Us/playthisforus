@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161017161513) do
+ActiveRecord::Schema.define(version: 20161019132223) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -24,6 +24,12 @@ ActiveRecord::Schema.define(version: 20161017161513) do
     t.integer  "user_id"
     t.string   "spotify_playlist_id"
     t.boolean  "currently_playing",   default: false, null: false
+    t.boolean  "pnator_enabled"
+    t.float    "pnator_danceability"
+    t.float    "pnator_energy"
+    t.float    "pnator_popularity"
+    t.float    "pnator_speechiness"
+    t.float    "pnator_happiness"
     t.index ["user_id"], name: "index_events_on_user_id", using: :btree
   end
 
