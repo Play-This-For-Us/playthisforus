@@ -4,6 +4,7 @@ class EventChannel < ApplicationCable::Channel
     @event = Event.find(params[:id])
 
     stream_from @event.channel_name
+    stream_from @event.channel_name + '|' + current_user.to_s
 
     broadcast_current_queue
   end
@@ -67,7 +68,7 @@ class EventChannel < ApplicationCable::Channel
 
   def broadcast_current_queue
     @event.songs.active_queue.each do |song|
-      ActionCable.server.broadcast @event.channel_name, action: 'add-song', data: song
+      ActionCable.server.broadcast @event.channel_name + '|' + current_user.to_s, action: 'add-song', data: song
     end
   end
 
