@@ -8,6 +8,11 @@ class App.Playlist
 
     @playlistChannel = new App.EventChannel(@pushSong, @removeSong)
 
+    window.onhashchange = =>
+      if location.hash == '#pnator'
+        @pnator()
+        location.hash = '#' # reset back so that onhashchange will be called again
+
   getEventChannel: =>
     @playlistChannel
 
@@ -67,3 +72,6 @@ class App.Playlist
   # send a downvote to the server
   sendDownvote: (songID) =>
     @playlistChannel.vote(songID, false)
+
+  pnator: =>
+    @playlistChannel.pnator()
