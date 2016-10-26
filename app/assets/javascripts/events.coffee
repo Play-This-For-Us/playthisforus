@@ -16,7 +16,9 @@ class App.Event
     @qrButtonSelector = $(@qrButtonSelector)
 
     # Get the join code string
-    @joinCode = $(joinCodeSelector).html().trim()
+    @joinCode = $(joinCodeSelector).html()
+    if(@joinCode)
+      @joinCode = @joinCode.trim()
 
     @qrButtonSelector.popover({
       html: true,
