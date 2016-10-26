@@ -34,7 +34,7 @@ gem 'redis', '~> 3.0'
 gem 'haml', '~> 4.0', '>= 4.0.7'
 
 # the newest and shiniest bootstrap (Bootstrap v4)
-gem 'bootstrap', '~> 4.0.0.alpha4'
+gem 'bootstrap', '~> 4.0.0.alpha5'
 
 # needed for some bootstrap functionality (and avoid an exception)
 source 'https://rails-assets.org' do
