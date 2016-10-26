@@ -13,7 +13,7 @@
   %body{ class: "#{yield (:body_class)}" }
     %nav.navbar.navbar-fixed-top.bg-custom
       .navbar-header
-        %button.navbar-toggler.pull-xs-right.hidden-md-up{ type: 'button', 'data-toggle': 'collapse', 'data-target': '#navContent' }
+        %button.navbar-toggler.float-xs-right.hidden-md-up{ type: 'button', 'data-toggle': 'collapse', 'data-target': '#navContent' }
           %i.fa.fa-bars
 
         = link_to root_path, class: "navbar-brand" do
@@ -21,7 +21,7 @@
           Play This
 
       .collapse.navbar-toggleable-sm{id: 'navContent'}
-        %ul.nav.navbar-nav.pull-xs-right
+        %ul.nav.navbar-nav.float-xs-right
           - if user_signed_in?
             %li.nav-item
               = link_to new_event_path, class: "nav-link" do
