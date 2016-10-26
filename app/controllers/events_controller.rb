@@ -22,21 +22,7 @@ class EventsController < ApplicationController
     @event = Event.new(event_params)
     @event.user = current_user # the owner
 
-    pnator_on = params[:pnator_on] == 'on'
-    if pnator_on
-      target_energy = params[:pnator_energy].to_i / 100.to_f
-      target_danceability = params[:pnator_danceability].to_i / 100.to_f
-      target_popularity = params[:pnator_popularity].to_i / 100.to_f
-      target_speechiness = params[:pnator_speechiness].to_i / 100.to_f
-      target_happiness = params[:pnator_happiness].to_i / 100.to_f
-
-      @event.pnator_enabled = pnator_on
-      @event.pnator_danceability = target_danceability
-      @event.pnator_energy = target_energy
-      @event.pnator_popularity = target_popularity
-      @event.pnator_speechiness = target_speechiness
-      @event.pnator_happiness = target_happiness
-    end
+    pnator_setup
 
     respond_to do |format|
       if @event.save
@@ -50,8 +36,10 @@ class EventsController < ApplicationController
   end
 
   def update
+    pnator_setup
+
     respond_to do |format|
-      if @event.update(event_params)
+      if @event.save && @event.update(event_params)
         format.html { redirect_to @event, notice: 'Event was successfully updated.' }
         format.json { render :show, status: :ok, location: @event }
       else
@@ -94,6 +82,24 @@ class EventsController < ApplicationController
   end
 
   private
+
+  def pnator_setup
+    pnator_on = params[:pnator_on] == 'on'
+    if pnator_on
+      target_energy = params[:pnator_energy].to_i / 100.to_f
+      target_danceability = params[:pnator_danceability].to_i / 100.to_f
+      target_popularity = params[:pnator_popularity].to_i / 100.to_f
+      target_speechiness = params[:pnator_speechiness].to_i / 100.to_f
+      target_happiness = params[:pnator_happiness].to_i / 100.to_f
+
+      @event.pnator_enabled = pnator_on
+      @event.pnator_danceability = target_danceability
+      @event.pnator_energy = target_energy
+      @event.pnator_popularity = target_popularity
+      @event.pnator_speechiness = target_speechiness
+      @event.pnator_happiness = target_happiness
+    end
+  end
 
   def join_event_params
     if params.key?(:join_code)
