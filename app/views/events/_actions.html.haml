@@ -8,19 +8,19 @@
       = link_to stop_playing_event_path, method: :post, class: "btn btn-primary" do
         %i.fa.fa-stop
         Stop Playing on Spotify
-    - elsif !@event.currently_playing
+    - elsif !@event.currently_playing && @event.spotify_playlist_id.present?
       = link_to start_playing_event_path, method: :post, class: "btn btn-primary" do
         %i.fa.fa-play
         Play on Spotify
 
     - if @event.spotify_playlist_id.present?
       = link_to create_new_playlist_event_path, method: :post, class: "btn btn-primary" do
-        %i.fa.fa-th-list
-        Create new Playlist
+        %i.fa.fa-spotify
+        Create new Spotify Playlist
     - else
       = link_to create_new_playlist_event_path, method: :post, class: "btn btn-primary" do
-        %i.fa.fa-th-list
-        Create Playlist
+        %i.fa.fa-spotify
+        Create Spotify Playlist
 
   - if @event.pnator_enabled
     = link_to '#pnator', class: 'btn btn-info' do
