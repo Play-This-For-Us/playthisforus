@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 class EventsController < ApplicationController
-  before_action :set_event, only: [:show, :edit, :update, :destroy, :start_playing]
+  before_action :set_event, only: [:show, :edit, :update, :destroy, :start_playing, :stop_playing, :create_new_playlist]
   before_action :authenticate, only: [:show, :edit]
   before_action :authenticate_owner, only: [:edit, :update]
 
@@ -81,6 +81,22 @@ class EventsController < ApplicationController
     end
   end
 
+  def stop_playing
+    if @event.update(currently_playing: false)
+      redirect_to @event, notice: 'Nifty! The playlist has stopped.'
+    else
+      redirect_to @event, error: 'An error occurred stopping the playlist.'
+    end
+  end
+
+  def create_new_playlist
+    if create_playlist(true)
+      redirect_to @event, notice: 'Slick! A new playlist was created.'
+    else
+      redirect_to @event, error: 'An error occurred creating the new playlist.'
+    end
+  end
+
   private
 
   def pnator_setup
@@ -117,8 +133,8 @@ class EventsController < ApplicationController
     @event.queue_next_song
   end
 
-  def create_playlist
-    return true if @event.spotify_playlist_id.present?
+  def create_playlist(force = false)
+    return true if @event.spotify_playlist_id.present? && !force
 
     playlist = @event.user.spotify.create_playlist!(@event.name)
     @event.update(spotify_playlist_id: playlist.id)

@@ -5,7 +5,7 @@
       Sign in with Spotify
   - else
     - if @event.currently_playing
-      = link_to start_playing_event_path, method: :post, class: "btn btn-primary" do
+      = link_to stop_playing_event_path, method: :post, class: "btn btn-primary" do
         %i.fa.fa-stop
         Stop Playing on Spotify
     - elsif !@event.currently_playing
@@ -14,11 +14,11 @@
         Play on Spotify
 
     - if @event.spotify_playlist_id.present?
-      = link_to start_playing_event_path, method: :post, class: "btn btn-primary" do
+      = link_to create_new_playlist_event_path, method: :post, class: "btn btn-primary" do
         %i.fa.fa-th-list
         Create new Playlist
     - else
-      = link_to start_playing_event_path, method: :post, class: "btn btn-primary" do
+      = link_to create_new_playlist_event_path, method: :post, class: "btn btn-primary" do
         %i.fa.fa-th-list
         Create Playlist
 
