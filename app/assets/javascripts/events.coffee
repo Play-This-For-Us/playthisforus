@@ -16,7 +16,7 @@ class App.Event
     @qrButtonSelector = $(@qrButtonSelector)
 
     # Get the join code string
-    @joinCode = $(joinCodeSelector).html();
+    @joinCode = $(joinCodeSelector).html()
     if(@joinCode)
       @joinCode = @joinCode.trim()
 
