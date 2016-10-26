@@ -15,10 +15,12 @@
 #= require tether
 #= require bootstrap
 #= require jquery-qrcode
+#= require bootstrap-slider
 #= require_tree .
 
 # When the document is rendered, setup our DOM manipulations
 $(document).ready ->
+  eventView = new App.EventCreateForm('#pnatorToggle', '#pnatorFields')
   eventView = new App.Event('#eventQRPopover', '#eventJoinCode')
   playlistView = new App.Playlist('.songs-list')
   searchView = new App.Search(playlistView.getEventChannel(), '.search-entry', '.search-results', '.search-results__close')

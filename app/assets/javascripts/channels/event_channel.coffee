@@ -29,3 +29,6 @@ class App.EventChannel
         upvote: upvote,
         song: songID
       }
+
+  pnator: =>
+    @eventChannel.perform 'pnator'

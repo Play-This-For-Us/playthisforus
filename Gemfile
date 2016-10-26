@@ -14,7 +14,7 @@ gem 'uglifier', '>= 1.3.0'
 # Use CoffeeScript for .coffee assets and views
 gem 'coffee-rails', '~> 4.2'
 # See https://github.com/rails/execjs#readme for more supported runtimes
-# gem 'therubyracer', platforms: :ruby
+gem 'therubyracer', platforms: :ruby
 
 # Use jquery as the JavaScript library
 gem 'jquery-rails'
@@ -34,7 +34,7 @@ gem 'redis', '~> 3.0'
 gem 'haml', '~> 4.0', '>= 4.0.7'
 
 # the newest and shiniest bootstrap (Bootstrap v4)
-gem 'bootstrap', '~> 4.0.0.alpha4'
+gem 'bootstrap', '~> 4.0.0.alpha5'
 
 # needed for some bootstrap functionality (and avoid an exception)
 source 'https://rails-assets.org' do
@@ -55,6 +55,8 @@ gem 'jquery-qrcode-rails'
 
 # Ruby wrapper for Spotify Web API Read more: http://www.rubydoc.info/github/guilhermesad/rspotify/master/
 gem 'rspotify'
+
+gem 'bootstrap-slider-rails'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
