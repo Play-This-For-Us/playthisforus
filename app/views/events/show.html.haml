@@ -33,6 +33,19 @@
       .card
         .event__banner{ style: "background-image: url('#{image_url(@event.avatar_image)}')"}
           .event__banner-overlay
+          - if @event.show_current_song?
+            - song = @event.currently_playing_song
+            .currently-playing__song
+              %span.media-left
+                = image_tag(song.art, class: "media-object currently-playing__avatar")
+              .media-body
+                %h4.currently-playing__header
+                  = song.name
+
+                %span.currently-playing__details
+                  %i.fa.fa-microphone
+                  = song.artist
+
           %h2.event__name
             = @event.name
 
