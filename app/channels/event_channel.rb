@@ -7,6 +7,7 @@ class EventChannel < ApplicationCable::Channel
     stream_from @event.channel_name + '|' + current_user.to_s
 
     broadcast_current_queue
+    @event.send_currently_playing
   end
 
   def submit_song(data)

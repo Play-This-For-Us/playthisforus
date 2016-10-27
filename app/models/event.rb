@@ -56,6 +56,7 @@ class Event < ApplicationRecord
     auth_user
     spotify_playlist.add_tracks!([song.to_spotify_track])
     song.remove_from_queue
+    send_currently_playing
   end
 
   def check_queue
@@ -73,6 +74,10 @@ class Event < ApplicationRecord
 
   def currently_playing_song
     self.songs.where.not(queued_at: nil).order(queued_at: :desc).first
+  end
+
+  def send_currently_playing
+    ActionCable.server.broadcast self.channel_name, action: 'current-song', data: currently_playing_song
   end
 
   private
