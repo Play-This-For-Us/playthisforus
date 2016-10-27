@@ -36,28 +36,18 @@
           %h2.event__name
             = @event.name
 
-            %small
-              = link_to edit_event_path(@event), class: 'event__edit' do
-                %i.fa.fa-pencil
-                Edit
+            - if owner?(@event)
+              %small
+                = link_to edit_event_path(@event), class: "event__edit" do
+                  %i.fa.fa-pencil
+                  Edit
 
         .card-block
           %p.card-text.lead
             = @event.description
 
-        - if owner?(@event)
-          .card-footer.text-muted
-            - if current_user.user_spotify_authenticated?
-              = link_to start_playing_event_path, method: :post, class: 'btn btn-primary' do
-                %i.fa.fa-play
-                Play on Spotify
-            - else
-              = link_to '/auth/spotify', class: 'btn btn-primary' do
-                %i.fa.fa-spotify
-                Sign in with Spotify
-            - if @event.pnator_enabled
-              = link_to '#pnator', class: 'btn btn-info' do
-                %i.fa.fa-magic
+        .card-footer.text-muted
+          = render 'actions'
 
   .row
     .col-md-12.col-lg-8.offset-lg-2

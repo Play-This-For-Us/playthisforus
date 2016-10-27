@@ -1,7 +1,8 @@
 # frozen_string_literal: true
 class EventsController < ApplicationController
-  before_action :set_event, only: [:show, :edit, :update, :destroy, :start_playing]
+  before_action :set_event, only: [:show, :edit, :update, :destroy, :start_playing, :stop_playing, :create_new_playlist]
   before_action :authenticate, only: [:show, :edit]
+  before_action :authenticate_owner, only: [:edit, :update]
 
   def index
     @events = Event.all
@@ -21,21 +22,7 @@ class EventsController < ApplicationController
     @event = Event.new(event_params)
     @event.user = current_user # the owner
 
-    pnator_on = params[:pnator_on] == 'on'
-    if pnator_on
-      target_energy = params[:pnator_energy].to_i / 100.to_f
-      target_danceability = params[:pnator_danceability].to_i / 100.to_f
-      target_popularity = params[:pnator_popularity].to_i / 100.to_f
-      target_speechiness = params[:pnator_speechiness].to_i / 100.to_f
-      target_happiness = params[:pnator_happiness].to_i / 100.to_f
-
-      @event.pnator_enabled = pnator_on
-      @event.pnator_danceability = target_danceability
-      @event.pnator_energy = target_energy
-      @event.pnator_popularity = target_popularity
-      @event.pnator_speechiness = target_speechiness
-      @event.pnator_happiness = target_happiness
-    end
+    pnator_setup
 
     respond_to do |format|
       if @event.save
@@ -49,8 +36,10 @@ class EventsController < ApplicationController
   end
 
   def update
+    pnator_setup
+
     respond_to do |format|
-      if @event.update(event_params)
+      if @event.save && @event.update(event_params)
         format.html { redirect_to @event, notice: 'Event was successfully updated.' }
         format.json { render :show, status: :ok, location: @event }
       else
@@ -92,7 +81,41 @@ class EventsController < ApplicationController
     end
   end
 
+  def stop_playing
+    if @event.update(currently_playing: false)
+      redirect_to @event, notice: 'Nifty! The playlist has stopped.'
+    else
+      redirect_to @event, error: 'An error occurred stopping the playlist.'
+    end
+  end
+
+  def create_new_playlist
+    if create_playlist(true)
+      redirect_to @event, notice: 'Slick! A new playlist was created.'
+    else
+      redirect_to @event, error: 'An error occurred creating the new playlist.'
+    end
+  end
+
   private
+
+  def pnator_setup
+    pnator_on = params[:pnator_on] == 'on'
+    if pnator_on
+      target_energy = params[:pnator_energy].to_i / 100.to_f
+      target_danceability = params[:pnator_danceability].to_i / 100.to_f
+      target_popularity = params[:pnator_popularity].to_i / 100.to_f
+      target_speechiness = params[:pnator_speechiness].to_i / 100.to_f
+      target_happiness = params[:pnator_happiness].to_i / 100.to_f
+
+      @event.pnator_enabled = pnator_on
+      @event.pnator_danceability = target_danceability
+      @event.pnator_energy = target_energy
+      @event.pnator_popularity = target_popularity
+      @event.pnator_speechiness = target_speechiness
+      @event.pnator_happiness = target_happiness
+    end
+  end
 
   def join_event_params
     if params.key?(:join_code)
@@ -110,8 +133,8 @@ class EventsController < ApplicationController
     @event.queue_next_song
   end
 
-  def create_playlist
-    return true if @event.spotify_playlist_id.present?
+  def create_playlist(force = false)
+    return true if @event.spotify_playlist_id.present? && !force
 
     playlist = @event.user.spotify.create_playlist!(@event.name)
     @event.update(spotify_playlist_id: playlist.id)
@@ -138,8 +161,16 @@ class EventsController < ApplicationController
     redirect_to root_path unless can_view?
   end
 
+  def authenticate_owner
+    redirect_to @event unless owns_event?
+  end
+
   def can_view?
     (current_user.present? && @event.user == current_user) ||
       (Event.find_by_join_code(cookies.permanent.encrypted[:join_cookie]) == @event)
+  end
+
+  def owns_event?
+    current_user.present? && @event.user == current_user
   end
 end
