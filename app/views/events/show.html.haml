@@ -33,6 +33,8 @@
       .card
         .event__banner{ style: "background-image: url('#{image_url(@event.avatar_image)}')"}
           .event__banner-overlay
+            .currently-playing__song
+
           %h2.event__name
             = @event.name
 

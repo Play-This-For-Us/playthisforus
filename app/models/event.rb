@@ -56,6 +56,7 @@ class Event < ApplicationRecord
     auth_user
     spotify_playlist.add_tracks!([song.to_spotify_track])
     song.remove_from_queue
+    send_currently_playing
   end
 
   def check_queue
@@ -67,22 +68,37 @@ class Event < ApplicationRecord
     "event-#{self.id}"
   end
 
-  private
-
-  def auth_user
-    # TODO(skovy) make this cleaner
-    self.user.spotify
+  def show_current_song?
+    self.currently_playing && song_is_playing?
   end
 
   def currently_playing_song
     self.songs.where.not(queued_at: nil).order(queued_at: :desc).first
   end
 
+  def send_currently_playing
+    return false unless show_current_song?
+    ActionCable.server.broadcast self.channel_name, action: 'current-song', data: currently_playing_song
+  end
+
+  private
+
+  def song_is_playing?
+    song = currently_playing_song
+    return false unless song.present?
+    (song.queued_at + (song.duration / 1000).seconds) >= (Time.now.utc)
+  end
+
+  def auth_user
+    # TODO(skovy) make this cleaner
+    self.user.spotify
+  end
+
   def should_queue_next_song?
     song = currently_playing_song
 
     # if there are not songs currently playing or played, queue up!
-    return true unless currently_playing_song.present?
+    return true unless song.present?
 
     (song.queued_at + (song.duration / 1000).seconds) <= (Time.now.utc + 20.seconds)
   end

@@ -12,7 +12,7 @@
 }
 
 .event__banner-overlay {
-  background: linear-gradient(rgba($dark, 0.7), rgba($dark, 0.7));
+  background: linear-gradient(rgba($dark, 0.5), rgba($dark, 0.5));
   position: absolute;
   top: 0;
   left: 0;
@@ -32,4 +32,27 @@
 .event__edit {
   font-size: 0.5em;
   color: $blue;
+}
+
+.currently-playing {
+  &__song {
+    padding: 16px;
+    position: absolute;
+    width: 100%;
+    top: 0;
+    z-index: 1;
+  }
+
+  &__avatar {
+    width: 100px;
+    height: 100px;
+  }
+
+  &__header {
+    color: $light;
+  }
+
+  &__details {
+    color: $light;
+  }
 }
