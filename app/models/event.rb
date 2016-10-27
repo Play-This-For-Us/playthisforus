@@ -77,6 +77,7 @@ class Event < ApplicationRecord
   end
 
   def send_currently_playing
+    return false unless show_current_song?
     ActionCable.server.broadcast self.channel_name, action: 'current-song', data: currently_playing_song
   end
 

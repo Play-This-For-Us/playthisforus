@@ -6,7 +6,7 @@ class App.Playlist
 
     @playlistSongs = [] # songs that are in the playlist
 
-    @playlistChannel = new App.EventChannel(@pushSong, @removeSong)
+    @playlistChannel = new App.EventChannel(@pushSong, @removeSong, @updateCurrentSong)
 
     window.onhashchange = =>
       if location.hash == '#pnator'
@@ -15,6 +15,10 @@ class App.Playlist
 
   getEventChannel: =>
     @playlistChannel
+
+  updateCurrentSong: (data) =>
+    song = new App.Song(data)
+    $('.currently-playing__song').html(song.toCurrentlyPlayingHtml())
 
   # add a song to the playlist data structure
   pushSong: (data) =>
