@@ -56,13 +56,15 @@ class Event < ApplicationRecord
     end
 
     # if there wasn't a song left and playlistinator failed
-    return unless next_song
+    return true unless next_song
     song = next_song
 
     auth_user
     spotify_playlist.add_tracks!([song.to_spotify_track])
     song.remove_from_queue
     send_currently_playing
+
+    return true # Spotify didn't error
   end
 
   def check_queue
