@@ -50,13 +50,21 @@ class Event < ApplicationRecord
   end
 
   def queue_next_song
-    return unless next_song
+    # if there is no next song then try to generate some
+    unless next_song || !self.pnator_enabled
+      apply_pnator(self.user, true, 3)
+    end
+
+    # if there wasn't a song left and playlistinator failed
+    return true unless next_song
     song = next_song
 
     auth_user
     spotify_playlist.add_tracks!([song.to_spotify_track])
     song.remove_from_queue
     send_currently_playing
+
+    return true # Spotify didn't error
   end
 
   def check_queue
@@ -79,6 +87,30 @@ class Event < ApplicationRecord
   def send_currently_playing
     return false unless show_current_song?
     ActionCable.server.broadcast self.channel_name, action: 'current-song', data: currently_playing_song
+  end
+
+  def apply_pnator(authed_user, bypass_auth, num_songs)
+    # You must be the owner and there must be some songs to seed from
+    return unless (bypass_auth || (authed_user && self.user == authed_user)) &&
+                  self.songs.all.count.positive? && self.pnator_enabled
+
+    seed_tracks = self.songs.last(5).pluck(:uri).map { |uri| uri.split(':')[-1] }
+    pnator_popularity = (self.pnator_popularity * 100).round
+    recs = RSpotify::Recommendations.generate(limit: num_songs, seed_tracks: seed_tracks,
+                                              target_energy: self.pnator_energy,
+                                              target_speechiness: self.pnator_speechiness,
+                                              target_danceability: self.pnator_danceability,
+                                              target_valence: self.pnator_happiness,
+                                              target_popularity: pnator_popularity)
+
+    recs.tracks.each do |t|
+      next if Song.exists?(uri: t.uri, event: self)
+
+      song = Song.create!(name: t.name, artist: t.artists[0].name, art: t.album.images[0]['url'], duration: t.duration_ms,
+                          uri: t.uri, event: self)
+
+      ActionCable.server.broadcast self.channel_name, action: 'add-song', data: song
+    end
   end
 
   private
