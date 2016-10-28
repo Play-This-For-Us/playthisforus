@@ -43,26 +43,7 @@ class EventChannel < ApplicationCable::Channel
 
   def pnator(_data)
     authed_user = current_authed_user
-    # You must be the owner and there must be some songs to seed from
-    return unless authed_user && @event.user == authed_user && @event.songs.all.count.positive?
-
-    seed_tracks = @event.songs.last(5).pluck(:uri).map { |uri| uri.split(':')[-1] }
-    pnator_popularity = (@event.pnator_popularity * 100).round
-    recs = RSpotify::Recommendations.generate(limit: 10, seed_tracks: seed_tracks,
-                                              target_energy: @event.pnator_energy,
-                                              target_speechiness: @event.pnator_speechiness,
-                                              target_danceability: @event.pnator_danceability,
-                                              target_valence: @event.pnator_happiness,
-                                              target_popularity: pnator_popularity)
-
-    recs.tracks.each { |t|
-      next if Song.exists?(uri: t.uri, event: @event)
-
-      song = Song.create!(name: t.name, artist: t.artists[0].name, art: t.album.images[0]['url'], duration: t.duration_ms,
-                          uri: t.uri, event: @event)
-
-      ActionCable.server.broadcast @event.channel_name, action: 'add-song', data: song
-    }
+    @event.apply_pnator(authed_user, false, 10)
   end
 
   private
