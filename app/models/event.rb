@@ -51,7 +51,7 @@ class Event < ApplicationRecord
 
   def queue_next_song
     # if there is no next song then try to generate some
-    unless next_song or !self.pnator_enabled
+    unless next_song || !self.pnator_enabled
       apply_pnator(self.user, true, 3)
     end
 
@@ -90,7 +90,7 @@ class Event < ApplicationRecord
   def apply_pnator(authed_user, bypass_auth, num_songs)
     # You must be the owner and there must be some songs to seed from
     return unless (bypass_auth || (authed_user && self.user == authed_user)) &&
-        self.songs.all.count.positive? && self.pnator_enabled
+                  self.songs.all.count.positive? && self.pnator_enabled
 
     seed_tracks = self.songs.last(5).pluck(:uri).map { |uri| uri.split(':')[-1] }
     pnator_popularity = (self.pnator_popularity * 100).round
@@ -101,14 +101,14 @@ class Event < ApplicationRecord
                                               target_valence: self.pnator_happiness,
                                               target_popularity: pnator_popularity)
 
-    recs.tracks.each { |t|
+    recs.tracks.each do |t|
       next if Song.exists?(uri: t.uri, event: self)
 
       song = Song.create!(name: t.name, artist: t.artists[0].name, art: t.album.images[0]['url'], duration: t.duration_ms,
                           uri: t.uri, event: self)
 
       ActionCable.server.broadcast self.channel_name, action: 'add-song', data: song
-    }
+    end
   end
 
   private
