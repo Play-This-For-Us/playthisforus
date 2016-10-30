@@ -36,16 +36,7 @@ class App.Song
 
   duration: =>
     # convert a count of milliseconds into a human-readable duration in M:SS form
-    msCount = @song.duration
-    ms = msCount % 1000
-    msCount = (msCount - ms) / 1000
-    secs = msCount % 60
-    msCount = (msCount - secs) / 60
-    mins = msCount % 60
-
-    secs = ("0" + secs).slice(-2)
-
-    return "#{mins}:#{secs}"
+    return ms_to_human(@song.duration)
 
   isHigherRanked: (song) =>
     @score() > song.score()
@@ -84,7 +75,7 @@ class App.Song
     </div>
     """
 
-  toCurrentlyPlayingHtml: =>
+  toCurrentlyPlayingHtml: (time_remaining) =>
     """
       <span class="media-left">
         <img class='media-object currently-playing__avatar' src='#{@art()}' alt='Song Art'>
@@ -97,6 +88,9 @@ class App.Song
         </a>
         <span class='currently-playing__details'>
           <i class="fa fa-microphone"></i> #{@artist()}
+        </span>
+        <span class='currently-playing__details'>
+          <i class="fa fa-clock-o"></i> <span id="currently-playing__remaining">#{ms_to_human(time_remaining)}</span>
         </span>
       </div>
     """
