@@ -11,7 +11,7 @@ class EventChannel < ApplicationCable::Channel
   end
 
   def submit_song(data)
-    return if Song.exists?(uri: data['uri'], event: @event)
+    return if Song.where(uri: data['uri'], event: @event, queued_at: nil).exists?
 
     song = Song.create!(
       name: data['name'],
