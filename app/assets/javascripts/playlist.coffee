@@ -13,7 +13,9 @@ class App.Playlist
         @pnator()
         location.hash = '#' # reset back so that onhashchange will be called again
 
-    setInterval((=>
+    # Update the time remaining every second
+    setInterval(
+      (=>
         if(@currentTimeRemaining)
           @currentTimeRemaining -= 1000
           @updateTimeRemaining())

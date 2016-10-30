@@ -20,7 +20,7 @@
 
 root = exports ? this
 
-root.ms_to_human = (msCount) =>
+root.ms_to_human = (msCount) ->
   # convert a count of milliseconds into a human-readable duration in M:SS form
   ms = msCount % 1000
   msCount = (msCount - ms) / 1000
