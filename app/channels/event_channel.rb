@@ -42,12 +42,12 @@ class EventChannel < ApplicationCable::Channel
 
     # Add to upvoted songs playlist
     authed_user = current_authed_user
-    if authed_user && authed_user.user_spotify_authenticated?
-      if data['upvote']
-        authed_user.add_to_upvoted(song)
-      else
-        authed_user.remove_from_upvoted(song)
-      end
+    return unless authed_user && authed_user.user_spotify_authenticated?
+
+    if data['upvote']
+      authed_user.add_to_upvoted(song)
+    else
+      authed_user.remove_from_upvoted(song)
     end
   end
 
