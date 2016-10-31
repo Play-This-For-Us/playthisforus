@@ -39,6 +39,16 @@ class EventChannel < ApplicationCable::Channel
     end
 
     ActionCable.server.broadcast @event.channel_name, action: 'update-song', data: song
+
+    # Add to upvoted songs playlist
+    authed_user = current_authed_user
+    if authed_user && authed_user.user_spotify_authenticated?
+      if data['upvote']
+        authed_user.add_to_upvoted(song)
+      else
+        authed_user.remove_from_upvoted(song)
+      end
+    end
   end
 
   def pnator(_data)
