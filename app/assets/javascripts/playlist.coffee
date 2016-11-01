@@ -15,9 +15,10 @@ class App.Playlist
 
     $(document).on 'click', '#currently-playing__star',
       (e) =>
-        @starSong(@currentPlaying.id())
         e.stopImmediatePropagation()
-        @currentPlaying.markSaved()
+        if(!@currentPlaying.saved)
+          @starSong(@currentPlaying.id())
+          @currentPlaying.markSaved()
 
     # Update the time remaining every second
     setInterval(
