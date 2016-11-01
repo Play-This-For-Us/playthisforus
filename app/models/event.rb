@@ -115,6 +115,11 @@ class Event < ApplicationRecord
     end
   end
 
+  def set_join_code
+    return if self.join_code.present? && self.join_code.length >= JOIN_CODE_LENGTH
+    self.join_code = generate_join_code
+  end
+
   private
 
   def song_is_playing?
@@ -141,10 +146,6 @@ class Event < ApplicationRecord
     user_id = self.user.spotify_attributes['id']
     playlist_id = self.spotify_playlist_id
     @spotify_playlist ||= RSpotify::Playlist.find(user_id, playlist_id)
-  end
-
-  def set_join_code
-    self.join_code = generate_join_code
   end
 
   def generate_join_code

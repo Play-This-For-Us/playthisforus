@@ -18,8 +18,12 @@
     = f.text_field :name, autofocus: true, class: 'form-control', required: true
 
   .form-group
+    = f.label :join_code
+    = f.text_field :join_code, class: 'form-control', required: true
+
+  .form-group
     = f.label :description
-    = f.text_area :description, autofocus: true, class: 'form-control', required: true
+    = f.text_area :description, class: 'form-control', required: true
 
   .form-group
     %label{ for: 'pnator_on' } Enable Playlistinator
