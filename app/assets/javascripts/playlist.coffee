@@ -15,15 +15,15 @@ class App.Playlist
 
     $(document).on 'click', '#currently-playing__star',
       (e) =>
-        @starSong(@currentPlayingID)
+        @starSong(@currentPlaying.id)
         e.stopImmediatePropagation()
         alert('Song saved') # TODO do better than an alert
 
     # Update the time remaining every second
     setInterval(
       (=>
-        if(@currentTimeRemaining)
-          @currentTimeRemaining -= 1000
+        if(@currentPlaying)
+          @currentPlaying.song.time_remaining -= 1000
           @updateTimeRemaining())
       , 1000)
 
@@ -31,13 +31,11 @@ class App.Playlist
     @playlistChannel
 
   updateCurrentSong: (data) =>
-    song = new App.Song(data)
-    @currentPlayingID = data.id
-    @currentTimeRemaining = data.time_remaining
-    $('.currently-playing__song').html(song.toCurrentlyPlayingHtml(@currentTimeRemaining))
+    @currentPlaying = new App.CurrentSong(data)
+    $('.currently-playing__song').html(@currentPlaying.toCurrentlyPlayingHtml())
 
   updateTimeRemaining: =>
-    $('#currently-playing__remaining').html(ms_to_human(@currentTimeRemaining))
+    $('#currently-playing__remaining').html(ms_to_human(@currentPlaying.timeRemainingMS()))
 
   # add a song to the playlist data structure
   pushSong: (data) =>
