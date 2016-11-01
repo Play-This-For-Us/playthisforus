@@ -43,26 +43,26 @@ class User < ApplicationRecord
     @spotify ||= RSpotify::User.new(self.spotify_attributes)
   end
 
-  def upvoted_playlist
+  def saved_playlist
     if self.upvote_playlist_id.present?
-      @upvoted_playlist ||= RSpotify::Playlist.find(spotify.id, self.upvote_playlist_id)
+      @saved_playlist ||= RSpotify::Playlist.find(spotify.id, self.upvote_playlist_id)
     else
-      @upvoted_playlist = self.spotify.create_playlist!('playthis-upvoted')
-      self.upvote_playlist_id = @upvoted_playlist.id
+      @saved_playlist = self.spotify.create_playlist!('playthis-saved')
+      self.saved_playlist_id = @saved_playlist.id
       self.save
     end
 
-    return @upvoted_playlist
+    @saved_playlist
   end
 
-  def add_to_upvoted(song)
+  def add_to_saved(song)
     # Ghetto way to prevent duplicates for now
-    upvoted_playlist.remove_tracks!(Array(RSpotify::Track.new(song)))
+    saved_playlist.remove_tracks!(Array(RSpotify::Track.new(song)))
 
-    upvoted_playlist.add_tracks!(Array(RSpotify::Track.new(song)))
+    saved_playlist.add_tracks!(Array(RSpotify::Track.new(song)))
   end
 
-  def remove_from_upvoted(song)
-    upvoted_playlist.remove_tracks!(Array(RSpotify::Track.new(song)))
+  def remove_from_saved(song)
+    saved_playlist.remove_tracks!(Array(RSpotify::Track.new(song)))
   end
 end

@@ -45,9 +45,9 @@ class EventChannel < ApplicationCable::Channel
     return unless authed_user && authed_user.user_spotify_authenticated?
 
     if data['upvote']
-      authed_user.add_to_upvoted(song)
+      authed_user.add_to_saved(song)
     else
-      authed_user.remove_from_upvoted(song)
+      authed_user.remove_from_saved(song)
     end
   end
 
