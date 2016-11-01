@@ -15,7 +15,7 @@ class App.Playlist
 
     $(document).on 'click', '#currently-playing__star',
       (e) =>
-        @starSong(@currentPlaying.id)
+        @starSong(@currentPlaying.id())
         e.stopImmediatePropagation()
         @currentPlaying.markSaved()
 
