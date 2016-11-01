@@ -76,7 +76,7 @@ class App.Song
     """
 
   toHtml: =>
-    html = """
+    """
     <div class='media songs-list__song' id='songs-list__song--#{@id()}'>
       <span class='media-left'>
         <a href='#{@spotifyOpenURL()}' style='text-decoration: none' target='_blank'>
