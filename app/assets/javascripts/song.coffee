@@ -76,7 +76,7 @@ class App.Song
     """
 
   toCurrentlyPlayingHtml: (time_remaining) =>
-    """
+    html = """
       <span class="media-left">
         <img class='media-object currently-playing__avatar' src='#{@art()}' alt='Song Art'>
       </span>
@@ -84,6 +84,15 @@ class App.Song
         <a href='#{@spotifyOpenURL()}' style='text-decoration: none' target='_blank'>
           <h4 class='media-heading currently-playing__header'>
             #{@name()}
+    """
+
+    # Put star button if user is authed with Spotify
+    if user_spotify_authed
+      html += """
+      <a class="btn" id="currently-playing__star" target="#"><i class="fa fa-star-o" aria-hidden="true"></i></a>
+      """
+
+    html += """
           </h4>
         </a>
         <span class='currently-playing__details'>
@@ -96,7 +105,7 @@ class App.Song
     """
 
   toHtml: =>
-    """
+    html = """
     <div class='media songs-list__song' id='songs-list__song--#{@id()}'>
       <span class='media-left'>
         <a href='#{@spotifyOpenURL()}' style='text-decoration: none' target='_blank'>

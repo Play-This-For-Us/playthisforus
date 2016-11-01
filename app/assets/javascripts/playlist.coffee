@@ -13,6 +13,12 @@ class App.Playlist
         @pnator()
         location.hash = '#' # reset back so that onhashchange will be called again
 
+    $(document).on 'click', '#currently-playing__star',
+      (e) =>
+        @starSong(@currentPlayingID)
+        e.stopImmediatePropagation()
+        alert('Song saved') # TODO do better than an alert
+
     # Update the time remaining every second
     setInterval(
       (=>
@@ -26,6 +32,7 @@ class App.Playlist
 
   updateCurrentSong: (data) =>
     song = new App.Song(data)
+    @currentPlayingID = data.id
     @currentTimeRemaining = data.time_remaining
     $('.currently-playing__song').html(song.toCurrentlyPlayingHtml(@currentTimeRemaining))
 
@@ -91,3 +98,6 @@ class App.Playlist
 
   pnator: =>
     @playlistChannel.pnator()
+
+  starSong: (songID) =>
+    @playlistChannel.saveSong(songID)

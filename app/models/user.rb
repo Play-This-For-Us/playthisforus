@@ -44,8 +44,8 @@ class User < ApplicationRecord
   end
 
   def saved_playlist
-    if self.upvote_playlist_id.present?
-      @saved_playlist ||= RSpotify::Playlist.find(spotify.id, self.upvote_playlist_id)
+    if self.saved_playlist_id.present?
+      @saved_playlist ||= RSpotify::Playlist.find(spotify.id, self.saved_playlist_id)
     else
       @saved_playlist = self.spotify.create_playlist!('playthis-saved')
       self.saved_playlist_id = @saved_playlist.id
