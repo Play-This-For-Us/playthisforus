@@ -50,6 +50,8 @@ class User < ApplicationRecord
   end
 
   def remove_from_saved(song)
-    spotify.remove_tracks!(Array(RSpotify::Track.new(song)))
+    track = RSpotify::Track.find(song.uri.sub!('spotify:track:', ''))
+
+    spotify.remove_tracks!(Array(track))
   end
 end
