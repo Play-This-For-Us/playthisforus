@@ -24,7 +24,7 @@ class App.Playlist
       (=>
         if(@currentPlaying)
           @currentPlaying.song.time_remaining -= 1000
-          @updateTimeRemaining())
+          @currentPlaying.updateTimeRemainingView())
       , 1000)
 
   getEventChannel: =>
@@ -33,9 +33,6 @@ class App.Playlist
   updateCurrentSong: (data) =>
     @currentPlaying = new App.CurrentSong(data)
     $('.currently-playing__song').html(@currentPlaying.toCurrentlyPlayingHtml())
-
-  updateTimeRemaining: =>
-    $('#currently-playing__remaining').html(ms_to_human(@currentPlaying.timeRemainingMS()))
 
   # add a song to the playlist data structure
   pushSong: (data) =>

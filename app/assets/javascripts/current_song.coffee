@@ -2,6 +2,9 @@ class App.CurrentSong extends App.Song
   constructor: (@song, @songChanged, @upvote, @downvote) ->
     super(@song, @songChanged, @upvote, @downVote)
 
+  updateTimeRemainingView: =>
+    $('#currently-playing__remaining').html(ms_to_human(@timeRemainingMS()))
+
   timeRemainingMS: =>
     @song.time_remaining
 
