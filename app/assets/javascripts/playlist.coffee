@@ -17,7 +17,7 @@ class App.Playlist
       (e) =>
         @starSong(@currentPlaying.id)
         e.stopImmediatePropagation()
-        alert('Song saved') # TODO do better than an alert
+        @currentPlaying.markSaved()
 
     # Update the time remaining every second
     setInterval(

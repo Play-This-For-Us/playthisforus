@@ -1,9 +1,20 @@
 class App.CurrentSong extends App.Song
   constructor: (@song, @songChanged, @upvote, @downvote) ->
     super(@song, @songChanged, @upvote, @downVote)
+    @saved = false
 
   updateTimeRemainingView: =>
     $('#currently-playing__remaining').html(ms_to_human(@timeRemainingMS()))
+
+  markSaved: ->
+    if !@saved
+      star = $('#currently-playing__star_img')
+
+      # Replace open star with filled star, or filled star with open
+      star.toggleClass('fa-star-o')
+      star.toggleClass('fa-star')
+
+      @saved = true
 
   timeRemainingMS: =>
     @song.time_remaining
@@ -22,7 +33,8 @@ class App.CurrentSong extends App.Song
     # Put star button if user is authed with Spotify
     if user_spotify_authed
       html += """
-      <a class="btn" id="currently-playing__star" target="#"><i class="fa fa-star-o" aria-hidden="true"></i></a>
+      <a class="btn" id="currently-playing__star" target="#">
+      <i id="currently-playing__star_img" class="fa fa-star-o" aria-hidden="true"></i></a>
       """
 
     html += """
@@ -32,7 +44,8 @@ class App.CurrentSong extends App.Song
           <i class="fa fa-microphone"></i> #{@artist()}
         </span>
         <span class='currently-playing__details'>
-          <i class="fa fa-clock-o"></i> <span id="currently-playing__remaining">#{ms_to_human(@timeRemainingMS())}</span>
+          <i class="fa fa-clock-o"></i>
+          <span id="currently-playing__remaining">#{ms_to_human(@timeRemainingMS())}</span>
         </span>
       </div>
     """
