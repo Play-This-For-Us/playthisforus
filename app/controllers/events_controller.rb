@@ -13,7 +13,7 @@ class EventsController < ApplicationController
 
   def new
     @event = Event.new
-    @event.set_join_code
+    @event.set_join_code # initialize the join code to a randomly generated code for the user
   end
 
   def edit
