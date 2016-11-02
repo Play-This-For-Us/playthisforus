@@ -42,4 +42,10 @@ class User < ApplicationRecord
   def spotify
     @spotify ||= RSpotify::User.new(self.spotify_attributes)
   end
+
+  def add_to_saved(song)
+    track = RSpotify::Track.find(song.uri.sub!('spotify:track:', ''))
+
+    spotify.save_tracks!(Array(track))
+  end
 end

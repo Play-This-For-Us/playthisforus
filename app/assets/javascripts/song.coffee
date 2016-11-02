@@ -79,26 +79,6 @@ class App.Song
     </div>
     """
 
-  toCurrentlyPlayingHtml: (time_remaining) =>
-    """
-      <span class="media-left">
-        <img class='media-object currently-playing__avatar' src='#{@art()}' alt='Song Art'>
-      </span>
-      <div class="media-body">
-        <a href='#{@spotifyOpenURL()}' style='text-decoration: none' target='_blank'>
-          <h4 class='media-heading currently-playing__header'>
-            #{@name()}
-          </h4>
-        </a>
-        <span class='currently-playing__details'>
-          <i class="fa fa-microphone"></i> #{@artist()}
-        </span>
-        <span class='currently-playing__details'>
-          <i class="fa fa-clock-o"></i> <span id="currently-playing__remaining">#{ms_to_human(time_remaining)}</span>
-        </span>
-      </div>
-    """
-
   toHtml: =>
     """
     <div class='media songs-list__song' id='songs-list__song--#{@id()}'>

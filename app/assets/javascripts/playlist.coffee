@@ -13,24 +13,27 @@ class App.Playlist
         @pnator()
         location.hash = '#' # reset back so that onhashchange will be called again
 
+    $(document).on 'click', '#currently-playing__star',
+      (e) =>
+        e.stopImmediatePropagation()
+        if(!@currentPlaying.saved)
+          @starSong(@currentPlaying.id())
+          @currentPlaying.markSaved()
+
     # Update the time remaining every second
     setInterval(
       (=>
-        if(@currentTimeRemaining)
-          @currentTimeRemaining -= 1000
-          @updateTimeRemaining())
+        if(@currentPlaying)
+          @currentPlaying.song.time_remaining -= 1000
+          @currentPlaying.updateTimeRemainingView())
       , 1000)
 
   getEventChannel: =>
     @playlistChannel
 
   updateCurrentSong: (data) =>
-    song = new App.Song(data)
-    @currentTimeRemaining = data.time_remaining
-    $('.currently-playing__song').html(song.toCurrentlyPlayingHtml(@currentTimeRemaining))
-
-  updateTimeRemaining: =>
-    $('#currently-playing__remaining').html(ms_to_human(@currentTimeRemaining))
+    @currentPlaying = new App.CurrentSong(data)
+    $('.currently-playing__song').html(@currentPlaying.toCurrentlyPlayingHtml())
 
   # add a song to the playlist data structure
   pushSong: (data) =>
@@ -91,3 +94,6 @@ class App.Playlist
 
   pnator: =>
     @playlistChannel.pnator()
+
+  starSong: (songID) =>
+    @playlistChannel.saveSong(songID)
