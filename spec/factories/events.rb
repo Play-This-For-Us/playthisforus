@@ -18,6 +18,7 @@ FactoryGirl.define do
   factory :event do
     sequence(:name) { |n| "Event Name #{n}" }
     sequence(:description) { |n| "Cool Event Description #{n}" }
+    sequence(:join_code) { |n| "abcdefg#{n}"}
     association :user, factory: :user
   end
 end

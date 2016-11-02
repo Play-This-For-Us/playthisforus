@@ -20,5 +20,6 @@ Rails.application.routes.draw do
     post 'create_new_playlist', on: :member
   end
 
-  get 'join(/:join_code)' => 'events#join', :as => :join_events
+  get '/:join_code' => 'events#join', :as => :join_events
+  post '/join' => 'events#join', :as => :join_events_submit
 end

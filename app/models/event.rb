@@ -22,13 +22,9 @@ class Event < ApplicationRecord
 
   validates :name, presence: true
   validates :description, presence: true
+  validates :join_code, presence: true, uniqueness: true, length: { minimum: JOIN_CODE_LENGTH }, format: { with: /\A[a-z0-9\-_]+\z/ }
 
   has_many :songs
-
-  has_secure_token :join_code
-
-  # create a random code to join the event
-  before_create :set_join_code
 
   scope :currently_playing, -> { where(currently_playing: true) }
 
@@ -115,6 +111,10 @@ class Event < ApplicationRecord
     end
   end
 
+  def set_join_code
+    self.join_code = generate_join_code
+  end
+
   private
 
   def song_is_playing?
@@ -141,10 +141,6 @@ class Event < ApplicationRecord
     user_id = self.user.spotify_attributes['id']
     playlist_id = self.spotify_playlist_id
     @spotify_playlist ||= RSpotify::Playlist.find(user_id, playlist_id)
-  end
-
-  def set_join_code
-    self.join_code = generate_join_code
   end
 
   def generate_join_code
