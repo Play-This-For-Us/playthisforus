@@ -20,7 +20,7 @@
         %p.lead
           Enter the event code here to join:
 
-        = form_for :events, :url => join_events_path, method: :get, html: { class: 'form-inline' } do |f|
+        = form_for :events, :url => join_events_submit_path, method: :post, html: { class: 'form-inline' } do |f|
           .form-group
             = f.text_field :join_code, autofocus: true, class: 'form-control', placeholder: "Event Code"
 
