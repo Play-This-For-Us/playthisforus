@@ -20,6 +20,8 @@
   .form-group
     = f.label :join_code
     = f.text_field :join_code, class: 'form-control', required: true
+    %small.form-text.text-muted
+      The join code must be lowercase alphanumeric and may include a dash (-) or underscore (_)
 
   .form-group
     = f.label :description

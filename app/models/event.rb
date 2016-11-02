@@ -22,13 +22,9 @@ class Event < ApplicationRecord
 
   validates :name, presence: true
   validates :description, presence: true
+  validates :join_code, presence: true, uniqueness: true, length: { minimum: JOIN_CODE_LENGTH }, format: { with: /\A[a-z0-9-_]+\z/ }
 
   has_many :songs
-
-  has_secure_token :join_code
-
-  # create a random code to join the event
-  before_create :set_join_code
 
   scope :currently_playing, -> { where(currently_playing: true) }
 
@@ -116,7 +112,6 @@ class Event < ApplicationRecord
   end
 
   def set_join_code
-    return if self.join_code.present? && self.join_code.length >= JOIN_CODE_LENGTH
     self.join_code = generate_join_code
   end
 
