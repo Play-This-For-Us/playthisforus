@@ -33,7 +33,7 @@ class App.CurrentSong extends App.Song
     # Put star button if user is authed with Spotify
     if user_spotify_authed
       html += """
-      <a class="btn" id="currently-playing__star" target="#">
+      <a id="currently-playing__star" target="#">
       <i id="currently-playing__star_img" class="fa fa-star-o" aria-hidden="true"></i></a>
       """
 
