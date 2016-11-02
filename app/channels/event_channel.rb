@@ -41,6 +41,17 @@ class EventChannel < ApplicationCable::Channel
     ActionCable.server.broadcast @event.channel_name, action: 'update-song', data: song
   end
 
+  # add a song (by id) to the user's saved songs playlist
+  def save_song(data)
+    authed_user = current_authed_user
+    return unless authed_user && authed_user.user_spotify_authenticated?
+
+    song = Song.find_by(id: data['song'], event: @event)
+    return if song.nil?
+
+    authed_user.add_to_saved(song)
+  end
+
   def pnator(_data)
     authed_user = current_authed_user
     @event.apply_pnator(authed_user, false, 10)
@@ -59,6 +70,6 @@ class EventChannel < ApplicationCable::Channel
   end
 
   def current_authed_user
-    return User.find_by(id: current_user)
+    User.find_by(id: current_user)
   end
 end

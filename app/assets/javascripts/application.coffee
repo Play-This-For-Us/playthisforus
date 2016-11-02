@@ -16,6 +16,11 @@
 #= require bootstrap
 #= require jquery-qrcode
 #= require bootstrap-slider
+#
+# Enforce order for class hierarchy
+#= require cable
+#= require song
+#= require current_song
 #= require_tree .
 
 root = exports ? this
