@@ -11,7 +11,8 @@ RSpec.describe EventsController, type: :controller do
     {
       name: 'Event 1',
       description: 'Event Description',
-      user: user
+      user: user,
+      join_code: "abcdefghij"
     }
   }
 

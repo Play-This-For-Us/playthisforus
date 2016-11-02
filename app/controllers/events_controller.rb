@@ -13,6 +13,7 @@ class EventsController < ApplicationController
 
   def new
     @event = Event.new
+    @event.set_join_code # initialize the join code to a randomly generated code for the user
   end
 
   def edit
@@ -154,7 +155,7 @@ class EventsController < ApplicationController
 
   # Never trust parameters from the scary internet, only allow the white list through.
   def event_params
-    params.require(:event).permit(:name, :description)
+    params.require(:event).permit(:name, :description, :join_code)
   end
 
   def authenticate
