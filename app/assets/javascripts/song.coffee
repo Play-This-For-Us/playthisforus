@@ -47,6 +47,10 @@ class App.Song
     scoreClass += ' songs-list__score--negative' if @score() < 0
     return scoreClass
 
+  showVote: => 
+    if @song.i_upvoted
+      $('#fa fa-chevron-down').color('color', red)
+
   @spotifyResultToSong: (data) ->
     song =
       name: data.name

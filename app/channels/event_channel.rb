@@ -50,7 +50,9 @@ class EventChannel < ApplicationCable::Channel
 
   def broadcast_current_queue
     @event.songs.active_queue.each do |song|
-      ActionCable.server.broadcast @event.channel_name + '|' + current_user.to_s, action: 'add-song', data: song
+      song_hash = song.as_json
+      song_hash[:i_upvoted] = true
+      ActionCable.server.broadcast @event.channel_name + '|' + current_user.to_s, action: 'add-song', data: song_hash
     end
   end
 
