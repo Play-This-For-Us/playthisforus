@@ -22,7 +22,7 @@ class Event < ApplicationRecord
 
   validates :name, presence: true
   validates :description, presence: true
-  validates :join_code, presence: true, uniqueness: true, length: { minimum: JOIN_CODE_LENGTH }, format: { with: /\A[a-z0-9-_]+\z/ }
+  validates :join_code, presence: true, uniqueness: true, length: { minimum: JOIN_CODE_LENGTH }, format: { with: /\A[a-z0-9\-_]+\z/ }
 
   has_many :songs
 
