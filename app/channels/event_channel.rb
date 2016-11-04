@@ -39,6 +39,11 @@ class EventChannel < ApplicationCable::Channel
     end
 
     ActionCable.server.broadcast @event.channel_name, action: 'update-song', data: song
+
+    song_hash = song.as_json
+    vote = Vote.find_by(user_identifier:current_user, song:song)
+    song_hash[:i_voted] = vote.vote
+    ActionCable.server.broadcast @event.channel_name + '|' + current_user.to_s, action: 'add-song', data: song_hash
   end
 
   # add a song (by id) to the user's saved songs playlist
@@ -62,7 +67,8 @@ class EventChannel < ApplicationCable::Channel
   def broadcast_current_queue
     @event.songs.active_queue.each do |song|
       song_hash = song.as_json
-      song_hash[:i_upvoted] = true
+      vote = Vote.find_by(user_identifier:current_user, song:song)
+      song_hash[:i_voted] = vote.vote if vote.present?
       ActionCable.server.broadcast @event.channel_name + '|' + current_user.to_s, action: 'add-song', data: song_hash
     end
   end
