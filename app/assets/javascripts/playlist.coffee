@@ -40,8 +40,8 @@ class App.Playlist
     songPosition = @findSong(data)
 
     if songPosition >= 0
-      # overwrite the existing song
-      @playlistSongs[songPosition] = new App.Song(data, @updatePlaylistUI, @sendUpvote, @sendDownvote)
+      # update the existing song
+      @playlistSongs[songPosition].updateSong(data)
     else
       # append to the end of the songs
       @playlistSongs.push(new App.Song(data, @updatePlaylistUI, @sendUpvote, @sendDownvote))

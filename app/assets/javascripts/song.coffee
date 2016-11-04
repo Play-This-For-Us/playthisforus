@@ -31,6 +31,17 @@ class App.Song
   score: =>
     parseInt(@song.score)
 
+  # updates an already existent song in the UI - only update attributes that
+  # should be updated in the UI
+  updateSong: (song) =>
+    return unless song
+
+    @song.score = parseInt(song.score)
+
+    # only update the current user's vote if it exists on the updated song
+    if song.hasOwnProperty('current_user_vote')
+      @song.current_user_vote = song.current_user_vote
+
   spotifyOpenURL: =>
     "http://open.spotify.com/track/#{@song.uri.replace('spotify:track:', '')}"
 
@@ -46,6 +57,14 @@ class App.Song
     scoreClass += ' songs-list__score--positive' if @score() > 0
     scoreClass += ' songs-list__score--negative' if @score() < 0
     return scoreClass
+
+  upvoteClass: =>
+    if @song.current_user_vote && @song.current_user_vote > 0
+     return "vote--upvoted"
+
+  downvoteClass: =>
+    if @song.current_user_vote && @song.current_user_vote < 0
+      return "vote--downvoted"
 
   @spotifyResultToSong: (data) ->
     song =
@@ -97,13 +116,13 @@ class App.Song
         </span>
       </div>
       <span class='media-right songs-list__vote-container'>
-        <button class='songs-list__vote songs-list__vote--upvote'>
+        <button class='songs-list__vote songs-list__vote--upvote #{@upvoteClass()}'>
           <i class='fa fa-chevron-up'></i>
         </button>
         <span class='#{@scoreClass()}'>
           #{@score()}
         </span>
-        <button class='songs-list__vote songs-list__vote--downvote'>
+        <button class='songs-list__vote songs-list__vote--downvote #{@downvoteClass()}'>
           <i class='fa fa-chevron-down'></i>
         </button>
       </span>
