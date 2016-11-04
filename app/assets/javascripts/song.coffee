@@ -39,7 +39,7 @@ class App.Song
     @song.score = parseInt(song.score)
 
     # only update the current user's vote if it exists on the updated song
-    if song.current_user_vote
+    if song.hasOwnProperty('current_user_vote')
       @song.current_user_vote = song.current_user_vote
 
   spotifyOpenURL: =>
@@ -59,11 +59,11 @@ class App.Song
     return scoreClass
 
   upvoteClass: =>
-    if @song.current_user_vote > 0
+    if @song.current_user_vote && @song.current_user_vote > 0
      return "vote--upvoted"
 
   downvoteClass: =>
-    if @song.current_user_vote < 0
+    if @song.current_user_vote && @song.current_user_vote < 0
       return "vote--downvoted"
 
   @spotifyResultToSong: (data) ->
