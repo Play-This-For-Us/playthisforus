@@ -16,6 +16,7 @@ class Vote < ApplicationRecord
 
   validates :user_identifier, presence: true
   validates :vote, presence: true, inclusion: [-1, 0, 1]
+  validates :song, presence: true
 
   scope :upvotes, -> { where(vote: 1).count }
   scope :downvotes, -> { where(vote: -1).count }
