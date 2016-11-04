@@ -66,3 +66,40 @@
           .search-results
 
       .songs-list
+
+- if params[:is_guest]
+  .modal.fade#intro-modal
+    .modal-dialog{:role => "document"}
+      .modal-content
+        .modal-header
+          %button.close{"aria-label" => "Close", "data-dismiss" => "modal", :type => "button"}
+            %span{"aria-hidden" => "true"} ×
+          %h4.modal-title
+            Hey! First time here?
+        .modal-body
+          %p.lead
+            Here are a few tips to get started and collaborate on this event.
+          %ol
+            %li
+              You can give one upvote (
+              %i.fa.fa-chevron-up
+              ) or one downvote (
+              %i.fa.fa-chevron-down
+              ) for each song
+              in the playlist. You can change these at any time.
+            %li
+              The song with the most upvotes will be played next and removed
+              from the top of the playlist queue.
+            %li
+              You can add your own songs by searching in the search bar. Other
+              guests can then vote on your suggestions.
+          .embed-responsive.embed-responsive-16by9
+            %iframe{:allowfullscreen => "", :frameborder => "0", :height => "315", :src => "https://www.youtube.com/embed/BRjlNPWzjAc?rel=0&controls=0&showinfo=0&modestbranding=1", :width => "560"}
+        .modal-footer
+          = link_to event_path(@event), class: 'btn btn-primary' do
+            Cool, let's play some music!
+
+  :javascript
+    $(document).ready(function () {
+      $('#intro-modal').modal('show');
+    });

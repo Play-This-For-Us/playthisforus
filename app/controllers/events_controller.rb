@@ -65,7 +65,7 @@ class EventsController < ApplicationController
       if @event.present?
         set_join_cookie
         set_user_identifier_cookie
-        redirect_to @event, notice: "You've sucessfully joined #{@event.name}"
+        redirect_to event_path(@event, is_guest: true), notice: "You've sucessfully joined #{@event.name}"
       else
         redirect_to root_path, flash: { error: "Invalid code: #{join_event_params}" }
       end
