@@ -48,10 +48,11 @@ class App.Song
     return scoreClass
 
   showVote: => 
+    console.log @song.i_upvoted
     if @song.i_upvoted > 0
       $('#songs-list__vote songs-list__vote--upvote').css('color', 'red')
     else if @song.i_upvoted < 0
-      $('#songs-list__vote songs-list__vote--upvote').css('color', 'red')
+      $('#songs-list__vote songs-list__vote--downvote').css('color', 'red')
 
   @spotifyResultToSong: (data) ->
     song =
