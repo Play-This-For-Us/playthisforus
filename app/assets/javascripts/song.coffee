@@ -48,8 +48,10 @@ class App.Song
     return scoreClass
 
   showVote: => 
-    if @song.i_upvoted
-      $('#fa fa-chevron-down').color('color', red)
+    if @song.i_upvoted > 0
+      $('#songs-list__vote songs-list__vote--upvote').css('color', 'red')
+    else if @song.i_upvoted < 0
+      $('#songs-list__vote songs-list__vote--upvote').css('color', 'red')
 
   @spotifyResultToSong: (data) ->
     song =
@@ -107,7 +109,7 @@ class App.Song
         <span class='#{@scoreClass()}'>
           #{@score()}
         </span>
-        <button class='songs-list__vote songs-list__vote--downvote'>
+        <button class='songs-list__vote songs-list__vote--downvote'> #{@showVote()}
           <i class='fa fa-chevron-down'></i>
         </button>
       </span>
