@@ -38,11 +38,13 @@ class EventChannel < ApplicationCable::Channel
       song.downvote(current_user)
     end
 
+    # update all guests with the new vote
     ActionCable.server.broadcast @event.channel_name, action: 'update-song', data: song
 
+    # update only the voter with their vote value
     song_hash = song.as_json
     vote = Vote.find_by(user_identifier:current_user, song:song)
-    song_hash[:i_voted] = vote.vote
+    song_hash[:current_user_vote] = vote.vote if vote.present?
     ActionCable.server.broadcast @event.channel_name + '|' + current_user.to_s, action: 'add-song', data: song_hash
   end
 
@@ -68,7 +70,7 @@ class EventChannel < ApplicationCable::Channel
     @event.songs.active_queue.each do |song|
       song_hash = song.as_json
       vote = Vote.find_by(user_identifier:current_user, song:song)
-      song_hash[:i_voted] = vote.vote if vote.present?
+      song_hash[:current_user_vote] = vote.vote if vote.present?
       ActionCable.server.broadcast @event.channel_name + '|' + current_user.to_s, action: 'add-song', data: song_hash
     end
   end

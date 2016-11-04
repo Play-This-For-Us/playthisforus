@@ -31,6 +31,17 @@ class App.Song
   score: =>
     parseInt(@song.score)
 
+  # updates an already existent song in the UI - only update attributes that
+  # should be updated in the UI
+  updateSong: (song) =>
+    return unless song
+
+    @song.score = parseInt(song.score)
+
+    # only update the current user's vote if it exists on the updated song
+    if song.current_user_vote
+      @song.current_user_vote = song.current_user_vote
+
   spotifyOpenURL: =>
     "http://open.spotify.com/track/#{@song.uri.replace('spotify:track:', '')}"
 
@@ -47,12 +58,12 @@ class App.Song
     scoreClass += ' songs-list__score--negative' if @score() < 0
     return scoreClass
 
-  upvoteClass: => 
-    if @song.i_voted > 0
+  upvoteClass: =>
+    if @song.current_user_vote > 0
      return "vote--upvoted"
 
-  downvoteClass: => 
-    if @song.i_voted < 0
+  downvoteClass: =>
+    if @song.current_user_vote < 0
       return "vote--downvoted"
 
   @spotifyResultToSong: (data) ->
