@@ -1,5 +1,5 @@
 class App.EventChannel
-  constructor: (@pushSong, @removeSong, @updateCurrentSong) ->
+  constructor: (@pushSong, @removeSong, @updateCurrentSong, @clear) ->
     @eventId = window.eventId
     @eventChannel = @subscribeWithReceive()
 
@@ -15,6 +15,8 @@ class App.EventChannel
           @removeSong(data.data)
         else if data.action && data.action == 'current-song'
           @updateCurrentSong(data.data)
+        else if data.action && data.action == 'clear'
+          @clear()
         else
           console.log('Unexpected chanel action.')
 
