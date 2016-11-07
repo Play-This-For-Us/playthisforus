@@ -73,10 +73,13 @@ class App.Playlist
   clearPlaylistUI: =>
     @playlistSelector.empty()
 
-  # sort the playlist based on votes and other metadata
+  # sort the playlist based first on score, then on time queued
   sortPlaylistSongs: ->
     @playlistSongs.sort (a, b) ->
-      b.score() - a.score()
+      if a.score == b.score
+        return Date.parse(b.queued_at).getUTCSeconds() - Date.parse(a.queued_at).getUTCSeconds()
+      else
+        return b.score - a.score
 
   # update the playlist view with the contents of our song list
   updatePlaylistUI: =>
