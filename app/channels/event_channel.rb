@@ -4,7 +4,7 @@ class EventChannel < ApplicationCable::Channel
     @event = Event.find(params[:id])
 
     stream_from @event.channel_name
-    stream_from unicast_channel_name
+    stream_from unique_channel
 
     send_clear_command
     broadcast_current_queue
@@ -80,16 +80,12 @@ class EventChannel < ApplicationCable::Channel
       else
         song_hash[:current_user_vote] = 0
       end
-      ActionCable.server.broadcast unicast_channel_name, action: 'add-song', data: song_hash
+      ActionCable.server.broadcast unique_channel, action: 'add-song', data: song_hash
     end
   end
 
   def send_clear_command
-    ActionCable.server.broadcast(unicast_channel_name, action: 'clear')
-  end
-
-  def unicast_channel_name
-    @event.channel_name + '|' + current_user.to_s
+    ActionCable.server.broadcast(unique_channel, action: 'clear')
   end
 
   def unique_channel
