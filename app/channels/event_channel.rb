@@ -8,7 +8,7 @@ class EventChannel < ApplicationCable::Channel
 
     send_clear_command
     broadcast_current_queue
-    @event.send_currently_playing
+    @event.send_currently_playing(channel: unique_channel)
   end
 
   def submit_song(data)
