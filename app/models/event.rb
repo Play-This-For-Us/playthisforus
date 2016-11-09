@@ -80,11 +80,11 @@ class Event < ApplicationRecord
     self.songs.where.not(queued_at: nil).order(queued_at: :desc).first
   end
 
-  def send_currently_playing
+  def send_currently_playing(channel: self.channel_name)
     return false unless show_current_song?
     current_song_json = currently_playing_song.as_json
     current_song_json[:time_remaining] = ((currently_playing_song.queued_at + (currently_playing_song.duration / 1000).seconds) - Time.now.utc).in_milliseconds
-    ActionCable.server.broadcast self.channel_name, action: 'current-song', data: current_song_json
+    ActionCable.server.broadcast channel, action: 'current-song', data: current_song_json
   end
 
   def apply_pnator(authed_user, bypass_auth, num_songs)
