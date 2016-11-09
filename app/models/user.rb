@@ -55,6 +55,7 @@ class User < ApplicationRecord
   end
 
   def display_name
+    # safely traverse the spotify attributes as there may be fields that don't exist
     self.try(:spotify_attributes).try(:[], 'display_name')
   end
 end
