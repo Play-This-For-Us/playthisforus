@@ -6,7 +6,6 @@ class EventChannel < ApplicationCable::Channel
     stream_from @event.channel_name
     stream_from unique_channel
 
-    send_clear_command
     broadcast_current_queue
     @event.send_currently_playing(channel: unique_channel)
   end
@@ -82,10 +81,6 @@ class EventChannel < ApplicationCable::Channel
       end
       ActionCable.server.broadcast unique_channel, action: 'add-song', data: song_hash
     end
-  end
-
-  def send_clear_command
-    ActionCable.server.broadcast(unique_channel, action: 'clear')
   end
 
   def unique_channel
