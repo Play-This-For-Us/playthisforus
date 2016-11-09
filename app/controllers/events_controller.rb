@@ -13,6 +13,7 @@ class EventsController < ApplicationController
 
   def new
     @event = Event.new
+    @event.set_join_code # initialize the join code to a randomly generated code for the user
   end
 
   def edit
@@ -64,7 +65,7 @@ class EventsController < ApplicationController
       if @event.present?
         set_join_cookie
         set_user_identifier_cookie
-        redirect_to @event, notice: "You've sucessfully joined #{@event.name}"
+        redirect_to event_path(@event, is_guest: true), notice: "You've sucessfully joined #{@event.name}"
       else
         redirect_to root_path, flash: { error: "Invalid code: #{join_event_params}" }
       end
@@ -154,7 +155,7 @@ class EventsController < ApplicationController
 
   # Never trust parameters from the scary internet, only allow the white list through.
   def event_params
-    params.require(:event).permit(:name, :description)
+    params.require(:event).permit(:name, :description, :join_code)
   end
 
   def authenticate

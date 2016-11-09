@@ -32,6 +32,14 @@
   }
 }
 
+.vote--upvoted {
+  color: $green;
+}
+
+.vote--downvoted {
+  color: $red;
+}
+
 .songs-list__score {
   font-size: 28px;
   color: $blue;

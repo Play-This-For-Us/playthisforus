@@ -1,5 +1,7 @@
 :javascript
   window.eventId = #{@event.id};
+  window.user_spotify_authed = #{@current_user.present? &&
+    @current_user.spotify_attributes.present?}
 
 .container.container-custom
   .row
@@ -15,7 +17,7 @@
               %li
                 Provide them with the event code
                 %strong{ id: 'eventJoinCode' }
-                  #{@event.join_code}
+                  = @event.join_code
                 and direct them to the
                 = link_to 'landing page.', root_path
 
@@ -32,7 +34,7 @@
 
 
       .card
-        .event__banner{ style: "background-image: url('#{image_url(@event.avatar_image)}')"}
+        .event__banner{ style: "background-image: url('#{image_url(@event.avatar_image)}')" }
           .event__banner-overlay
             .currently-playing__song
 
@@ -41,7 +43,7 @@
 
             - if owner?(@event)
               %small
-                = link_to edit_event_path(@event), class: "event__edit" do
+                = link_to edit_event_path(@event), class: 'event__edit' do
                   %i.fa.fa-pencil
                   Edit
 
@@ -51,6 +53,9 @@
 
         .card-footer.text-muted
           = render 'actions'
+          %button.btn.btn-primary{"data-target" => "#intro-modal", "data-toggle" => "modal", :type => "button"}
+            %i.fa.fa-question-circle
+            How does this work?
 
   .row
     .col-md-12.col-lg-8.offset-lg-2
@@ -65,3 +70,50 @@
           .search-results
 
       .songs-list
+
+
+.modal.fade#intro-modal
+  .modal-dialog{:role => "document"}
+    .modal-content
+      .modal-header
+        - if params[:is_guest]
+          = link_to event_path(@event), class: 'close' do
+            %span{"aria-hidden" => "true"} ×
+        - else
+          %button.close{"aria-label" => "Close", "data-dismiss" => "modal", :type => "button"}
+            %span{"aria-hidden" => "true"} ×
+        %h4.modal-title
+          Hey! First time here?
+      .modal-body
+        %p.lead
+          Here are a few tips to get started and collaborate on this event.
+        %ol
+          %li
+            You can give one upvote (
+            %i.fa.fa-chevron-up
+            ) or one downvote (
+            %i.fa.fa-chevron-down
+            ) for each song
+            in the playlist. You can change these at any time.
+          %li
+            The song with the most upvotes will be played next and removed
+            from the top of the playlist queue.
+          %li
+            You can add your own songs by searching in the search bar. Other
+            guests can then vote on your suggestions.
+        .embed-responsive.embed-responsive-16by9
+          %iframe{:allowfullscreen => "", :frameborder => "0", :height => "315", :src => "https://www.youtube.com/embed/BRjlNPWzjAc?rel=0&controls=0&showinfo=0&modestbranding=1", :width => "560"}
+      .modal-footer
+        - if params[:is_guest]
+          = link_to event_path(@event), class: 'btn btn-primary' do
+            Cool, let's play some music!
+        - else
+          %button.btn.btn-primary{"data-dismiss" => "modal", :type => "button"}
+            Cool, Got it!
+
+
+- if params[:is_guest]
+  :javascript
+    $(document).ready(function () {
+      $('#intro-modal').modal('show');
+    });
