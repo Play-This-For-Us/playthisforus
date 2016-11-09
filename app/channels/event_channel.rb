@@ -11,7 +11,7 @@ class EventChannel < ApplicationCable::Channel
   end
 
   def submit_song(data)
-    return if Song.exists?(uri: data['uri'], event: @event)
+    return if Song.exists?(uri: data['uri'], event: @event, queued_at: nil)
 
     song = Song.create!(
       name: data['name'],
@@ -38,7 +38,29 @@ class EventChannel < ApplicationCable::Channel
       song.downvote(current_user)
     end
 
+    # update all guests with the new vote
     ActionCable.server.broadcast @event.channel_name, action: 'update-song', data: song
+
+    # update only the voter with their vote value
+    song_hash = song.as_json
+    vote = Vote.find_by(user_identifier: current_user, song: song)
+    if vote.present?
+      song_hash[:current_user_vote] = vote.vote
+    else
+      song_hash[:current_user_vote] = 0
+    end
+    ActionCable.server.broadcast @event.channel_name + '|' + current_user.to_s, action: 'add-song', data: song_hash
+  end
+
+  # add a song (by id) to the user's saved songs playlist
+  def save_song(data)
+    authed_user = current_authed_user
+    return unless authed_user && authed_user.user_spotify_authenticated?
+
+    song = Song.find_by(id: data['song'], event: @event)
+    return if song.nil?
+
+    authed_user.add_to_saved(song)
   end
 
   def pnator(_data)
@@ -50,7 +72,14 @@ class EventChannel < ApplicationCable::Channel
 
   def broadcast_current_queue
     @event.songs.active_queue.each do |song|
-      ActionCable.server.broadcast @event.channel_name + '|' + current_user.to_s, action: 'add-song', data: song
+      song_hash = song.as_json
+      vote = Vote.find_by(user_identifier:current_user, song:song)
+      if vote.present?
+        song_hash[:current_user_vote] = vote.vote
+      else
+        song_hash[:current_user_vote] = 0
+      end
+      ActionCable.server.broadcast @event.channel_name + '|' + current_user.to_s, action: 'add-song', data: song_hash
     end
   end
 
@@ -59,6 +88,6 @@ class EventChannel < ApplicationCable::Channel
   end
 
   def current_authed_user
-    return User.find_by(id: current_user)
+    User.find_by(id: current_user)
   end
 end

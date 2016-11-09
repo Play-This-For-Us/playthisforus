@@ -22,13 +22,9 @@ class Event < ApplicationRecord
 
   validates :name, presence: true
   validates :description, presence: true
+  validates :join_code, presence: true, uniqueness: true, length: { minimum: JOIN_CODE_LENGTH }, format: { with: /\A[a-z0-9\-_]+\z/ }
 
   has_many :songs
-
-  has_secure_token :join_code
-
-  # create a random code to join the event
-  before_create :set_join_code
 
   scope :currently_playing, -> { where(currently_playing: true) }
 
@@ -86,7 +82,9 @@ class Event < ApplicationRecord
 
   def send_currently_playing
     return false unless show_current_song?
-    ActionCable.server.broadcast self.channel_name, action: 'current-song', data: currently_playing_song
+    current_song_json = currently_playing_song.as_json
+    current_song_json[:time_remaining] = ((currently_playing_song.queued_at + (currently_playing_song.duration / 1000).seconds) - Time.now.utc).in_milliseconds
+    ActionCable.server.broadcast self.channel_name, action: 'current-song', data: current_song_json
   end
 
   def apply_pnator(authed_user, bypass_auth, num_songs)
@@ -111,6 +109,10 @@ class Event < ApplicationRecord
 
       ActionCable.server.broadcast self.channel_name, action: 'add-song', data: song
     end
+  end
+
+  def set_join_code
+    self.join_code = generate_join_code
   end
 
   private
@@ -139,10 +141,6 @@ class Event < ApplicationRecord
     user_id = self.user.spotify_attributes['id']
     playlist_id = self.spotify_playlist_id
     @spotify_playlist ||= RSpotify::Playlist.find(user_id, playlist_id)
-  end
-
-  def set_join_code
-    self.join_code = generate_join_code
   end
 
   def generate_join_code

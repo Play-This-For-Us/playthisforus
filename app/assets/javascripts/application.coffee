@@ -16,7 +16,26 @@
 #= require bootstrap
 #= require jquery-qrcode
 #= require bootstrap-slider
+#
+# Enforce order for class hierarchy
+#= require cable
+#= require song
+#= require current_song
 #= require_tree .
+
+root = exports ? this
+
+root.ms_to_human = (msCount) ->
+  # convert a count of milliseconds into a human-readable duration in M:SS form
+  ms = msCount % 1000
+  msCount = (msCount - ms) / 1000
+  secs = msCount % 60
+  msCount = (msCount - secs) / 60
+  mins = msCount % 60
+
+  secs = ("0" + secs).slice(-2)
+
+  return "#{mins}:#{secs}"
 
 # When the document is rendered, setup our DOM manipulations
 $(document).ready ->

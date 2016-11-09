@@ -31,21 +31,23 @@ class App.Song
   score: =>
     parseInt(@song.score)
 
+  # updates an already existent song in the UI - only update attributes that
+  # should be updated in the UI
+  updateSong: (song) =>
+    return unless song
+
+    @song.score = parseInt(song.score)
+
+    # only update the current user's vote if it exists on the updated song
+    if song.hasOwnProperty('current_user_vote')
+      @song.current_user_vote = song.current_user_vote
+
   spotifyOpenURL: =>
     "http://open.spotify.com/track/#{@song.uri.replace('spotify:track:', '')}"
 
   duration: =>
     # convert a count of milliseconds into a human-readable duration in M:SS form
-    msCount = @song.duration
-    ms = msCount % 1000
-    msCount = (msCount - ms) / 1000
-    secs = msCount % 60
-    msCount = (msCount - secs) / 60
-    mins = msCount % 60
-
-    secs = ("0" + secs).slice(-2)
-
-    return "#{mins}:#{secs}"
+    return ms_to_human(@song.duration)
 
   isHigherRanked: (song) =>
     @score() > song.score()
@@ -55,6 +57,14 @@ class App.Song
     scoreClass += ' songs-list__score--positive' if @score() > 0
     scoreClass += ' songs-list__score--negative' if @score() < 0
     return scoreClass
+
+  upvoteClass: =>
+    if @song.current_user_vote && @song.current_user_vote > 0
+     return "vote--upvoted"
+
+  downvoteClass: =>
+    if @song.current_user_vote && @song.current_user_vote < 0
+      return "vote--downvoted"
 
   @spotifyResultToSong: (data) ->
     song =
@@ -84,23 +94,6 @@ class App.Song
     </div>
     """
 
-  toCurrentlyPlayingHtml: =>
-    """
-      <span class="media-left">
-        <img class='media-object currently-playing__avatar' src='#{@art()}' alt='Song Art'>
-      </span>
-      <div class="media-body">
-        <a href='#{@spotifyOpenURL()}' style='text-decoration: none' target='_blank'>
-          <h4 class='media-heading currently-playing__header'>
-            #{@name()}
-          </h4>
-        </a>
-        <span class='currently-playing__details'>
-          <i class="fa fa-microphone"></i> #{@artist()}
-        </span>
-      </div>
-    """
-
   toHtml: =>
     """
     <div class='media songs-list__song' id='songs-list__song--#{@id()}'>
@@ -123,13 +116,13 @@ class App.Song
         </span>
       </div>
       <span class='media-right songs-list__vote-container'>
-        <button class='songs-list__vote songs-list__vote--upvote'>
+        <button class='songs-list__vote songs-list__vote--upvote #{@upvoteClass()}'>
           <i class='fa fa-chevron-up'></i>
         </button>
         <span class='#{@scoreClass()}'>
           #{@score()}
         </span>
-        <button class='songs-list__vote songs-list__vote--downvote'>
+        <button class='songs-list__vote songs-list__vote--downvote #{@downvoteClass()}'>
           <i class='fa fa-chevron-down'></i>
         </button>
       </span>

@@ -34,3 +34,9 @@ class App.EventChannel
 
   pnator: =>
     @eventChannel.perform 'pnator'
+
+  saveSong: (songID) =>
+    @eventChannel.perform 'save_song',
+      {
+        song: songID
+      }

@@ -34,9 +34,16 @@ class Song < ApplicationRecord
   end
 
   def upvote(user_identifier)
-    if self.votes.exists?(user_identifier: user_identifier)
-      # the user already voted, change the vote to an upvote
-      self.votes.find_by(user_identifier: user_identifier).upvote
+    vote =  self.votes.where(user_identifier: user_identifier).first
+    if vote.present?
+    if vote.vote > 0
+        # the user already upvoted this song, delete the upvote
+        vote.destroy
+      else
+        # the user already voted, change the vote to an upvote
+        self.votes.find_by(user_identifier: user_identifier).upvote
+      end
+
     else
       # create a new upvote for the user
       self.votes.create!(user_identifier: user_identifier, vote: 1)
@@ -44,9 +51,15 @@ class Song < ApplicationRecord
   end
 
   def downvote(user_identifier)
-    if self.votes.exists?(user_identifier: user_identifier)
-      # the user already voted, change the vote to a downvote
-      self.votes.find_by(user_identifier: user_identifier).downvote
+    vote = self.votes.where(user_identifier: user_identifier).first
+    if vote.present?
+      if vote.vote > 0
+        # the user already voted, change the vote to a downvote
+        self.votes.find_by(user_identifier: user_identifier).downvote
+      else
+        # the user already downvoted this song, delete the downvote
+        vote.destroy
+      end
     else
       # create a new downvote for the user
       self.votes.create!(user_identifier: user_identifier, vote: -1)
