@@ -76,10 +76,18 @@ class App.Playlist
   # sort the playlist based first on score, then on time queued
   sortPlaylistSongs: ->
     @playlistSongs.sort (a, b) ->
-      if a.score == b.score
-        return Date.parse(b.queued_at).getUTCSeconds() - Date.parse(a.queued_at).getUTCSeconds()
-      else
-        return b.score - a.score
+      if a.score() == b.score()  # Tie on score, sort by time submitted
+        bQueueSecs = Date.parse(b.song.created_at)
+        aQueueSecs = Date.parse(a.song.created_at)
+
+        if aQueueSecs > bQueueSecs  # B queued first
+          return 1
+        else if aQueueSecs < bQueueSecs  # A queued first
+          return -1
+        else  # There was a tie
+          return b.id() - a.id()  # If B's ID is greater, put A first
+      else  # Score didn't tie
+        return b.score() - a.score()
 
   # update the playlist view with the contents of our song list
   updatePlaylistUI: =>
