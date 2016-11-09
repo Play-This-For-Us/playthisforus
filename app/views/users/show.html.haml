@@ -2,6 +2,8 @@
   .row
     .col-md-12
       %h3
+        - if @user.avatar.present?
+          = image_tag(@user.avatar, class: 'user__avatar')
         = greeting
 
       - if @events.empty?
