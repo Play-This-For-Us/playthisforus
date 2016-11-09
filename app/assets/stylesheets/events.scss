@@ -34,6 +34,12 @@
   color: $blue;
 }
 
+.event__owner {
+  font-size: 18px;
+  display: block;
+  padding-top: 4px;
+}
+
 .currently-playing {
   &__song {
     padding: 16px;

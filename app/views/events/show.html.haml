@@ -45,6 +45,11 @@
                 = link_to edit_event_path(@event), class: 'event__edit' do
                   %i.fa.fa-pencil
                   Edit
+            - elsif @event.user.avatar.present? && @event.user.display_name.present?
+              %small.event__owner
+                Made by
+                = image_tag(@event.user.avatar, class: 'user__avatar user__avatar--mini')
+                = @event.user.display_name
 
         .card-block
           %p.card-text.lead

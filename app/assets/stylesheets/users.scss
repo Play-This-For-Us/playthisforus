@@ -1,0 +1,12 @@
+.user {
+  &__avatar {
+    display: inline-block;
+    border-radius: 50%;
+    width: 80px;
+    vertical-align: middle;
+
+    &--mini {
+      width: 30px;
+    }
+  }
+}
