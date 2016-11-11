@@ -116,8 +116,17 @@
             Cool, Got it!
 
 
-- if params[:is_guest]
+- if params[:is_guest] &&
   :javascript
     $(document).ready(function () {
-      $('#intro-modal').modal('show');
+      var visitedBefore = document.cookie.includes("VisitedBefore");
+
+      if(!visitedBefore) {  // First time visitor
+        $('#intro-modal').modal('show');
+      }
+
+      var expire = new Date();
+      expire = new Date(expire.getTime() + 7776000000);
+
+      document.cookie = "VisitedBefore=yes; expires=" + expire;
     });
