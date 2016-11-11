@@ -22,7 +22,10 @@ class EventChannel < ApplicationCable::Channel
       event: @event
     )
 
-    ActionCable.server.broadcast @event.channel_name, action: 'add-song', data: song
+    ActionCable.server.broadcast @event.channel_name,
+      action: 'add-song',
+      data: song,
+      alert: { type: 'success', text: "#{song.name} was added to the queue" }
   end
 
   def vote(data)
@@ -39,7 +42,9 @@ class EventChannel < ApplicationCable::Channel
     end
 
     # update all guests with the new vote
-    ActionCable.server.broadcast @event.channel_name, action: 'update-song', data: song
+    ActionCable.server.broadcast @event.channel_name,
+      action: 'update-song',
+      data: song
 
     # update only the voter with their vote value
     song_hash = song.as_json
@@ -49,7 +54,11 @@ class EventChannel < ApplicationCable::Channel
     else
       song_hash[:current_user_vote] = 0
     end
-    ActionCable.server.broadcast @event.channel_name + '|' + current_user.to_s, action: 'add-song', data: song_hash
+
+    ActionCable.server.broadcast @event.channel_name + '|' + current_user.to_s,
+      action: 'add-song',
+      data: song_hash,
+      alert: { type: 'success', text: "Vote added #{song.name}" }
   end
 
   # add a song (by id) to the user's saved songs playlist
