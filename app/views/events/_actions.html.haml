@@ -27,13 +27,14 @@
       %i.fa.fa-magic
       Magic Playlist
 - else
-  = link_to "https://open.spotify.com/user/#{@event.user_id}/playlist/#{@event.spotify_playlist_id}", class: "btn btn-primary"  do
-    %i.fa.fa-play
-    Play in browser
+  - if @event.user.spotify_attributes.key?("id") && @event.user.spotify_attributes["id"].length.positive?
+    = link_to "https://open.spotify.com/user/#{@event.user.spotify_attributes["id"]}/playlist/#{@event.spotify_playlist_id}", class: "btn btn-primary"  do
+      %i.fa.fa-play
+      Play in browser
 
-  = link_to "https://open.spotify.com:user:#{@event.user_id}:playlist:#{@event.spotify_playlist_id}", class: "btn btn-primary"  do
-    %i.fa.fa-play
-    Play in app
+    = link_to "https://open.spotify.com:user:#{@event.user.spotify_attributes["id"]}:playlist:#{@event.spotify_playlist_id}", class: "btn btn-primary"  do
+      %i.fa.fa-play
+      Play in app
 
 
 
