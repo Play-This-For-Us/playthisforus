@@ -24,6 +24,12 @@
       The join code must be lowercase alphanumeric and may include a dash (-) or underscore (_)
 
   .form-group
+    = f.label :image_url
+    = f.text_field :image_url, class: 'form-control', required: false
+    %small.form-text.text-muted
+      Should be a direct link to an image. Can be left blank for a default image.
+
+  .form-group
     = f.label :description
     = f.text_area :description, class: 'form-control', required: true
 
