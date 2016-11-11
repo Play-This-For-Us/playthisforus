@@ -4,6 +4,7 @@
  */
 
 @import 'settings';
+@import 'alert';
 @import 'events';
 @import 'users';
 @import 'playlist';
@@ -51,13 +52,6 @@ img {
 
 .flash-display {
   margin-top: 16px;
-}
-
-.alert--cover {
-  position: absolute;
-  left: 15px;
-  right: 15px;
-  z-index: 9;
 }
 
 @media only screen and (max-width: 767px) {
