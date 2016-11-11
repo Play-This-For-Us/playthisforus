@@ -1,13 +1,8 @@
 # frozen_string_literal: true
 module ApplicationHelper
   def custom_user
-    if current_user.spotify_attributes.present? &&
-       current_user.spotify_attributes.key?('display_name') &&
-
-       current_user.spotify_attributes['display_name'] &&
-
-       !current_user.spotify_attributes['display_name'].empty?
-      ", #{current_user.spotify_attributes['display_name']}"
+    if current_user.display_name.present?
+      ", #{current_user.display_name}"
     end
   end
 

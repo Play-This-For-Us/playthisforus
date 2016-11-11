@@ -48,4 +48,14 @@ class User < ApplicationRecord
 
     spotify.save_tracks!(Array(track))
   end
+
+  def avatar
+    # safely traverse the spotify attributes as there may be fields that don't exist
+    self.try(:spotify_attributes).try(:[], 'images').try(:[], 0).try(:[], 'url')
+  end
+
+  def display_name
+    # safely traverse the spotify attributes as there may be fields that don't exist
+    self.try(:spotify_attributes).try(:[], 'display_name')
+  end
 end
