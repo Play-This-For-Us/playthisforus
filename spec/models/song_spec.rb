@@ -66,6 +66,27 @@ RSpec.describe Song, type: :model do
 
         expect(event.songs.ranked).to match [song_a, song_b, song_c, song_d]
       end
+
+      it 'properly ranks vote ties' do
+        song_a = FactoryGirl.create(:song, event: event)
+        FactoryGirl.create(:vote, vote: 1, song: song_a)
+        FactoryGirl.create(:vote, vote: 1, song: song_a)
+        expect(song_a.score).to be 2
+
+        song_d = FactoryGirl.create(:song, event: event, created_at: Date.parse('31-12-1990'))
+        FactoryGirl.create(:vote, vote: 1, song: song_d)
+        FactoryGirl.create(:vote, vote: 1, song: song_d)
+        expect(song_d.score).to be 2
+
+        song_c = FactoryGirl.create(:song, event: event)
+        expect(song_c.score).to be 0
+
+        song_b = FactoryGirl.create(:song, event: event)
+        FactoryGirl.create(:vote, vote: 1, song: song_b)
+        expect(song_b.score).to be 1
+
+        expect(event.songs.ranked).to match [song_d, song_a, song_b, song_c]
+      end
     end
   end
 

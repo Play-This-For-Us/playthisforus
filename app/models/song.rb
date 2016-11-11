@@ -23,10 +23,11 @@ class Song < ApplicationRecord
 
   scope :active_queue, -> { where(queued_at: nil) }
 
+  # Sort first by vote count, then by time added, then by id
   scope :ranked, lambda {
     joins('LEFT JOIN votes ON songs.id = votes.song_id')
       .group('songs.id')
-      .order('coalesce(sum(votes.vote), 0) DESC NULLS LAST')
+      .order('coalesce(sum(votes.vote), 0) DESC NULLS LAST, songs.created_at, songs.id')
   }
 
   def score

@@ -6,7 +6,7 @@ class App.Playlist
 
     @playlistSongs = [] # songs that are in the playlist
 
-    @playlistChannel = new App.EventChannel(@pushSong, @removeSong, @updateCurrentSong)
+    @playlistChannel = new App.EventChannel(@pushSong, @removeSong, @updateCurrentSong, @clearSongs)
 
     window.onhashchange = =>
       if location.hash == '#pnator'
@@ -34,6 +34,10 @@ class App.Playlist
   updateCurrentSong: (data) =>
     @currentPlaying = new App.CurrentSong(data)
     $('.currently-playing__song').html(@currentPlaying.toCurrentlyPlayingHtml())
+
+  clearSongs: =>
+    @playlistSongs = []
+    @updatePlaylistUI()
 
   # add a song to the playlist data structure
   pushSong: (data) =>
@@ -73,10 +77,21 @@ class App.Playlist
   clearPlaylistUI: =>
     @playlistSelector.empty()
 
-  # sort the playlist based on votes and other metadata
+  # sort the playlist based first on score, then on time queued
   sortPlaylistSongs: ->
     @playlistSongs.sort (a, b) ->
-      b.score() - a.score()
+      if a.score() == b.score()  # Tie on score, sort by time submitted
+        bQueueSecs = Date.parse(b.song.created_at)
+        aQueueSecs = Date.parse(a.song.created_at)
+
+        if aQueueSecs > bQueueSecs  # B queued first
+          return 1
+        else if aQueueSecs < bQueueSecs  # A queued first
+          return -1
+        else  # There was a tie
+          return b.id() - a.id()  # If B's ID is greater, put A first
+      else  # Score didn't tie
+        return b.score() - a.score()
 
   # update the playlist view with the contents of our song list
   updatePlaylistUI: =>

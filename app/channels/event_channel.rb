@@ -4,10 +4,10 @@ class EventChannel < ApplicationCable::Channel
     @event = Event.find(params[:id])
 
     stream_from @event.channel_name
-    stream_from @event.channel_name + '|' + current_user.to_s
+    stream_from unique_channel
 
     broadcast_current_queue
-    @event.send_currently_playing
+    @event.send_currently_playing(channel: unique_channel)
   end
 
   def submit_song(data)
@@ -79,7 +79,7 @@ class EventChannel < ApplicationCable::Channel
       else
         song_hash[:current_user_vote] = 0
       end
-      ActionCable.server.broadcast @event.channel_name + '|' + current_user.to_s, action: 'add-song', data: song_hash
+      ActionCable.server.broadcast unique_channel, action: 'add-song', data: song_hash
     end
   end
 
