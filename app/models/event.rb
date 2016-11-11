@@ -134,7 +134,7 @@ class Event < ApplicationRecord
     # if there are not songs currently playing or played, queue up!
     return true unless song.present?
 
-    (song.queued_at + (song.duration / 1000).seconds) <= (Time.now.utc + 20.seconds)
+    (song.queued_at + (song.duration / 1000).seconds) <= (Time.now.utc + 5.seconds)
   end
 
   def spotify_playlist
