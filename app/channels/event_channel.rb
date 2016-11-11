@@ -44,12 +44,10 @@ class EventChannel < ApplicationCable::Channel
     # update only the voter with their vote value
     song_hash = song.as_json
     vote = Vote.find_by(user_identifier: current_user, song: song)
-    if vote.present?
-      song_hash[:current_user_vote] = vote.vote
-    else
-      song_hash[:current_user_vote] = 0
-    end
-    ActionCable.server.broadcast @event.channel_name + '|' + current_user.to_s, action: 'add-song', data: song_hash
+
+    song_hash[:current_user_vote] = vote.present? ? vote.vote : 0
+
+    ActionCable.server.broadcast self.unique_channel, action: 'add-song', data: song_hash
   end
 
   # add a song (by id) to the user's saved songs playlist
@@ -73,18 +71,16 @@ class EventChannel < ApplicationCable::Channel
   def broadcast_current_queue
     @event.songs.active_queue.each do |song|
       song_hash = song.as_json
-      vote = Vote.find_by(user_identifier:current_user, song:song)
-      if vote.present?
-        song_hash[:current_user_vote] = vote.vote
-      else
-        song_hash[:current_user_vote] = 0
-      end
+      vote = Vote.find_by(user_identifier: current_user, song: song)
+
+      song_hash[:current_user_vote] = vote.present? ? vote.vote : 0
+
       ActionCable.server.broadcast unique_channel, action: 'add-song', data: song_hash
     end
   end
 
   def unique_channel
-    @unique_channel ||= "#{@event}|#{current_user}"
+    @unique_channel ||= "#{@event.channel_name}|#{current_user}"
   end
 
   def current_authed_user
