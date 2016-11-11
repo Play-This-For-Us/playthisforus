@@ -1,24 +1,24 @@
 - if owner?(@event)
   - if !current_user.user_spotify_authenticated?
-    = link_to '/auth/spotify', class: "btn btn-primary" do
+    = link_to '/auth/spotify', class: 'btn btn-primary' do
       %i.fa.fa-spotify
       Sign in with Spotify
   - else
     - if @event.currently_playing
-      = link_to stop_playing_event_path, method: :post, class: "btn btn-primary" do
+      = link_to stop_playing_event_path, method: :post, class: 'btn btn-primary' do
         %i.fa.fa-stop
         Stop Playing on Spotify
     - elsif !@event.currently_playing && @event.spotify_playlist_id.present?
-      = link_to start_playing_event_path, method: :post, class: "btn btn-primary" do
+      = link_to start_playing_event_path, method: :post, class: 'btn btn-primary' do
         %i.fa.fa-play
         Play on Spotify
 
     - if @event.spotify_playlist_id.present?
-      = link_to create_new_playlist_event_path, method: :post, class: "btn btn-primary" do
+      = link_to create_new_playlist_event_path, method: :post, class: 'btn btn-primary' do
         %i.fa.fa-spotify
         Create new Spotify Playlist
     - else
-      = link_to create_new_playlist_event_path, method: :post, class: "btn btn-primary" do
+      = link_to create_new_playlist_event_path, method: :post, class: 'btn btn-primary' do
         %i.fa.fa-spotify
         Create Spotify Playlist
 
@@ -26,3 +26,10 @@
     = link_to '#pnator', class: 'btn btn-info' do
       %i.fa.fa-magic
       Magic Playlist
+- elsif @event.user.user_spotify_authenticated? && @event.spotify_playlist_id.present?
+  = link_to "https://open.spotify.com/user/#{@event.user.spotify_id}/playlist/#{@event.spotify_playlist_id}", class: 'btn btn-primary' do
+    %i.fa.fa-play
+    Play in browser
+  = link_to "spotify:user:#{@event.user.spotify_id}:playlist:#{@event.spotify_playlist_id}", class: "btn btn-primary" do
+    %i.fa.fa-play
+    Play in Spotify
