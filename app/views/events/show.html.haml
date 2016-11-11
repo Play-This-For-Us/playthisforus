@@ -47,7 +47,7 @@
                   Edit
             - elsif @event.user.avatar.present? && @event.user.display_name.present?
               %small.event__owner
-                Made by
+                Hosted by
                 = image_tag(@event.user.avatar, class: 'user__avatar user__avatar--mini')
                 = @event.user.display_name
 
