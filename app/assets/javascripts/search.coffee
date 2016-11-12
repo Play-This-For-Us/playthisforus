@@ -31,8 +31,12 @@ class App.Search
     @resultSelector.empty()
 
   updateSearch: (s) =>
+    query = s
+    if not query.include? '-'  # Spotify limitation
+      query = query + '*' # Add a wildcard to end
+
     data =
-      q: s
+      q: query
       type: 'track'
       market: 'US'
       limit: 5

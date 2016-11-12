@@ -22,7 +22,11 @@ class EventChannel < ApplicationCable::Channel
       event: @event
     )
 
+    song.upvote(current_user)
+
     ActionCable.server.broadcast @event.channel_name, action: 'add-song', data: song
+
+    ActionCable.server.broadcast unique_channel, action: 'add-song', data: with_current_user_vote(song)
   end
 
   def vote(data)
