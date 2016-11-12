@@ -28,9 +28,13 @@ class Event < ApplicationRecord
 
   scope :currently_playing, -> { where(currently_playing: true) }
 
-  def avatar_image
+  def placeholder_avatar_image
     # we currently have 5 default images
     "events/#{(id % 4) + 1}.jpg"
+  end
+
+  def avatar_image
+    self.image_url.nil? ? placeholder_avatar_image : self.image_url
   end
 
   def current_queue
