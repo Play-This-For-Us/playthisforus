@@ -48,10 +48,8 @@ class EventChannel < ApplicationCable::Channel
     # update only the voter with their vote value
     ActionCable.server.broadcast unique_channel, action: 'add-song', data: with_current_user_vote(song)
 
-     # remove song if downvotes are less than -4
-    if song.score < -4
-      song.remove_from_queue
-    end
+    # remove song if score is less than -4
+    song.remove_from_queue if song.score < -4
   end
 
   # add a song (by id) to the user's saved songs playlist
