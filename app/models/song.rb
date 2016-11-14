@@ -76,6 +76,11 @@ class Song < ApplicationRecord
     ActionCable.server.broadcast self.event.channel_name, action: 'remove-song', data: self
   end
 
+  def destroyer
+    ActionCable.server.broadcast self.event.channel_name, action: 'remove-song', data: self
+    self.destroy
+  end
+
   def as_json(options = {})
     h = super(options)
     h[:score] = score
