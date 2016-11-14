@@ -67,6 +67,16 @@ class Event < ApplicationRecord
     return true # Spotify didn't error
   end
 
+  def super_upvote_song(song: super_song)
+    song = super_song
+    auth_user
+    spotify_playlist.add_tracks!([song.to_spotify_track])
+    song.remove_from_queue
+    send_currently_playing
+
+    return true # Spotify didn't error
+  end
+
   def check_queue
     return unless should_queue_next_song?
     queue_next_song
