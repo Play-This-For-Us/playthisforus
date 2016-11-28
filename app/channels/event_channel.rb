@@ -35,7 +35,7 @@ class EventChannel < ApplicationCable::Channel
     ActionCable.server.broadcast unique_channel,
       action: 'add-song',
       data: with_current_user_vote(song),
-      alert: { type: 'success', text: "#{song.name} was added to the queue" }
+      alert: { type: 'success', text: "'#{song.name}' added to the queue." }
   end
 
   def vote(data)

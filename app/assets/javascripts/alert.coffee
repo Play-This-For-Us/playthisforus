@@ -10,9 +10,15 @@ class App.Alert
   update: (text, type) =>
     @text = text
     @type = type
-    @unmount()
-    @mount()
-    setTimeout(@hide, 3000)
+
+    # clear any existing timeout to hide the alert
+    # happens when users perform many actions quickly
+    clearTimeout(@timeout) if @timeout
+    @hide() # hide the existing alert
+    @mount() # show the new, updated alert
+
+    # hide the alert in 3 seconds if the user doesn't close it manually
+    @timeout = setTimeout(@hide, 3000)
 
   hide: =>
     if @elementID
