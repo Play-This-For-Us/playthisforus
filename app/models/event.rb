@@ -34,7 +34,7 @@ class Event < ApplicationRecord
   end
 
   def avatar_image
-    self.image_url.nil? ? placeholder_avatar_image : self.image_url
+    self.image_url.present? ? self.image_url : placeholder_avatar_image
   end
 
   def current_queue
