@@ -19,7 +19,7 @@ class App.EventChannel
           @removeSong(data.data)
         else if data.action && data.action == 'current-song'
           @updateCurrentSong(data.data)
-        else
+        else if data.action
           console.log('Unexpected chanel action.')
       , disconnected: @clear, connected: @clear
 

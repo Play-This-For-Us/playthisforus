@@ -13,8 +13,7 @@ class EventChannel < ApplicationCable::Channel
   def submit_song(data)
     if Song.exists?(uri: data['uri'], event: @event, queued_at: nil)
       ActionCable.server.broadcast unique_channel,
-        action: 'status',
-        alert: { type: 'warning', text: "#{song.name} already exists." }
+        alert: { type: 'warning', text: "'#{data['name']}' already in the queue." }
       return
     end
 
@@ -61,7 +60,7 @@ class EventChannel < ApplicationCable::Channel
     ActionCable.server.broadcast unique_channel,
       action: 'add-song',
       data: with_current_user_vote(song),
-      alert: { type: 'success', text: "Vote added #{song.name}" }
+      alert: { type: 'success', text: "Vote added for '#{song.name}'" }
 
     # remove song if score is less than -4
     song.destroyer if song.score < -4
