@@ -45,10 +45,19 @@ class EventChannel < ApplicationCable::Channel
     song = Song.find_by(id: song_id, event: @event)
     return if song.nil?
 
+    vote_text = ""
     if data['upvote']
-      song.upvote(current_user)
+      if song.upvote(current_user)
+        vote_text = "Upvoted"
+      else
+        vote_text = "Upvote removed for"
+      end
     else
-      song.downvote(current_user)
+      if song.downvote(current_user)
+        vote_text = "Downvoted"
+      else
+        vote_text = "Downvote removed for"
+      end
     end
 
     # update all guests with the new vote
@@ -60,7 +69,7 @@ class EventChannel < ApplicationCable::Channel
     ActionCable.server.broadcast unique_channel,
       action: 'add-song',
       data: with_current_user_vote(song),
-      alert: { type: 'success', text: "Vote added for '#{song.name}'" }
+      alert: { type: 'success', text: "#{vote_text} '#{song.name}'" }
 
     # remove song if score is less than -4
     song.destroyer if song.score < -4
