@@ -56,6 +56,14 @@ class User < ApplicationRecord
 
   def display_name
     # safely traverse the spotify attributes as there may be fields that don't exist
-    self.try(:spotify_attributes).try(:[], 'display_name')
+    name = self.try(:spotify_attributes).try(:[], 'display_name')
+
+    # If no display name, try to use Spotify username (id)
+    name.present? ? name : self.try(:spotify_attributes).try(:[], 'id')
+  end
+
+  def spotify_id
+    # safely traverse the spotify attributes as there may be fields that don't exist
+    self.try(:spotify_attributes).try(:[], 'id')
   end
 end

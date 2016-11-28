@@ -28,9 +28,13 @@ class Event < ApplicationRecord
 
   scope :currently_playing, -> { where(currently_playing: true) }
 
-  def avatar_image
+  def placeholder_avatar_image
     # we currently have 5 default images
     "events/#{(id % 4) + 1}.jpg"
+  end
+
+  def avatar_image
+    self.image_url.nil? ? placeholder_avatar_image : self.image_url
   end
 
   def current_queue
@@ -134,7 +138,7 @@ class Event < ApplicationRecord
     # if there are not songs currently playing or played, queue up!
     return true unless song.present?
 
-    (song.queued_at + (song.duration / 1000).seconds) <= (Time.now.utc + 20.seconds)
+    (song.queued_at + (song.duration / 1000).seconds) <= (Time.now.utc + 5.seconds)
   end
 
   def spotify_playlist
