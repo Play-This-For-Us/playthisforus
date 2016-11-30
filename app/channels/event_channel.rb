@@ -11,7 +11,11 @@ class EventChannel < ApplicationCable::Channel
   end
 
   def submit_song(data)
-    return if Song.exists?(uri: data['uri'], event: @event, queued_at: nil)
+    if Song.exists?(uri: data['uri'], event: @event, queued_at: nil)
+      ActionCable.server.broadcast unique_channel,
+        alert: { type: 'warning', text: "'#{data['name']}' already in the queue." }
+      return
+    end
 
     song = Song.create!(
       name: data['name'],
@@ -24,9 +28,14 @@ class EventChannel < ApplicationCable::Channel
 
     song.upvote(current_user)
 
-    ActionCable.server.broadcast @event.channel_name, action: 'add-song', data: song
+    ActionCable.server.broadcast @event.channel_name,
+      action: 'add-song',
+      data: song
 
-    ActionCable.server.broadcast unique_channel, action: 'add-song', data: with_current_user_vote(song)
+    ActionCable.server.broadcast unique_channel,
+      action: 'add-song',
+      data: with_current_user_vote(song),
+      alert: { type: 'success', text: "'#{song.name}' added to the queue." }
   end
 
   def vote(data)
@@ -36,17 +45,31 @@ class EventChannel < ApplicationCable::Channel
     song = Song.find_by(id: song_id, event: @event)
     return if song.nil?
 
+    vote_text = ""
     if data['upvote']
-      song.upvote(current_user)
+      if song.upvote(current_user)
+        vote_text = "Upvoted"
+      else
+        vote_text = "Upvote removed for"
+      end
     else
-      song.downvote(current_user)
+      if song.downvote(current_user)
+        vote_text = "Downvoted"
+      else
+        vote_text = "Downvote removed for"
+      end
     end
 
     # update all guests with the new vote
-    ActionCable.server.broadcast @event.channel_name, action: 'update-song', data: song
+    ActionCable.server.broadcast @event.channel_name,
+      action: 'update-song',
+      data: song
 
     # update only the voter with their vote value
-    ActionCable.server.broadcast unique_channel, action: 'add-song', data: with_current_user_vote(song)
+    ActionCable.server.broadcast unique_channel,
+      action: 'add-song',
+      data: with_current_user_vote(song),
+      alert: { type: 'success', text: "#{vote_text} '#{song.name}'" }
 
     # remove song if score is less than -4
     song.destroyer if song.score < -4

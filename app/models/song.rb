@@ -40,14 +40,20 @@ class Song < ApplicationRecord
     if vote.vote > 0
         # the user already upvoted this song, delete the upvote
         vote.destroy
+
+        false # the song wasn't "upvoted"
       else
         # the user already voted, change the vote to an upvote
         self.votes.find_by(user_identifier: user_identifier).upvote
+
+        true # the song was "upvoted"
       end
 
     else
       # create a new upvote for the user
       self.votes.create!(user_identifier: user_identifier, vote: 1)
+
+      true # the song was "upvoted"
     end
   end
 
@@ -57,13 +63,19 @@ class Song < ApplicationRecord
       if vote.vote > 0
         # the user already voted, change the vote to a downvote
         self.votes.find_by(user_identifier: user_identifier).downvote
+
+        true # the song was "downvoted"
       else
         # the user already downvoted this song, delete the downvote
         vote.destroy
+
+        false # the song was "downvoted"
       end
     else
       # create a new downvote for the user
       self.votes.create!(user_identifier: user_identifier, vote: -1)
+
+      true # the song was "downvoted"
     end
   end
 
