@@ -12,6 +12,13 @@
 #  user_id             :integer
 #  spotify_playlist_id :string
 #  currently_playing   :boolean          default(FALSE), not null
+#  pnator_enabled      :boolean
+#  pnator_danceability :float
+#  pnator_energy       :float
+#  pnator_popularity   :float
+#  pnator_speechiness  :float
+#  pnator_happiness    :float
+#  image_url           :text
 #
 
 FactoryGirl.define do
