@@ -13,6 +13,7 @@
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
 #  queued_at  :datetime
+#  super_vote :boolean          default(FALSE), not null
 #
 
 # An entry in an event's playlist
