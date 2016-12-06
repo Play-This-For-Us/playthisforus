@@ -12,6 +12,9 @@ class App.Search
     @searchSelector.keyup @handleSearch
     $(document).on 'click', @closeSelector, @reset
 
+    # Number of the current request to Spotify (counts up from 0 each time we send a request)
+    @requestNum = 0
+
   handleSearch: (e) =>
     # if the search box is empty, clear the results
     if e.currentTarget.value.length == 0
@@ -41,7 +44,12 @@ class App.Search
       market: 'US'
       limit: 5
 
+    @requestNum = @requestNum + 1
+    curRequestNum = @requestNum
+
     $.get('https://api.spotify.com/v1/search', data, ((data, status, jqXHR) =>
+      if(curRequestNum < @requestNum) # This isn't the most recent request
+        return
       @clearSearchResults()
       @addSearchResultEntry entry for entry in data.tracks.items
     ), 'json')
