@@ -88,6 +88,41 @@ RSpec.describe Song, type: :model do
 
         expect(event.songs.ranked).to match [song_d, song_a, song_b, song_c]
       end
+
+      it 'properly ranks super votes first' do
+        song_a = FactoryGirl.create(:song, event: event, super_vote: false)
+        expect(song_a.score).to be 0
+
+        song_c = FactoryGirl.create(:song, event: event, super_vote: true)
+        expect(song_c.score).to be 0
+
+        song_b = FactoryGirl.create(:song, event: event, super_vote: false)
+        FactoryGirl.create(:vote, vote: 1, song: song_b)
+        expect(song_b.score).to be 1
+
+        expect(event.songs.ranked).to match [song_c, song_b, song_a]
+      end
+
+      it 'properly ranks super votes by actual vote value when multiple super upvotes' do
+        song_a = FactoryGirl.create(:song, event: event, super_vote: true)
+        FactoryGirl.create(:vote, vote: -1, song: song_a)
+        FactoryGirl.create(:vote, vote: -1, song: song_a)
+        expect(song_a.score).to be -2
+
+        song_d = FactoryGirl.create(:song, event: event, super_vote: true)
+        FactoryGirl.create(:vote, vote: 1, song: song_d)
+        FactoryGirl.create(:vote, vote: 1, song: song_d)
+        expect(song_d.score).to be 2
+
+        song_c = FactoryGirl.create(:song, event: event, super_vote: true)
+        FactoryGirl.create(:vote, vote: 1, song: song_c)
+        expect(song_c.score).to be 1
+
+        song_b = FactoryGirl.create(:song, event: event, super_vote: true)
+        expect(song_b.score).to be 0
+
+        expect(event.songs.ranked).to match [song_d, song_c, song_b, song_a]
+      end
     end
   end
 
