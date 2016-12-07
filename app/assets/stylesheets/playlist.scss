@@ -46,6 +46,16 @@
   font-weight: bold;
 }
 
+.songs-list__super-vote-button {
+  border: 0;
+  background: transparent;
+  color: $orange;
+  cursor: pointer;
+  padding: 0;
+  margin: 4px 0;
+  outline: 0;
+}
+
 .vote--upvoted {
   color: $green;
 }

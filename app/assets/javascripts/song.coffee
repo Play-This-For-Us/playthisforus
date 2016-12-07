@@ -96,6 +96,18 @@ class App.Song
     else
       ""
 
+  superVoteButton: =>
+    text = "Super Vote"
+    if @superVote()
+      text = "Remove Super Vote"
+
+    """
+      <button class='songs-list__super-vote-button'>
+        <i class='fa fa-rocket'></i>
+        #{text}
+      </button>
+    """
+
   resultToHtml: =>
     """
     <div class='search-results__song'>
@@ -135,6 +147,7 @@ class App.Song
           <span class='songs-list__song-details'>
             <i class="fa fa-clock-o"></i> #{@duration()}
           </span>
+          #{@superVoteButton()}
         </div>
         <span class='media-right songs-list__vote-container'>
           <button class='songs-list__vote songs-list__vote--upvote #{@upvoteClass()}'>
