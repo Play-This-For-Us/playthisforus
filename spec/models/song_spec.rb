@@ -107,7 +107,7 @@ RSpec.describe Song, type: :model do
         song_a = FactoryGirl.create(:song, event: event, super_vote: true)
         FactoryGirl.create(:vote, vote: -1, song: song_a)
         FactoryGirl.create(:vote, vote: -1, song: song_a)
-        expect(song_a.score).to be -2
+        expect(song_a.score).to be(-2)
 
         song_d = FactoryGirl.create(:song, event: event, super_vote: true)
         FactoryGirl.create(:vote, vote: 1, song: song_d)
