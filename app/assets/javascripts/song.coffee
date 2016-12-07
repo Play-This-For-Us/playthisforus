@@ -3,7 +3,7 @@ class App.Song
   # songChanged - a callback function to update UI when a song is changed
   # upvote - a callback function called when the song is upvoted
   # downvote - a callback function called when the song is downvoted
-  constructor: (@song, @songChanged, @upvote, @downvote) ->
+  constructor: (@song, @songChanged, @upvote, @downvote, @super) ->
     $(document).on 'click', "#songs-list__song--#{@id()} .songs-list__vote--upvote",
       (e) =>
         @upvote(@id())
@@ -11,6 +11,10 @@ class App.Song
     $(document).on 'click', "#songs-list__song--#{@id()} .songs-list__vote--downvote",
       (e) =>
         @downvote(@id())
+        e.stopImmediatePropagation()
+    $(document).on 'click', "#songs-list__song--#{@id()} .songs-list__super-vote-button",
+      (e) =>
+        @super(@id())
         e.stopImmediatePropagation()
 
   data: =>
@@ -40,6 +44,7 @@ class App.Song
     return unless song
 
     @song.score = parseInt(song.score)
+    @song.super_vote = song.super_vote
 
     # only update the current user's vote if it exists on the updated song
     if song.hasOwnProperty('current_user_vote')
@@ -128,7 +133,7 @@ class App.Song
 
   toHtml: =>
     """
-    <div class='#{@superVoteClass()}' id='songs-list__song--#{@id()}'>
+    <div class='#{@superVoteClass()} songs-list__container' id='songs-list__song--#{@id()}'>
       <div class='media songs-list__song'>
         <span class='media-left'>
           <a href='#{@spotifyOpenURL()}' style='text-decoration: none' target='_blank'>

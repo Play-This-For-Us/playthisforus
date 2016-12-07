@@ -48,7 +48,7 @@ class App.Playlist
       @playlistSongs[songPosition].updateSong(data)
     else
       # append to the end of the songs
-      @playlistSongs.push(new App.Song(data, @updatePlaylistUI, @sendUpvote, @sendDownvote))
+      @playlistSongs.push(new App.Song(data, @updatePlaylistUI, @sendUpvote, @sendDownvote, @sendSuperVote))
 
     # update the playlsit UI
     @updatePlaylistUI()
@@ -116,6 +116,10 @@ class App.Playlist
   # send a downvote to the server
   sendDownvote: (songID) =>
     @playlistChannel.vote(songID, false)
+
+  # send a supervote to the server (either to add or remove)
+  sendSuperVote: (songID) =>
+    @playlistChannel.superVote(songID)
 
   pnator: =>
     @playlistChannel.pnator()
