@@ -28,6 +28,9 @@ class App.Song
   name: =>
     @song.name
 
+  superVote: =>
+    @song.super_vote
+
   score: =>
     parseInt(@song.score)
 
@@ -76,6 +79,23 @@ class App.Song
 
     return new @ song
 
+  superVoteClass: =>
+    if @superVote()
+      "songs-list__song-super-vote"
+    else
+      ""
+
+  superVoteHtml: =>
+    if @superVote()
+      """
+        <div class="songs-list__super-vote">
+          <i class="fa fa-rocket"></i>
+          Super Upvoted by Host
+        </div>
+      """
+    else
+      ""
+
   resultToHtml: =>
     """
     <div class='search-results__song'>
@@ -96,35 +116,38 @@ class App.Song
 
   toHtml: =>
     """
-    <div class='media songs-list__song' id='songs-list__song--#{@id()}'>
-      <span class='media-left'>
-        <a href='#{@spotifyOpenURL()}' style='text-decoration: none' target='_blank'>
-          <img class='media-object songs-list__song-avatar' src='#{@art()}' alt='Generic placeholder image'>
-        </a>
-      </span>
-      <div class='media-body'>
-        <a href='#{@spotifyOpenURL()}' style='text-decoration: none' target='_blank'>
-          <h4 class='media-heading songs-list__song-title'>
-            #{@name()}
-          </h4>
-        </a>
-        <span class='songs-list__song-details'>
-          <i class="fa fa-microphone"></i> #{@artist()}
+    <div class='#{@superVoteClass()}' id='songs-list__song--#{@id()}'>
+      <div class='media songs-list__song'>
+        <span class='media-left'>
+          <a href='#{@spotifyOpenURL()}' style='text-decoration: none' target='_blank'>
+            <img class='media-object songs-list__song-avatar' src='#{@art()}' alt='Generic placeholder image'>
+          </a>
         </span>
-        <span class='songs-list__song-details'>
-          <i class="fa fa-clock-o"></i> #{@duration()}
+        <div class='media-body'>
+          <a href='#{@spotifyOpenURL()}' style='text-decoration: none' target='_blank'>
+            <h4 class='media-heading songs-list__song-title'>
+              #{@name()}
+            </h4>
+          </a>
+          <span class='songs-list__song-details'>
+            <i class="fa fa-microphone"></i> #{@artist()}
+          </span>
+          <span class='songs-list__song-details'>
+            <i class="fa fa-clock-o"></i> #{@duration()}
+          </span>
+        </div>
+        <span class='media-right songs-list__vote-container'>
+          <button class='songs-list__vote songs-list__vote--upvote #{@upvoteClass()}'>
+            <i class='fa fa-chevron-up'></i>
+          </button>
+          <span class='#{@scoreClass()}'>
+            #{@score()}
+          </span>
+          <button class='songs-list__vote songs-list__vote--downvote #{@downvoteClass()}'>
+            <i class='fa fa-chevron-down'></i>
+          </button>
         </span>
       </div>
-      <span class='media-right songs-list__vote-container'>
-        <button class='songs-list__vote songs-list__vote--upvote #{@upvoteClass()}'>
-          <i class='fa fa-chevron-up'></i>
-        </button>
-        <span class='#{@scoreClass()}'>
-          #{@score()}
-        </span>
-        <button class='songs-list__vote songs-list__vote--downvote #{@downvoteClass()}'>
-          <i class='fa fa-chevron-down'></i>
-        </button>
-      </span>
+      #{@superVoteHtml()}
     </div>
     """

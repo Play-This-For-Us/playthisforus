@@ -4,7 +4,13 @@
 }
 
 .songs-list__song {
-  margin-bottom: 20px;
+  margin-bottom: 10px;
+  padding: 8px;
+
+  &-super-vote {
+    background-color: rgba($blue, 0.15);
+    border-radius: 3px;
+  }
 }
 
 .songs-list__song-details {
@@ -30,6 +36,13 @@
   &:hover {
     text-shadow: 0 0 8px $orange;
   }
+}
+
+.songs-list__super-vote {
+  color: $blue;
+  font-size: 14px;
+  padding: 8px;
+  border-top: 1px solid rgba($blue, 0.4);
 }
 
 .vote--upvoted {
