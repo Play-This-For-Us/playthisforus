@@ -75,6 +75,49 @@ class EventChannel < ApplicationCable::Channel
     song.destroyer if song.score < -4
   end
 
+  def super_vote(data)
+    # only event owners are allowed to super upvote and song
+    # verify this request is from an event owner
+    unless current_authed_user.present? && current_authed_user.is_a?(User) && @event.user == current_authed_user
+      ActionCable.server.broadcast(
+        unique_channel,
+        alert: { type: 'danger', text: "Nice try pal! You don't have permission to do this." }
+      )
+      return
+    end
+
+    # verify we have a song that is valid
+    song_id = data['song']
+    song = Song.find_by(id: song_id, event: @event)
+    return if song.nil?
+
+    vote_text = ""
+    if song.super_vote?
+      # the song is super vote, remove the super vote
+      song.update!(super_vote: false)
+      vote_text = 'Super vote removed for'
+    else
+      # the song is not super voted, add a super vote
+      song.update!(super_vote: true)
+      vote_text = 'Super voted'
+    end
+
+    # update all guests with the new vote
+    ActionCable.server.broadcast(
+      @event.channel_name,
+      action: 'update-song',
+      data: song
+    )
+
+    # update only the voter with their vote value
+    ActionCable.server.broadcast(
+      unique_channel,
+      action: 'add-song',
+      data: with_current_user_vote(song),
+      alert: { type: 'success', text: "#{vote_text} '#{song.name}'" }
+    )
+  end
+
   # add a song (by id) to the user's saved songs playlist
   def save_song(data)
     authed_user = current_authed_user

@@ -37,6 +37,12 @@ class App.EventChannel
         song: songID
       }
 
+  superVote: (songID) =>
+    @eventChannel.perform 'super_vote',
+      {
+        song: songID
+      }
+
   pnator: =>
     @eventChannel.perform 'pnator'
 

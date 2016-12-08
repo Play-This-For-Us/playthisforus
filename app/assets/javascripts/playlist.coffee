@@ -48,7 +48,7 @@ class App.Playlist
       @playlistSongs[songPosition].updateSong(data)
     else
       # append to the end of the songs
-      @playlistSongs.push(new App.Song(data, @updatePlaylistUI, @sendUpvote, @sendDownvote))
+      @playlistSongs.push(new App.Song(data, @updatePlaylistUI, @sendUpvote, @sendDownvote, @sendSuperVote))
 
     # update the playlsit UI
     @updatePlaylistUI()
@@ -79,8 +79,17 @@ class App.Playlist
 
   # sort the playlist based first on score, then on time queued
   sortPlaylistSongs: ->
-    @playlistSongs.sort (a, b) ->
-      if a.score() == b.score()  # Tie on score, sort by time submitted
+    @playlistSongs = @playlistSongs.sort (a, b) ->
+      if a.superVote() && !b.superVote()
+        # a is super voted and b is not, a goes first
+        return -1
+      else if !a.superVote() && b.superVote()
+        # b is super voted and a is not, b goes first
+        return 1
+
+      # If supervotes are a tie (eg: both true or both false) use vote scores
+      if a.score() == b.score()
+        # Tie on score, sort by time submitted
         bQueueSecs = Date.parse(b.song.created_at)
         aQueueSecs = Date.parse(a.song.created_at)
 
@@ -90,7 +99,8 @@ class App.Playlist
           return -1
         else  # There was a tie
           return b.id() - a.id()  # If B's ID is greater, put A first
-      else  # Score didn't tie
+      else
+        # Score didn't tie
         return b.score() - a.score()
 
   # update the playlist view with the contents of our song list
@@ -106,6 +116,10 @@ class App.Playlist
   # send a downvote to the server
   sendDownvote: (songID) =>
     @playlistChannel.vote(songID, false)
+
+  # send a supervote to the server (either to add or remove)
+  sendSuperVote: (songID) =>
+    @playlistChannel.superVote(songID)
 
   pnator: =>
     @playlistChannel.pnator()

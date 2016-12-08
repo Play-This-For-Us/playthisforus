@@ -13,6 +13,7 @@
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
 #  queued_at  :datetime
+#  super_vote :boolean          default(FALSE), not null
 #
 
 # An entry in an event's playlist
@@ -23,11 +24,15 @@ class Song < ApplicationRecord
 
   scope :active_queue, -> { where(queued_at: nil) }
 
-  # Sort first by vote count, then by time added, then by id
+  # Sort first by super votes, then vote count, then by time added, then by id
+  # 1. This allows admins to have the absolute say on what's next
+  # 2. Then, guests decide on popular vote (they also decide next super upvoted song if there is more than one)
+  # 3. Then, in case of vote tie, the oldest song will be played next
+  # 4. In the rare case of a tie, we just fallback to the id for predicitability
   scope :ranked, lambda {
     joins('LEFT JOIN votes ON songs.id = votes.song_id')
       .group('songs.id')
-      .order('coalesce(sum(votes.vote), 0) DESC NULLS LAST, songs.created_at, songs.id')
+      .order('songs.super_vote DESC, coalesce(sum(votes.vote), 0) DESC NULLS LAST, songs.created_at ASC, songs.id ASC')
   }
 
   def score

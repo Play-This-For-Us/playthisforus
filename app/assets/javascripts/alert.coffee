@@ -28,9 +28,12 @@ class App.Alert
     if @type == 'success'
       return '<i class="fa fa-check-circle"></i>'
     else if @type == 'warning'
-      return '<i class="fa fa-exclamation-triangle"></i>'
+      return '<i class="fa fa-exclamation"></i>'
     else if @type == 'info'
       return '<i class="fa fa-info-circle"></i>'
+    else if @type == 'danger'
+      return '<i class="fa fa-exclamation-triangle"></i>'
+    return ''
 
   generateID: =>
     @elementID = (new Date()).getTime()
