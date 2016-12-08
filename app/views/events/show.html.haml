@@ -1,5 +1,6 @@
 :javascript
   window.eventId = #{@event.id};
+  window.currentUserIsOwner = #{@current_user.is_a?(User) && owner?(@event)}
   window.user_spotify_authed = #{@current_user.present? &&
     @current_user.spotify_attributes.present?}
 

@@ -4,6 +4,7 @@ class App.Song
   # upvote - a callback function called when the song is upvoted
   # downvote - a callback function called when the song is downvoted
   constructor: (@song, @songChanged, @upvote, @downvote, @super) ->
+    @currentUserIsOwner = window.currentUserIsOwner
     $(document).on 'click', "#songs-list__song--#{@id()} .songs-list__vote--upvote",
       (e) =>
         @upvote(@id())
@@ -85,12 +86,16 @@ class App.Song
     return new @ song
 
   superVoteClass: =>
+    # this is just visual, all users (inlcuding guests) need to see the super
+    # vote status
     if @superVote()
       "songs-list__song-super-vote"
     else
       ""
 
   superVoteHtml: =>
+    # this is just visual, all users (inlcuding guests) need to see the super
+    # vote status
     if @superVote()
       """
         <div class="songs-list__super-vote">
@@ -102,6 +107,10 @@ class App.Song
       ""
 
   superVoteButton: =>
+    # we only want to display the button to super upvote to the event owner
+    # at the time, if there is an issue we will also authenticate serverside
+    return "" unless @currentUserIsOwner
+
     text = "Super Vote"
     if @superVote()
       text = "Remove Super Vote"
