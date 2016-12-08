@@ -95,11 +95,11 @@ class EventChannel < ApplicationCable::Channel
     if song.super_vote?
       # the song is super vote, remove the super vote
       song.update!(super_vote: false)
-      vote_text = "Super vote removed for"
+      vote_text = 'Super vote removed for'
     else
       # the song is not super voted, add a super vote
       song.update!(super_vote: true)
-      vote_text = "Super voted"
+      vote_text = 'Super voted'
     end
 
     # update all guests with the new vote
