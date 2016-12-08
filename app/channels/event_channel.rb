@@ -76,8 +76,15 @@ class EventChannel < ApplicationCable::Channel
   end
 
   def super_vote(data)
-    # verify the current user is the owner of the event, we only allow the
-    # event owner/host perform super votes
+    # only event owners are allowed to super upvote and song
+    # verify this request is from an event owner
+    unless current_authed_user.present? && current_authed_user.is_a?(User) && @event.user == current_authed_user
+      ActionCable.server.broadcast(
+        unique_channel,
+        alert: { type: 'danger', text: "Nice try pal! You don't have permission to do this." }
+      )
+      return
+    end
 
     # verify we have a song that is valid
     song_id = data['song']
@@ -96,15 +103,19 @@ class EventChannel < ApplicationCable::Channel
     end
 
     # update all guests with the new vote
-    ActionCable.server.broadcast @event.channel_name,
+    ActionCable.server.broadcast(
+      @event.channel_name,
       action: 'update-song',
       data: song
+    )
 
     # update only the voter with their vote value
-    ActionCable.server.broadcast unique_channel,
+    ActionCable.server.broadcast(
+      unique_channel,
       action: 'add-song',
       data: with_current_user_vote(song),
       alert: { type: 'success', text: "#{vote_text} '#{song.name}'" }
+    )
   end
 
   # add a song (by id) to the user's saved songs playlist
