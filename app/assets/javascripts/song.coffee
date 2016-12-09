@@ -15,8 +15,6 @@ class App.Song
         e.stopImmediatePropagation()
     $(document).on 'click', "#songs-list__song--#{@id()} .songs-list__super-vote-button",
       (e) =>
-        alert("test")
-        e.preventDefault()
         @super(@id())
         e.stopImmediatePropagation()
 
