@@ -116,10 +116,10 @@ class App.Song
       text = "Remove Super Vote"
 
     """
-      <button class='songs-list__super-vote-button'>
+      <a href="#" class='songs-list__super-vote-button'>
         <i class='fa fa-rocket'></i>
         #{text}
-      </button>
+      </a>
     """
 
   resultToHtml: =>
